@@ -2,21 +2,23 @@ package com.example.fooddelivery2_0.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@EqualsAndHashCode
-@Entity
 @AllArgsConstructor
+@Entity
 public class Address {
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    private String address;
     private String city;
     private String country;
+
+    public Address(String address, String city, String country) {
+        this.address = address;
+        this.city = city;
+        this.country = country;
+    }
 }

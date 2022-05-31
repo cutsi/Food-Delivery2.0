@@ -7,18 +7,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "condiment_names")
-public class CondimentName { //DONE
+@Table(name = "portion_names")
+public class PortionName {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
 
-    public CondimentName(String name) {
+    public PortionName(String name) {
         this.name = name;
     }
 }

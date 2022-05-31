@@ -6,16 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@EqualsAndHashCode
-//@Entity
+@Entity
 @AllArgsConstructor
-public class Role {
+public class Image {
     @Id
     @GeneratedValue()
     private Long id;
     private String name;
-
 }

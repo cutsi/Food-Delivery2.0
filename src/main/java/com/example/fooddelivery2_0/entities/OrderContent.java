@@ -5,20 +5,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "condiment_names")
-public class CondimentName { //DONE
+@Table(name = "order_contents")
+public class OrderContent { //DONE
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String image;
     private String name;
+    @OneToOne
+    private OrderContentDetails orderDetails;
 
-    public CondimentName(String name) {
-        this.name = name;
-    }
 }
+

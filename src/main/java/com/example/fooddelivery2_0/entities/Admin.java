@@ -1,4 +1,9 @@
 package com.example.fooddelivery2_0.entities;
 
-public class Admin {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "admins")
+public class Admin extends User{ //DONE
 }

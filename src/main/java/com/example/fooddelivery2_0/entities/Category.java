@@ -1,20 +1,33 @@
 package com.example.fooddelivery2_0.entities;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@EqualsAndHashCode
-@Entity
 @AllArgsConstructor
-public class Category {
+@Entity
+@Table(name = "categories")
+public class Category { //DONE
+
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String image;
+    @OneToMany(mappedBy = "category")
+    private List<FoodItem> foodItems;
+
+    public Category(String name, String image) {
+        this.name = name;
+        this.image = image;
+    }
+
+//    @OneToMany(mappedBy = "category")
+//    private Set<FoodItem> foodItems = new HashSet<>();
+//    public Category(String categoryName){
+//        this.categoryName = categoryName;
+//    }
+
 }
