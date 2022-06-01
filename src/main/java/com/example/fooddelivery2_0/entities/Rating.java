@@ -12,7 +12,7 @@ import java.time.ZoneId;
 @AllArgsConstructor
 @Entity
 @Table(name = "ratings")
-public class Rating { //DONE
+public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,2 +1,27 @@
-package com.example.fooddelivery2_0.services;public class CategoryService {
+package com.example.fooddelivery2_0.services;
+import com.example.fooddelivery2_0.entities.Category;
+import com.example.fooddelivery2_0.repos.CategoryRepo;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@AllArgsConstructor
+public class CategoryService {
+    private final CategoryRepo categoryRepo;
+
+    public Optional<Category> getCategoryByCategoryName(String categoryName){
+        return categoryRepo.findByName(categoryName);
+    }
+    public Optional<Category> getCategoryById(Long id){
+        return categoryRepo.findById(id);
+    }
+    public void save(Category category){
+        categoryRepo.save(category);
+    }
+
+    public List<Category> getAll() {
+        return categoryRepo.findAll();
+    }
 }
