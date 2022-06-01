@@ -1,4 +1,9 @@
 package com.example.fooddelivery2_0.repos;
 
-public interface PortionRepo {
+import com.example.fooddelivery2_0.entities.Portion;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository //
+public interface PortionRepo extends JpaRepository<Portion, Long> {
 }

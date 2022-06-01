@@ -1,4 +1,9 @@
 package com.example.fooddelivery2_0.repos;
 
-public interface OrderContentDetailsRepo {
+import com.example.fooddelivery2_0.entities.OrderContentDetails;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository //
+public interface OrderContentDetailsRepo extends JpaRepository<OrderContentDetails, Long> {
 }
