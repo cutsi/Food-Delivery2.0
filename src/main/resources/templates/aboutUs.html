@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="fragments/general :: head"></head>
+<head>
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+<main role="main" class="flex-shrink-0">
+  <header th:replace="fragments/general :: header"></header>
+
+  <section id="page-header">
+    <div class="jumbotron jumbotron-fluid" th:style="'background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + ${banner} + ');'" style="height: 400px">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-width">
+            <h2 class="jumbotron-header" style="padding-top: 17rem;">O nama</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="aboutus">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7" style="padding-top: 100px;">
+          <h2 class="text-center">Što je to MEZI?</h2>
+          <p style="padding-top: 35px;padding-bottom: 100px;">
+            Mezi je platforma  koja se bavi dostavom raznih vrsta proizvoda,
+            namirnica, hrane i slično. Kupci mogu iz udobnosti svog doma,
+            posla ili nekog drugog mjesta putem mobilne aplikacije koja
+            je brza i besplatna, naručiti bilo koji proizvod iz ponude.
+            Dostava stiže na Vašu adresu brzo i jednostavno. Samo se registrirajte,
+            odaberite restoran, željeni prozivod, i to je to, vaš odabir bit će vam pred vratima ubrzo.
+          </p>
+        </div>
+        <div class="col-sm-5">
+          <div class="img-wrap">
+            <img style="margin-top: 100px;margin-bottom: 50px;" class="" th:src="${beef}" src ="${beef}">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-7" style="padding-top: 100px;">
+          <h2 class="text-center">Želite postati naš partner?</h2>
+          <p style="padding-top: 35px;padding-bottom: 100px;">
+            Imate restoran? Grill? Fast food? Želite da se vaš objekt nalazi na našoj stranici?
+            <a href="/kontaktirajte-nas"> Kontaktirajte nas.</a> Sami proces izrade profila vašeg
+            restorana je jednostavan, brz i besplatan. Nemate što izgubiti. Zašto ne pokušati?
+            <br>
+            Vaš MEZI.
+          </p>
+        </div>
+        <div class="col-sm-5">
+          <div class="img-wrap">
+            <img style="margin-top: 100px;margin-bottom: 100px;" class="" th:src="${dough}" src ="${dough}">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer th:replace="fragments/general :: footer">
+</footer>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+
+</body>
+
+</html>

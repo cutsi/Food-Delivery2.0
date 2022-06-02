@@ -1,0 +1,393 @@
+
+/* Footer css */
+
+#footer {
+    background-color: darkred;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/** Index.html css below **/
+
+/* Content CSS */
+
+.jumbotron-header {
+    font-family: "Kufam";
+    font-size: 35px;
+    font-weight: 600
+}
+
+.jumbotron {
+    margin-bottom: 0;
+    margin-top: -10px;
+
+}
+
+.jumbotron-subheader {
+    font-size: 1.5rem;
+    margin-top: 20px;
+
+}
+
+.jumbotron {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/2.jpg");
+    color: #f1f3f8;
+    background-repeat:no-repeat;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    background-position:center;
+
+}
+
+/* Bootstrap carousel css */
+
+.col-width {
+    padding: 0px 10px;
+}
+
+/* #about section css */
+
+#about {
+    margin: 60px auto;
+}
+
+.card-about {
+    background-color: antiquewhite;
+    text-align: center;
+    color: black;
+}
+.card-container {
+    padding: 0 30px;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-main {
+    margin: 10px auto;
+}
+
+.card-image {
+    width: 100%;
+    margin: -5px auto;
+}
+
+.fa-carrot {
+    color: orange;
+}
+
+/** CSS pertaining to sign-in.html **/
+
+/* Main-content css */
+
+#main-content {
+    margin-top: 60px;
+}
+
+.sign-in-header {
+    text-align: center;
+    position: relative;
+    top: 25px;
+    font-weight: 700;
+}
+
+.form-col {
+    border: 2px #393b44 solid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #8d93ab;
+    color: #f1f3f8;
+}
+
+.sign-in-div {
+    max-width: 389px;
+}
+
+.form-text {
+    color: #f1f3f8;
+    font-weight: lighter;
+}
+
+.lusu-form {
+    padding: 50px;
+}
+
+.submit-box {
+    margin: 0 33%;
+}
+
+.submit-button {
+    text-align: center;
+    position: relative;
+    top: 10px;
+    align-content: center;
+}
+
+.form-error {
+    text-align: center;
+    background-color: #ed0c17;
+    overflow: auto;
+    color: #f1f3f8;
+    margin: 0 auto 42px;
+    padding: 10px;
+}
+
+input[type=checkbox] {
+    transform: scale(1.25);
+}
+
+.form-group {
+    margin: 15px auto 0px;
+}
+
+.remember {
+    margin-right: 10px;
+}
+
+#featured-restaurants {
+    margin: 60px auto;
+}
+
+@media screen and (max-width: 700px) {
+    .form-col {
+        width: 85%;
+    }
+
+    .form-col {
+        position: static;
+        transform: none;
+        margin: 60px auto;
+    }
+}
+
+@media screen and (max-height: 750px) {
+    .form-col {
+        width: 85%;
+    }
+
+    .form-col {
+        position: static;
+        transform: none;
+        margin: 60px auto;
+    }
+}
+
+
+@media screen and (max-width: 700px) {
+    .jumbotron-header {
+        width: 85%;
+    }
+
+    .jumbotron-header {
+        position: static;
+        transform: none;
+        margin: 120px auto;
+    }
+}
+
+@media screen and (max-height: 750px) {
+    .jumbotron-header {
+        width: 85%;
+    }
+
+    .jumbotron-header {
+        position: static;
+        transform: none;
+        margin: 120px auto;
+    }
+}
+
+.menu{
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+.menu-group-heading{
+    margin:0;
+    padding-bottom: 1em;
+    border-bottom: 2px solid #ccc;
+    font-size: 21px;
+}
+
+.menu-group{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5em;
+    padding:1.5em 0;
+}
+.menu-item{
+    display: flex;
+    font-size: 14px;
+    width: 100%;
+    background-color: whitesmoke;
+    border: none;
+    outline:0 !important;
+    text-align: left;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s linear;
+}
+.menu-item-name{
+    font-size: 1.1rem;
+    margin-right: 1.2em;
+    font-family: system-ui;
+}
+.menu-item-info{
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: slategray;
+}
+
+button.menu-item:hover,
+button.menu-item.is-open {
+    border-top-left-radius: 30px;
+}
+
+.menu-item-content {
+    background-color: #e7e9ed;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.menu-item-text{
+    flex-grow: 1;
+    font-size: 1.25rem;
+}
+.menu-item-desc{
+    line-height: 1.6;
+}
+.menu-item-heading{
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+.menu-item-price{
+    font-size: 1.0rem;
+    font-weight: bold;
+}
+.menu-item-image{
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    object-fit: cover;
+    margin-right: 1.5em;
+    margin-left: -5px;
+    margin-left: 6px;
+    margin-top: 6px;
+    border-radius: 25%;
+}
+@media screen and (min-width: 992px){
+    .menu{
+        font-size: 16px;
+    }
+    .menu-item-image{
+        width: 125px;
+        height: 125px;
+    }
+}
+
+
+
+
+
+
+.checkbox-group{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5em;
+    padding: 1.5em;
+
+}
+
+
+.checkbox-item{
+    display: flex;
+    font-size: 14px;
+    width: 100%;
+    background-color: #e7e9ed;;
+    border: none;
+    outline:0 !important;
+    text-align: left;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s linear;
+}
+
+
+
+.checkbox-text{
+    flex-grow: 1;
+    font-size: 1.25rem;
+}
+.menu-item-desc{
+    line-height: 1.6;
+}
+.checkbox-heading{
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+.checkbox-price{
+    font-size: 1.0rem;
+}
+
+.checkbox-name{
+    font-size: 1.1rem;
+    margin-right: 1.2em;
+}
+
+.radiobutton-heading{
+    border-bottom: 2px solid #ccc;
+}
+
+@media screen and (min-width: 992px){
+    .checkbox-group{
+        font-size: 16px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.portion-item{
+    display: flex;
+    font-size: 14px;
+    width: 100%;
+    background-color: #e7e9ed;;
+    border: none;
+    outline:0 !important;
+    text-align: left;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s linear;
+}
+
+.portion-text{
+    flex-grow: 1;
+    font-size: 1.25rem;
+}
+
+.portion-heading{
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.portion-group{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5em;
+    padding: 1.5em;
+    border-top: 2px solid #ccc;
+    margin-top: 10px;
+}

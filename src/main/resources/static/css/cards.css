@@ -1,0 +1,26 @@
+.jumbotron1 {
+    background:#1199FF;
+    color: #f1f3f8;
+    background-repeat:no-repeat;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    background-position:center;
+
+}
+.jumbotron1-header {
+    font-family: "Kufam";
+    font-size: 1.5rem;
+    font-weight: 600
+}
+
+.jumbotron1 {
+    margin-bottom: 0;
+}
+
+.jumbotron1-subheader {
+    font-size: 1.5rem;
+    margin-top: 20px;
+
+}
