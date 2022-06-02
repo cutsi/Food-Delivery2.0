@@ -73,6 +73,7 @@ public class DatabaseInitializer {
 
     @Transactional
     public void insertFakeData() throws NoSuchAlgorithmException {
+
         //orderRepo.deleteAll();
         //userRepo.deleteAll();
         if(!customerRepo.findByEmail("josipcutura1997@gmail.com").isPresent()){
@@ -237,11 +238,7 @@ public class DatabaseInitializer {
             System.out.println(restaurantRepo.findByName("Restaurant_1").get().getOwners());
 
         }
-        //INSERT ABOUT US
 
-        imageRepo.save(new Image(1L, "images/o-nama.jpeg"));
-        imageRepo.save(new Image(2L, "images/beef.jpg"));
-        imageRepo.save(new Image(3L, "images/nuggets1.jpg"));
 
 
         userRepo.findAll().stream()

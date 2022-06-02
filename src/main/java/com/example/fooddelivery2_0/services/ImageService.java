@@ -18,4 +18,8 @@ public class ImageService {
     public Optional<Image> getImageById(Long id){
         return imageRepo.findById(id);
     }
+
+    public void saveImage(Image image) {
+        imageRepo.save(image);
+    }
 }

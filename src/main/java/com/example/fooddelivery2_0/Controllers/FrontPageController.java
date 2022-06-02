@@ -1,4 +1,6 @@
 package com.example.fooddelivery2_0.Controllers;
+import com.example.fooddelivery2_0.entities.ContactMessage;
+import com.example.fooddelivery2_0.entities.Image;
 import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.services.ImageService;
 import com.example.fooddelivery2_0.services.RestaurantService;
@@ -28,12 +30,27 @@ public class FrontPageController {
         return "home";
     }
 
-    @GetMapping(path = "o-nama")
+    @GetMapping(path = "O-nama")
     public String aboutUs(Model model){
-        model.addAttribute("banner", imageService.getImageById(7L).get().getName());
-        model.addAttribute("beef", imageService.getImageById(3L).get().getName());
-        model.addAttribute("dough", imageService.getImageById(5L).get().getName());
+        model.addAttribute("banner", "images/o-nama.jpeg");
+        model.addAttribute("beef", "images/beef.jpg");
+        model.addAttribute("dough", "images/nuggets1.jpg");
         return "aboutUs";
+    }
+    @GetMapping(path = "Kontaktirajte-nas")
+    public String contactUs(Model model){
+        model.addAttribute("banner", "images/contact-us1.jpg");
+        model.addAttribute("sendMessageToUs", new ContactMessage());
+        return "contact-us";
+    }
+    @GetMapping(path = "/Kako-naručiti")
+    public String howToOrder(Model model){
+        model.addAttribute("banner", "images/howtoorder.jpg");
+        return "howToOrder";
+    }
+    @GetMapping(path="/login")
+    public String getLogin(){
+        return "login";
     }
 }
 

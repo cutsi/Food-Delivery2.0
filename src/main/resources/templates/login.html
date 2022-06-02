@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org">
+
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <link href="../static/css/signup.css" th:href="@{/css/signup.css}" rel="stylesheet" />
+</head>
+
+<body class="d-flex flex-column h-100">
+<main role="main" class="flex-shrink-0">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+<div class = "center">
+  <div class="container1">
+    <div class="title">Login</div>
+    <div class="content">
+      <form th:action="@{/login}" method="post" class="border-teal p-4 border-t-12 bg-white mb-6">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Email</span>
+            <input id="username" type="text" name="username" autocomplete="on"
+                   class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                   placeholder="Unesite email">
+          </div>
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input id="password" type="password" name="password" autocomplete="off"
+                   class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                   placeholder="Unesite lozinku">
+          </div>
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input type="checkbox" name="remember-me" checked style="display: none"/>
+          </div>
+        </div>
+        <div class="button">
+          <input type="submit" value="Prijavi se">
+        </div>
+        <p class="forgot_email">
+          <a href="/zaboravljena-lozinka">Zaboravili ste šifru?</a>
+        </p>
+      </form>
+      <form th:action="@{/prijava}" method="get" class="border-teal p-4 border-t-12 bg-white mb-6" style="border-top: 2px solid darkred;">
+        <div class="input-box">
+          <span class="details" style="text-align: center;">NEMATE RAČUN?</span>
+        </div>
+        <div class="button-reg">
+          <input type="submit" value="Registriraj se">
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<footer th:replace="fragments/general :: footer">
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+</body>
+
+</html>
