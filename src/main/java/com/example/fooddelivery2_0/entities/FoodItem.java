@@ -41,5 +41,9 @@ public class FoodItem { //DONE
             });
         }
     }
-
+    public List<Portion> getPortionsOrderById(){
+        List<Portion> portionList = new ArrayList<>(portions);
+        Collections.sort(portionList);
+        return portionList;
+    }
 }

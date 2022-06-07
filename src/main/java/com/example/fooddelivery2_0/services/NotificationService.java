@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class NotificationService {
 
-    /*private final SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void notifyRestaurantOnNewOrder(Order order){
         Restaurant restaurant = order.getRestaurant();
@@ -31,6 +31,6 @@ public class NotificationService {
                 "order/progress",
                 order.getStatus().name()
         );// user listens in the first two lines, third line is what we send
-    }*/
+    }
 
 }

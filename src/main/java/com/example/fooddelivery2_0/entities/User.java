@@ -32,7 +32,7 @@ public class User implements UserDetails {
 
     private String phone;
     @JsonIgnore
-    private Boolean locked;
+    private Boolean locked = false;
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
@@ -77,7 +77,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isAccountNonLocked() {
-        return !locked;
+        return true;//return !locked
     }
 
     @Override

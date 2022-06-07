@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Restoran</title>
+  <link href="../static/css/success.css" th:href="@{/css/success.css}" rel="stylesheet" />
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/restaurant_orders.css" th:href="@{/css/restaurant_orders.css}" rel="stylesheet" />
+  <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
+  <link href="../static/css/rating.css" th:href="@{/css/rating.css}" rel="stylesheet" />
+  <link href="../static/css/checkout.css" th:href="@{/css/checkout.css}" rel="stylesheet" />
+
+
+  <style>
+
+    .accept-orders a {
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+  </style>
+
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+
+
+  <div class="row no-gutters" style="margin-top: 5rem;">
+    <div class="col-md-6 no-gutters">
+      <div class="left-side">
+        <div class="new-orders"><b>NEW ORDERS</b></div>
+        <div class="orders-content" style="border-left: 3px solid #cb190c;border-right: 3px solid #cb190c;border-bottom: 3px solid #cb190c;">
+          <section>
+            <table class="bill-table">
+              <th:block th:each="norder: ${orders}">
+                <tr th:if="!${norder.isAccepted()} AND !${norder.isDeclined()}"
+                    th:class="'order-'+${norder.getId()} + ' NotAcceptedOrder'">
+                  <td th:text="'#'+${norder.getId()}" class="bill-id-cell-new-orders">
+                  </td>
+                  <td th:text="${#temporals.format(norder.getCreatedAt(), 'd.M HH:mm')}" class="address-cell">
+                  </td>
+                </tr>
+                <tr th:if="!${norder.isAccepted()} AND !${norder.isDeclined()}"
+                    th:class="'order-'+${norder.getId() + ' NotAcceptedOrder'}">
+                  <td colspan=2 class="details-cell">
+                    <div class="details-cell">
+                      <b>Adresa</b>: [[${norder.getAddress()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Ime:</b> [[${norder.getCustomer().getName()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Tel:</b> [[${norder.getPhone()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Napomena restoranu:</b> [[${norder.getRestaurantNote()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Napomena dostavljacu:</b> [[${norder.getDeliveryNote()}]]
+                    </div>
+                    <div class="">
+                      <div class="details-btn-form">
+                        <input
+                                th:data-order-id="${norder.getId()}"
+                                onclick="showDetails(this.getAttribute('data-order-id'),1)"
+                                class="details-btn button-content-cell" type="submit" value="Detalji" />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </th:block>
+            </table>
+
+            <div id="popup1" class="overlay pop">
+              <div class="popup" style="height: 85%; overflow-y: auto;">
+                <h2 class="popup-header">Detalji narudžbe</h2>
+                <a class="close">&times;</a>
+                <h3 class="content-header">Narudžba</h3>
+                <div class="content-wrapper">
+                </div>
+                <div class="Ukupno">
+                  UKUPNO
+                </div>
+                <div class="ukupno-price" id="ukupno-price">
+                  <b> </b>
+                </div>
+                <div class="accept-orders">
+                  <a>
+                    <button class="decline button-content-cell" style="background: #1e7e34; margin-top: 2rem;background: #D9391C;">Decline</button>
+                  </a>
+                  <a>
+                    <button class="accept button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Accept</button>
+                  </a>
+                  <a>
+                    <button class="deliver button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Deliver</button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-6 no-gutters">
+      <div class="right-side">
+        <div class="accepted-orders"> <b>ACCEPTED ORDERS</b></div>
+        <div class="orders-content" style="border-left: 3px solid #68a708;border-right: 3px solid #68a708;border-bottom: 3px solid #68a708;">
+
+          <section>
+            <table class="bill-table">
+              <th:block th:each="norder: ${orders}">
+                <tr th:if="${norder.isAccepted()} AND ${norder.getStatus().name()} == 'ACCEPTED'"
+                    th:class="'order-'+${norder.getId()}">
+                  <td th:text="'#'+${norder.getId()}" class="bill-id-cell-new-orders">
+                  </td>
+                  <td th:text="${#temporals.format(norder.getCreatedAt(), 'd.M HH:mm')}" class="address-cell">
+                  </td>
+                </tr>
+                <tr th:if="${norder.isAccepted()} AND ${norder.getStatus().name()} == 'ACCEPTED'"
+                    th:class="'order-'+${norder.getId()}">
+                  <td colspan=2 class="details-cell">
+                    <div class="details-cell">
+                      <b>Adresa</b>: [[${norder.getAddress()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Ime:</b> [[${norder.getCustomer().getName()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Tel:</b> [[${norder.getPhone()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Napomena restoranu:</b> [[${norder.getRestaurantNote()}]]
+                    </div>
+
+                    <div class="details-cell">
+                      <b>Napomena dostavljacu:</b> [[${norder.getDeliveryNote()}]]
+                    </div>
+                    <div class="">
+                      <div class="details-btn-form">
+                        <input
+                                th:data-order-id="${norder.getId()}"
+                                onclick="showDetails(this.getAttribute('data-order-id'),2)"
+                                class="details-btn button-content-cell" type="submit" value="Detalji" />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </th:block>
+            </table>
+
+
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"-->
+<!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">-->
+<!--</script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"-->
+<!--        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">-->
+<!--</script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"-->
+<!--        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">-->
+<!--</script>-->
+
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script th:inline="javascript">
+  let notifRef = [[${notif_ref}]];
+  let restaurant_id = [[${item.getId()}]];
+  let g_orders = [[${orders}]];//global_orders=g_orders
+  let currentRefId="";
+
+  // $(".bill-table").on("click",".details-btn-form",function (e){
+  //     e.preventDefault();
+  // })
+
+  $("#popup1 .accept").on("click",function (){
+
+    $.ajax({
+      url:`/narudzba/orders/accept?refid=${currentRefId}`,
+      method:'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      success: function(data) {
+        if(data.status === "success"){
+          $(".pop").css("display","none");
+          let olds = $(".bill-table .order-"+currentRefId.split("$")[1]);//olds = left side order
+          olds.removeClass("NotAcceptedOrder");//remove left side order
+          $(".right-side .bill-table").append(olds.get(0));//we put order on the right (1st line id and time)
+          $(".right-side .bill-table").append(olds.get(1));//2nd line order details
+
+        }else{
+          alert("Error while accepting order!");
+        }
+      },
+      error: function(request, status, error) {
+        alert("The request failed");
+      }
+    });
+
+  });
+
+  $("#popup1 .decline").on("click",function (){
+
+    $.ajax({
+      url:`/narudzba/orders/decline?refid=${currentRefId}`,
+      method:'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      success: function(data) {
+        if(data.status === "success"){
+
+          g_orders = g_orders.filter(o=>  o.id != currentRefId.split("$")[1]);
+          $(".bill-table .order-"+currentRefId.split("$")[1]).remove();
+          $(".pop").css("display","none");
+
+        }else{
+          alert("Error while declining order!");
+        }
+      },
+      error: function(request, status, error) {
+        alert("The request failed");
+      }
+    });
+
+  });
+
+  $("#popup1 .deliver").on("click",function (){
+
+    $.ajax({
+      url:`/narudzba/orders/deliver?refid=${currentRefId}`,
+      method:'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      success: function(data) {
+        if(data.status === "success"){
+
+          g_orders = g_orders.filter(o=>  o.id != currentRefId.split("$")[1]);
+          $(".bill-table .order-"+currentRefId.split("$")[1]).remove();
+          $(".pop").css("display","none");
+
+        }else{
+          alert("Error while delivering order!");
+        }
+      },
+      error: function(request, status, error) {
+        alert("The request failed");
+      }
+    });
+
+  });
+
+
+  $(".close").on("click",function (e){
+    $(".pop").css("display","none");
+  })
+
+  function showDetails(orderId, popup){
+
+    let currentOrder = g_orders.filter(o=>  o.id == orderId);
+    currentRefId = currentOrder[0].orderReference + currentOrder[0].id;
+    let contents = currentOrder[0].contents;
+    console.log(contents);
+    let contentHtml = ``;
+    let totalPrice = 0.00;
+
+
+    contents.forEach((c,i)=>{
+
+      contentHtml += `
+
+                                <div class="content">
+                                    <div class="item-name"><b>${c.orderDetail.quantity} X  ${c.name} </b> (${c.orderDetail.portion.name.name})</div>
+                                    <div class="item-price">${c.orderDetail.portion.price}KM</div>
+                                    <div class="condiments">
+                            `;
+
+      c.orderDetail.condiments.forEach(cond=>{
+
+        contentHtml += `
+                                        <div class="condiment">+${cond.name.name}</div>
+                                        <div class="condiment-price">${cond.price}KM</div>
+
+                                   `;
+
+      });
+
+      contentHtml += `
+
+                                   </div>
+                                   <div class="item-total">
+                                        ${c.orderDetail.price}
+                                    </div>
+                                </div>
+
+                        `;
+      totalPrice += parseFloat(c.orderDetail.price);
+
+    });
+
+    console.log(currentOrder[0]);
+    if(!$(".bill-table .order-"+currentOrder[0].id).hasClass("NotAcceptedOrder")){
+      $(".accept").css("display","none");
+      $(".deliver").css("display","block");
+    }else{
+      $(".deliver").css("display","none");
+      $(".accept").css("display","block");
+    }
+    $("#popup1 "+ ".content-wrapper").html(contentHtml);
+    $("#popup1").css("display","block");
+    $("#ukupno-price").html(totalPrice.toFixed(2)+"KM");
+
+  }
+</script>
+<script th:src="@{/js/notif-sub.js}"></script>
+
+<script>
+  function calculateTotal(orderList){
+
+  }
+</script>
+</body>
+</html>

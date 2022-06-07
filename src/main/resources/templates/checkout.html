@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org">
+
+<head th:replace="fragments/general :: head"></head>
+<link href="../static/css/checkout.css" th:href="@{/css/checkout.css}" rel="stylesheet" />
+
+<head>
+</head>
+
+<body>
+<header th:replace="fragments/general :: header"></header>
+
+<div class="container mt-5 p-3 rounded cart">
+    <div class="row no-gutters" style="margin-top: 20px;">
+        <div class="col-md-8">
+            <div class="product-details mr-2">
+                <div class="d-flex flex-row align-items-center">
+                    <a href="#" onclick="location.href = document.referrer; return false;">
+                        <i class="fa fa-long-arrow-left"></i>
+                        <span class="ml-2">Nazad na restoran</span>
+                    </a>
+                </div>
+                <hr>
+                <h6 class="mb-0">Košarica</h6>
+
+                <th:block th:each="item: ${foodItems}">
+                    <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded">
+                        <div class="d-flex flex-row">
+                            <img class="checkout-item-image" th:src="${item.getImage()}" src ="${item.getImage()}" alt="" width="40">
+                            <div class="ml-2">
+                                <span class="font-weight-bold d-block">[[${item.getName()}]]  ([[${item.getOrderDetail().getQuantity()}]] x [[${item.getOrderDetail().getPortion().getName().getName()}]])</span>
+                                <th:block th:each="condiment: ${item.getOrderDetail().getCondiments()}">
+                                    <span class="spec" style="font-size: 13px;">+[[${condiment.getName().getName()}]]</span><br>
+                                </th:block>
+
+                                <br><span class="spec checkout-item-price" style="font-size: inherit;font-weight: bolder;">[[${item.getOrderDetail().getPrice()}]]KM</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded">
+                    <div class="d-flex flex-row">
+                        <div class="ml-2">
+                            <span class="font-weight-bold d-block">TOTAL</span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <span class="d-block ml-5 font-weight-bold">[[${total}]]KM</span></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="payment-info">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Detalji dostave</span>
+                </div>
+                <div>
+                    <label class="credit-card-label">Adresa dostave</label>
+                    <input id="autocomplete" placeholder="Unesite svoju lokaciju" type="text" class="form-control credit-inputs">
+                </div>
+                <div>
+                    <label class="credit-card-label">Dodatne informacija za dostavu</label>
+                    <input type="text"
+                           id="delivery_note"
+                           value="deliv note"
+                           placeholder="Npr. drugi kat zgrade stan X, ili detaljnije objašnjenje vaše adrese ukoliko je potrebno"
+                           class="form-control credit-inputs">
+                </div>
+                <div>
+                    <label class="credit-card-label">Broj telefona</label>
+                    <input type="text"
+                           id="phone"
+                           value="061234568"
+                           placeholder="Unesite broj telefona"
+                           class="form-control credit-inputs">
+                </div>
+                <div>
+                    <label class="credit-card-label">Napomena</label>
+                    <textarea rows="2"
+                              id="restaurant_note"
+                              class="form-control credit-inputs"
+                              placeholder="Npr. trebaju mi vilica i nož">Rest note</textarea>
+                </div>
+
+                <hr class="line">
+                <div class="d-flex justify-content-between information">
+                    <span>UKUPNO</span>
+                    <span>[[${total}]]KM</span>
+                </div>
+                <button onclick="sendOrder()" class="btn btn-primary btn-block d-flex justify-content-between mt-3" type="button" style="background-color: #1e7e34">
+                    <span>[[${total}]]KM</span>
+                    <span>NARUČI
+            <i class="fa fa-long-arrow-right ml-1"></i>
+          </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<footer th:replace="fragments/general :: footer">
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+<script>
+    let autocomplete;
+    function initAutocomplete(){
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            {
+                types: ['establishment'],
+                componentRestrictions: {'country': ['AU']},
+                fields: ['place_id', 'geometry', 'name']
+            });
+        autocomplete.addEventListener('place_changed', onPlaceChanged());
+        function onPlaceChanged(){
+            var place = autocomplete.getPlace();
+            if(!place.geometry){
+                document.getElementById('autocomplete').placeholder = 'Unesite adresu';
+            }
+            else{
+                document.getElementById('details').innerHTML=place.name;
+            }
+        }
+    }
+</script>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete">
+</script>
+<script th:inline="javascript">
+
+    let foodItemsVar = [[${foodItems}]];
+    let restaurantId = [[${restaurantId}]];
+
+    function sendOrder(){
+
+        let deliveryNote = $("#delivery_note").val().trim();
+        let restaurantNote = $("#restaurant_note").val().trim();
+        let phone = $("#phone").val().trim();
+        let orderRequest = {
+            foodItems : foodItemsVar,
+            deliveryNote : deliveryNote,
+            restaurantNote : restaurantNote,
+            phone : phone
+        };
+
+        $.ajax({
+            url:`/narudzba/new/${restaurantId}`,
+            method:'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(orderRequest),
+            success: function(data) {
+                if(data.status === "success"){
+                    window.location.href =  window.location.protocol + "//" + window.location.host + data.path;// redirects user to the progress page tied to his order
+                    //alert("done")
+                }else{
+                    alert("Error !");
+                }
+            },
+            error: function(request, status, error) {
+                alert("The request failed");
+            }
+        });
+
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        const place = autocomplete.getPlace();
+        let address1 = "";
+        let postcode = "";
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        // place.address_components are google.maps.GeocoderAddressComponent objects
+        // which are documented at http://goo.gle/3l5i5Mr
+        for (const component of place.address_components) {
+            const componentType = component.types[0];
+
+            switch (componentType) {
+                case "street_number": {
+                    address1 = `${component.long_name} ${address1}`;
+                    break;
+                }
+
+                case "route": {
+                    address1 += component.short_name;
+                    break;
+                }
+
+                case "postal_code": {
+                    postcode = `${component.long_name}${postcode}`;
+                    break;
+                }
+
+                case "postal_code_suffix": {
+                    postcode = `${postcode}-${component.long_name}`;
+                    break;
+                }
+                case "locality":
+                    document.querySelector("#locality").value = component.long_name;
+                    break;
+                case "administrative_area_level_1": {
+                    document.querySelector("#state").value = component.short_name;
+                    break;
+                }
+                case "country":
+                    document.querySelector("#country").value = component.long_name;
+                    break;
+            }
+        }
+
+        address1Field.value = address1;
+        postalField.value = postcode;
+        // After filling the form with address components from the Autocomplete
+        // prediction, set cursor focus on the second address line to encourage
+        // entry of subpremise information such as apartment, unit, or floor number.
+        address2Field.focus();
+    }
+
+</script>
+</body>
+
+</html>

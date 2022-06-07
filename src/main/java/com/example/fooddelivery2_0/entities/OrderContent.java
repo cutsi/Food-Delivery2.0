@@ -20,7 +20,7 @@ public class OrderContent { //DONE
     private String image;
     private String name;
     @OneToOne
-    private OrderContentDetails orderDetails;
+    private OrderContentDetails orderDetail;
 
 }
 

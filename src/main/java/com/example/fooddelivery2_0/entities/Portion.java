@@ -8,7 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "portions")
-public class Portion { //DONE
+public class Portion implements Comparable<Portion>{ //DONE
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,4 +25,8 @@ public class Portion { //DONE
         this.name = portionName;
     }
 
+    @Override
+    public int compareTo(Portion portion) {
+        return (int) (this.id - portion.getId());
+    }
 }

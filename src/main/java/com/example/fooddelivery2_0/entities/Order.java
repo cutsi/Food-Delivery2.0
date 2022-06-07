@@ -3,6 +3,7 @@ package com.example.fooddelivery2_0.entities;
 import com.example.fooddelivery2_0.Utils.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
@@ -44,8 +45,12 @@ public class Order implements Comparable<Order>{ //DONE
         this.restaurant = restaurant;
         this.contents = contents;
     }
-
-
+    public String getCreatedAtLDT(){
+        return createdAt.getHour() + ":" + createdAt.getMinute();
+    }
+    public List<OrderContent> getContents(){
+        return contents;
+    }
     @Override
     public int compareTo(Order o) {
         return this.createdAt.compareTo(o.getCreatedAt());

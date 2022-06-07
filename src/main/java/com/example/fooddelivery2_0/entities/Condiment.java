@@ -22,7 +22,7 @@ public class Condiment { //DONE
     @ManyToOne
     private CondimentName name;
     //@ManyToMany(mappedBy = "condiments")
-    //private List<OrderContentDetail> details;
+    //private List<FOrderContentDetails> details;
     //@Transient
     //@JsonIgnore
     //private String displayName;

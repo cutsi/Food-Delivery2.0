@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class WorkingHoursService {
+public class WorkingHoursService {//ulogirat se na super restoran
     private final WorkingHoursRepo workingHoursRepo;
     private final String ZATVORENO = "Zatvoreno";
     private final String PONEDJELJAK = "Ponedjeljak";

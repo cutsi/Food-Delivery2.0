@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Stanje narudžbe</title>
+  <link href="../static/css/progress-bar.css" th:href="@{/css/progress-bar.css}" rel="stylesheet" />
+  <script>
+    document.addEventListener('click', click);
+
+    // function click(e) {
+    //   let el
+    //
+    //   el = e.target
+    //
+    //   if (el !== e.currentTarget) {
+    //     if(el.nodeName === 'BUTTON') {
+    //
+    //       if(el.classList.contains('is-active')) {
+    //         el.classList.remove('is-active')
+    //       } else {
+    //         el.classList.add('is-active')
+    //       }
+    //     }
+    //   }
+    //   e.stopPropagation()
+    // }
+  </script>
+</head>
+<body style="background: #333333">
+<main role="main" class="flex-shrink-0">
+  <header th:replace="fragments/general :: header"></header>
+  <div class="outer" style="background: #333333">
+    <div class="progress dark">
+      <div class="left">
+        <div class="current"></div>
+      </div>
+      <div class="right">
+        <div id="ordered" th:class="${status == 'ORDERED' ? 'current' : status == 'DELIVERED' ? 'prev' : ''}">Your order is waiting to be confirmed.</div>
+        <div id="accepted" th:class="${status == 'ACCEPTED' ? 'current' : ''}">Your order is confirmed.</div>
+        <div id="delivered" th:class="'done ' + ${status == 'DELIVERED' ? 'current' : ''}">Your order is finished and is on its way to You.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<footer th:replace="fragments/general :: footer"></footer>
+
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script th:inline="javascript">
+
+  let refId = [[${ref_id}]];
+
+</script>
+<script th:src="@{/js/order-notif-sub.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+</body>
+</html>
