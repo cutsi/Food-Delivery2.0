@@ -77,11 +77,11 @@ function notif_bell_animate(){
 }
 
 function connect() {
-    var socket = new SockJS('/secured/notif-websocket');
+    var socket = new SockJS('/secured/notif-websocket');//knock knock connection
     stompClient = Stomp.over(socket);//stomp protocol
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe(`/user/${notifRef}${restaurant_id}/restaurant-notifications/new-order`, function (data) {
+        stompClient.subscribe(`/user/${notifRef}${restaurant_id}/restaurant-notifications/new-order`, function (data) {//restaurant queue
             var audio = new Audio('/audio/notif-restaurant.mp3');
             audio.play();
             notif_bell_animate();

@@ -27,7 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).and()
                 //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 //.and()
-                .csrf().ignoringAntMatchers("/narudzba/new/**").and() //only for development
+                //THIS HERE
+                //.csrf().ignoringAntMatchers("/narudzba/new/**").and() //only for development
                 .authorizeRequests()
                 .antMatchers("/restaurant","/css/**", "/js/**", "/css/**", "/audio/**", "/","/style.css","/index")
                 .permitAll()

@@ -18,6 +18,18 @@
       cursor: pointer;
       text-decoration: none;
     }
+    .overlay1{
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      opacity: 1;
+      z-index: 2;
+      display: none;
+    }
 
   </style>
 
@@ -77,7 +89,7 @@
               </th:block>
             </table>
 
-            <div id="popup1" class="overlay pop">
+            <div id="popup1" class="overlay1 pop">
               <div class="popup" style="height: 85%; overflow-y: auto;">
                 <h2 class="popup-header">Detalji narudžbe</h2>
                 <a class="close">&times;</a>
@@ -282,7 +294,6 @@
   })
 
   function showDetails(orderId, popup){
-
     let currentOrder = g_orders.filter(o=>  o.id == orderId);
     currentRefId = currentOrder[0].orderReference + currentOrder[0].id;
     let contents = currentOrder[0].contents;
@@ -340,10 +351,11 @@
 </script>
 <script th:src="@{/js/notif-sub.js}"></script>
 
-<script>
-  function calculateTotal(orderList){
-
-  }
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
 </script>
 </body>
 </html>

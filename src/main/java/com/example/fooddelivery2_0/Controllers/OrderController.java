@@ -35,7 +35,7 @@ public class OrderController {
         model.addAttribute("total", orderRequestService.addPrices(orderRequestService.getCartItems(foodItems)));
         return "checkout";
     }
-
+    //what is this
     @PostMapping(path = "/new/{rid}",  consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, String> newOrder(@RequestBody OrderRequest orderRequest,
@@ -51,17 +51,6 @@ public class OrderController {
         try {
             //SAVE NEW ORDER ON DATABASE
             order = orderRequestService.saveNewOrder(orderRequest, (Customer) principal.getPrincipal(), restaurantId);
-            orderRequest.getFoodItems().stream().forEach(i->{
-                System.out.println(i.getOrderDetail().getCondiments());
-                System.out.println(i.getOrderDetail().getPortion());
-            });
-
-            System.out.println("*****************");
-
-            order.getContents().stream().forEach(i->{
-                System.out.println(i.getOrderDetail().getCondiments());
-                System.out.println(i.getOrderDetail().getPortion());
-            });
             //PUSH NOTIF TO RESTAURANT
             notificationService.notifyRestaurantOnNewOrder(order);
             response.put("path","/narudzba/progress?refid="+order.getOrderReference()+order.getId());
@@ -75,7 +64,7 @@ public class OrderController {
         return response;
 
     }
-
+    //THIS HERE
     @GetMapping(path = "/progress")
     public String orderStatus(@RequestParam("refid") String refId, Model model) {
 
@@ -92,7 +81,7 @@ public class OrderController {
 
 
     }
-
+    //THIS HERE
     @GetMapping(path = "/orders/accept")
     @ResponseBody
     public Map<String, String> acceptOrder(@RequestParam("refid") String refId) {

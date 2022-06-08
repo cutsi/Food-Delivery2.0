@@ -6,7 +6,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public interface ReferenceGenerator {
-
+    //THIS HERE
     static String generateReference() throws NoSuchAlgorithmException {
 
         KeyGenerator keyGen = KeyGenerator.getInstance("DES");

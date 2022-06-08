@@ -28,7 +28,7 @@ function updateProgress(status){
 function connect() {
     var socket = new SockJS('/secured/order-progress-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    stompClient.connect({}, function (frame) {// if server lets us in this func is executed
         console.log('Connected: ' + frame);
         stompClient.subscribe(`/user/${refId}/order/progress`, function (data) {
             var audio = new Audio('/audio/notif-restaurant.mp3');
