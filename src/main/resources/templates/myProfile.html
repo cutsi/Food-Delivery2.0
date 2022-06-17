@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="css/profile.css">
   <link href="../static/css/nav.css" th:href="@{/css/nav.css}" rel="stylesheet" />
   <link href="../static/css/orders_profile.css" th:href="@{/css/orders_profile.css}" rel="stylesheet" />
+  <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
 
 </head>
 
@@ -109,13 +110,7 @@
 
                     <div class="row-order header green">
                       <div class="cell">
-                        Naziv
-                      </div>
-                      <div class="cell">
                         Cijena
-                      </div>
-                      <div class="cell">
-                        Ukupno
                       </div>
                       <div class="cell">
                         Datum
@@ -123,29 +118,25 @@
                       <div class="cell">
                         Status
                       </div>
+                      <div class="cell">
+                        Detalji
+                      </div>
                     </div>
 
                     <div class="row-order">
-                      <div class="cell" data-title="Product">
-                        <th:block th:each="content: ${order.getContents()}">
-                          ([[${content.getQuantity()}]]X) [[${content.getName()}]]<br>
-                        </th:block>
-
+                      <div class="cell" data-title="Cijena">
+                        [[${order.getPrice()}]]KM
                       </div>
-                      <div class="cell" data-title="Unit Price">
-
-                        <th:block th:each="content: ${order.getContents()}">
-                          KM<br>
-                        </th:block>
-                      </div>
-                      <div class="cell" data-title="total-price">
-                        [[${order.getPrice()}]]
-                      </div>
-                      <div class="cell" data-title="Date Sold">
+                      <div class="cell" data-title="Datum">
                         [[${order.getCreatedAtDMYHM()}]]
                       </div>
                       <div class="cell" data-title="Status">
                         [[${order.getStatus()}]]
+                      </div>
+                      <div class="cell" data-title="Detalji">
+                        <form action="#popup1">
+                          <input class="button-content-cell" type="submit" value="Detalji" />
+                        </form>
                       </div>
                     </div>
                   </th:block>
@@ -187,6 +178,39 @@
 
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div id="popup1" class="overlay pop">
+    <div class="popup" style="height: 85%; overflow-y: auto;">
+      <h2 class="popup-header">Detalji narudžbe</h2>
+      <a class="close">&times;</a>
+      <h3 class="content-header">Narudžba</h3>
+
+      <div class="content-wrapper">
+
+      </div>
+
+
+      <div class="Ukupno">
+        UKUPNO
+      </div>
+      <div class="ukupno-price">
+        <b>37.50KM</b>
+      </div>
+      <div class="accept-orders">
+        <a>
+          <button class="decline button-content-cell" style="background: #1e7e34; margin-top: 2rem;background: #D9391C;">Decline</button>
+        </a>
+        <a>
+          <button class="accept button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Accept</button>
+        </a>
+        <a>
+          <button class="deliver button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Deliver</button>
+        </a>
       </div>
     </div>
   </div>

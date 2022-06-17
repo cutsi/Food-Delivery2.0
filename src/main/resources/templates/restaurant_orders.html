@@ -307,12 +307,12 @@
       contentHtml += `
 
                                 <div class="content">
-                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div><!----CHANGED> <!-->
-                                    <div class="item-price">${c.portion.price}KM</div><!----CHANGED> <!-->
+                                    <div class="item-name"><b>${c.orderDetail.quantity} X  ${c.name} </b> (${c.orderDetail.portion.name.name})</div>
+                                    <div class="item-price">${c.orderDetail.portion.price}KM</div>
                                     <div class="condiments">
                             `;
 
-      c.condiments.forEach(cond=>{//CHANGED
+      c.orderDetail.condiments.forEach(cond=>{
 
         contentHtml += `
                                         <div class="condiment">+${cond.name.name}</div>
@@ -326,12 +326,12 @@
 
                                    </div>
                                    <div class="item-total">
-                                        ${c.portion.price}<!----CHANGED> <!-->
+                                        ${c.orderDetail.price}
                                     </div>
                                 </div>
 
                         `;
-      totalPrice += parseFloat(c.portion.price);//CHANGED
+      totalPrice += parseFloat(c.orderDetail.price);
 
     });
 
