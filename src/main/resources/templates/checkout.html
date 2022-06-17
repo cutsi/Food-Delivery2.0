@@ -28,12 +28,12 @@
                         <div class="d-flex flex-row">
                             <img class="checkout-item-image" th:src="${item.getImage()}" src ="${item.getImage()}" alt="" width="40">
                             <div class="ml-2">
-                                <span class="font-weight-bold d-block">[[${item.getName()}]]  ([[${item.getOrderDetail().getQuantity()}]] x [[${item.getOrderDetail().getPortion().getName().getName()}]])</span>
-                                <th:block th:each="condiment: ${item.getOrderDetail().getCondiments()}">
+                                <span class="font-weight-bold d-block">[[${item.getName()}]]  ([[${item.getQuantity()}]] x [[${item.getPortion().getName().getName()}]])</span> <!----CHANGED> <!-->
+                                <th:block th:each="condiment: ${item.getCondiments()}"><!----CHANGED> <!-->
                                     <span class="spec" style="font-size: 13px;">+[[${condiment.getName().getName()}]]</span><br>
                                 </th:block>
 
-                                <br><span class="spec checkout-item-price" style="font-size: inherit;font-weight: bolder;">[[${item.getOrderDetail().getPrice()}]]KM</span>
+                                <br><span class="spec checkout-item-price" style="font-size: inherit;font-weight: bolder;">[[${item.getPortion().getPrice()}]]KM</span><!----CHANGED> <!-->
 
                             </div>
                         </div>

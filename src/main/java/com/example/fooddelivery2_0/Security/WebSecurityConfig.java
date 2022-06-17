@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 //.and()
                 //THIS HERE
-                //.csrf().ignoringAntMatchers("/narudzba/new/**").and() //only for development
+                .csrf().ignoringAntMatchers("/home/filter", "/home").and() //only for development
                 .authorizeRequests()
                 .antMatchers("/restaurant","/css/**", "/js/**", "/css/**", "/audio/**", "/","/style.css","/index")
                 .permitAll()

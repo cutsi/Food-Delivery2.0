@@ -21,6 +21,8 @@ public class Condiment { //DONE
     private String price;
     @ManyToOne
     private CondimentName name;
+    @ManyToOne
+    private FoodItem foodItem;
     //@ManyToMany(mappedBy = "condiments")
     //private List<FOrderContentDetails> details;
     //@Transient

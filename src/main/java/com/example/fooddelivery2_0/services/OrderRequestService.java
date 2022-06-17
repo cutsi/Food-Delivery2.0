@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -25,20 +27,16 @@ import java.util.stream.Stream;
 @Service
 @AllArgsConstructor
 public class OrderRequestService {
-    @Autowired
     private OrderRepo orderRepo;
-    @Autowired
     private RestaurantRepo restaurantRepo;
-    @Autowired
     private OrderContentRepo orderContentRepo;
-    @Autowired
     private OrderContentDetailsRepo orderContentDetailRepo;
     private static final DecimalFormat df = new DecimalFormat("0.00");
     public String getTotal(List<Order> orders){
         Double totalPrice = 0.00;
         for (Order order:orders) {
             for(OrderContent orderContent: order.getContents()){
-                totalPrice = totalPrice + Double.valueOf(orderContent.getOrderDetail().getPrice());
+                totalPrice = totalPrice + Double.valueOf(orderContent.getPortion().getPrice());//CHANGE
             }
         }
         System.out.println("TOTAL PRICE_: " + totalPrice);
@@ -46,7 +44,7 @@ public class OrderRequestService {
     }
     public String addPrices(List<OrderContent> cartItems){
         return df.format(cartItems.stream()
-                .mapToDouble(cartItem -> Double.parseDouble(cartItem.getOrderDetail().getPrice()))
+                .mapToDouble(cartItem -> Double.parseDouble(cartItem.getPortion().getPrice()))//CHANGE
                 .sum());
     }
 
@@ -58,6 +56,8 @@ public class OrderRequestService {
             try {
 
                 if(!"null".equals(f)) {
+                    System.out.println("STREAM OF:" + f);
+                    System.out.println("OrderContent.class: " + OrderContent.class);
                     cartItems.add(mapper.readValue(f, OrderContent.class));
                 }
 
@@ -69,11 +69,12 @@ public class OrderRequestService {
         });
         return cartItems;
     }
+    @Transient
     public Order saveNewOrder(OrderRequest order, Customer customer, Long restaurantId) throws NoSuchAlgorithmException {
 
-        order.getFoodItems().stream().forEach(p->{
-            orderContentDetailRepo.save(p.getOrderDetail());
-        });
+        /*order.getFoodItems().stream().forEach(p->{
+            orderContentDetailRepo.save(p.getOrderDetail());//TO CHANGE
+        });*/
         List<OrderContent> contents = orderContentRepo.saveAll(order.getFoodItems());
         Order newOrder = new Order(ReferenceGenerator.generateReference(), customer, restaurantRepo.getById(restaurantId), contents,  Status.ORDERED);
         newOrder.setDeliveryNote(order.getDeliveryNote());
@@ -151,4 +152,6 @@ public class OrderRequestService {
         return null;
 
     }
+
+
 }

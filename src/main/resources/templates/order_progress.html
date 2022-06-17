@@ -37,9 +37,9 @@
         <div class="current"></div>
       </div>
       <div class="right">
-        <div id="ordered" th:class="${status == 'ORDERED' ? 'current' : status == 'DELIVERED' ? 'prev' : ''}">Your order is waiting to be confirmed.</div>
-        <div id="accepted" th:class="${status == 'ACCEPTED' ? 'current' : ''}">Your order is confirmed.</div>
-        <div id="delivered" th:class="'done ' + ${status == 'DELIVERED' ? 'current' : ''}">Your order is finished and is on its way to You.</div>
+        <div id="ordered" th:class="${status == 'ORDERED' ? 'current' : status == 'DELIVERED' ? 'prev' : ''}">Restoran pregledava vašu narudžbu</div>
+        <div id="accepted" th:class="${status == 'ACCEPTED' ? 'current' : ''}">Vaša narudžba je potvrđena.</div>
+        <div id="delivered" th:class="'done ' + ${status == 'DELIVERED' ? 'current' : ''}">Vaša narudžba je spremna.</div>
       </div>
     </div>
   </div>

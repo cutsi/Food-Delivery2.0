@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_content_details")
-public class OrderContentDetails {
+public class OrderContentDetails {//should be removed
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -90,8 +90,8 @@ public class DatabaseInitializer {
             customerRepo.save(customer);
 
 //            customer = new Customer(
-//                    "Moroccan_Restaurant",
-//                    "mezitestrest@yopmail.com",
+//                    "Josip_Restaurant",
+//                    "josipcutura@yopmail.com",
 //                    "0612345678",
 //                    bCryptPasswordEncoder.encode("rest")
 //            );
@@ -140,17 +140,17 @@ public class DatabaseInitializer {
             CondimentName sugar = new CondimentName("Sugar");
             condimentNameRepo.saveAll(List.of(ketchup, mayonnaise, salt, sugar));
 
-            //ADD 2 PORTIONS FOR FOOD_ITEM NUMBER 1
+            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 1
             Condiment condiment1Food1 = new Condiment("0", ketchup);
             Condiment condiment2Food1 = new Condiment("0", mayonnaise);
             List<Condiment> condimentsFood1 = List.of(condiment1Food1, condiment2Food1);
             condimentRepo.saveAll(condimentsFood1);
-            //ADD 2 PORTIONS FOR FOOD_ITEM NUMBER 2
+            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 2
             Condiment condiment1Food2 = new Condiment("0", sugar);
             Condiment condiment2Food2 = new Condiment("0.5", salt);
             List<Condiment> condimentsFood2 = List.of(condiment1Food2, condiment2Food2);
             condimentRepo.saveAll(condimentsFood2);
-            //ADD 3 PORTIONS FOR FOOD_ITEM NUMBER 3
+            //ADD 3 CONDIMENTS FOR FOOD_ITEM NUMBER 3
             Condiment condiment1Food3 = new Condiment("0", ketchup);
             Condiment condiment2Food3 = new Condiment("1", mayonnaise);
             Condiment condiment3Food3 = new Condiment("0.5", salt);
@@ -225,7 +225,7 @@ public class DatabaseInitializer {
             //ADD RESTAURANT OWNER FOR RESTAURANT NUMBER 1
             RestaurantOwner owner1 = new RestaurantOwner(
                     "Moroccan_Owner",
-                    "mezitestrest@yopmail.com",
+                    "josipcutura@yopmail.com",
                     "0612345678",
                     bCryptPasswordEncoder.encode("rest")
             );

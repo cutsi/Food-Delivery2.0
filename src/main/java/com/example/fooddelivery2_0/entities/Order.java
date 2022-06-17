@@ -24,6 +24,7 @@ public class Order implements Comparable<Order>{ //DONE
     private String deliveryNote;
     private String address;
     private String phone;
+    private String price;
     @Enumerated(EnumType.STRING)
     private Status status;
     private boolean isAccepted;
@@ -44,6 +45,9 @@ public class Order implements Comparable<Order>{ //DONE
         this.customer = customer;
         this.restaurant = restaurant;
         this.contents = contents;
+    }
+    public String getCreatedAtDMYHM(){
+        return  createdAt.getDayOfMonth() + "." + createdAt.getMonthValue() + "." + createdAt.getYear() + " " + createdAt.getHour() + ":" + createdAt.getMinute();
     }
     public String getCreatedAtLDT(){
         return createdAt.getHour() + ":" + createdAt.getMinute();

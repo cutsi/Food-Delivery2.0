@@ -4,9 +4,11 @@ package com.example.fooddelivery2_0.Controllers;
 import com.example.fooddelivery2_0.Utils.Requests.OrderRequest;
 import com.example.fooddelivery2_0.entities.Customer;
 import com.example.fooddelivery2_0.entities.Order;
+import com.example.fooddelivery2_0.entities.OrderContent;
 import com.example.fooddelivery2_0.entities.RestaurantOwner;
 import com.example.fooddelivery2_0.services.NotificationService;
 import com.example.fooddelivery2_0.services.OrderRequestService;
+import com.example.fooddelivery2_0.services.OrderService;
 import com.example.fooddelivery2_0.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -25,11 +27,21 @@ public class OrderController {
     private final OrderRequestService orderRequestService;
     private final NotificationService notificationService;
     private final UserService userService;
+    private final OrderService orderService;
 
     @PostMapping(path="", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String checkout(@RequestParam String[] foodItems,
                            @RequestParam Long restaurant_id,
                            Model model) {
+        for (String foodItem: foodItems
+             ) {System.out.println("FOODITEMSSS: " + foodItem);
+
+        }
+        foodItems = orderService.serialize(foodItems);
+        for (String foodItem: foodItems) {
+            System.out.println("SERIALIZED FOOD ITEM: " + foodItem);
+        }
+
         model.addAttribute("restaurantId", restaurant_id);
         model.addAttribute("foodItems", orderRequestService.getCartItems(foodItems));
         model.addAttribute("total", orderRequestService.addPrices(orderRequestService.getCartItems(foodItems)));
@@ -42,16 +54,18 @@ public class OrderController {
                                         @PathVariable("rid") Long restaurantId,
                                         Authentication principal) {
 
-        System.out.println(orderRequest.getDeliveryNote());
-        System.out.println(orderRequest.getRestaurantNote());
+        //System.out.println(orderRequest.getDeliveryNote());
+        //System.out.println(orderRequest.getRestaurantNote());
 
         Order order;
         Map<String, String> response = new HashMap<>();
-
+        //var response = new HashMap<String ,String>(); //TODO PROVJERIT VAR
         try {
-            //SAVE NEW ORDER ON DATABASE
+
             order = orderRequestService.saveNewOrder(orderRequest, (Customer) principal.getPrincipal(), restaurantId);
-            //PUSH NOTIF TO RESTAURANT
+            order.setPrice(orderRequestService.addPrices(order.getContents()));
+
+            orderService.save(order);
             notificationService.notifyRestaurantOnNewOrder(order);
             response.put("path","/narudzba/progress?refid="+order.getOrderReference()+order.getId());
             response.put("status","success");

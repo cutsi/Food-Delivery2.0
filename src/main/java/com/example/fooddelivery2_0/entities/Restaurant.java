@@ -29,14 +29,14 @@ public class Restaurant {
     private List<Rating> ratings;
     @OneToMany(mappedBy = "restaurant")
     private List<Response> responses;
-    @OneToMany
+    @OneToMany(mappedBy = "restaurant")
     private List<FoodItem> foodItems;
     @OneToMany(mappedBy = "restaurant")
     private List<WorkingHours> workingHours; //MAX 7
     @OneToMany(mappedBy = "restaurant")
     private List<Order> orders;
     @JsonIgnore
-    private String notificationReference; //the reference to use to subscribe to notification queue (we will add id to it to be more unique)
+    private String notificationReference;
 
     public Restaurant(String phone, String image, String name, String banner, String deliveryCost, RestaurantAddress address, List<FoodItem> foodItems) {
         this.phone = phone;

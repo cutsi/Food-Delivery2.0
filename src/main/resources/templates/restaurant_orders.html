@@ -42,7 +42,7 @@
   <div class="row no-gutters" style="margin-top: 5rem;">
     <div class="col-md-6 no-gutters">
       <div class="left-side">
-        <div class="new-orders"><b>NEW ORDERS</b></div>
+        <div class="new-orders"><b>NOVE NARUDŽBE</b></div>
         <div class="orders-content" style="border-left: 3px solid #cb190c;border-right: 3px solid #cb190c;border-bottom: 3px solid #cb190c;">
           <section>
             <table class="bill-table">
@@ -122,7 +122,7 @@
     </div>
     <div class="col-md-6 no-gutters">
       <div class="right-side">
-        <div class="accepted-orders"> <b>ACCEPTED ORDERS</b></div>
+        <div class="accepted-orders"> <b>PRIHVAĆENE NARUDŽBE</b></div>
         <div class="orders-content" style="border-left: 3px solid #68a708;border-right: 3px solid #68a708;border-bottom: 3px solid #68a708;">
 
           <section>
@@ -307,12 +307,12 @@
       contentHtml += `
 
                                 <div class="content">
-                                    <div class="item-name"><b>${c.orderDetail.quantity} X  ${c.name} </b> (${c.orderDetail.portion.name.name})</div>
-                                    <div class="item-price">${c.orderDetail.portion.price}KM</div>
+                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div><!----CHANGED> <!-->
+                                    <div class="item-price">${c.portion.price}KM</div><!----CHANGED> <!-->
                                     <div class="condiments">
                             `;
 
-      c.orderDetail.condiments.forEach(cond=>{
+      c.condiments.forEach(cond=>{//CHANGED
 
         contentHtml += `
                                         <div class="condiment">+${cond.name.name}</div>
@@ -326,12 +326,12 @@
 
                                    </div>
                                    <div class="item-total">
-                                        ${c.orderDetail.price}
+                                        ${c.portion.price}<!----CHANGED> <!-->
                                     </div>
                                 </div>
 
                         `;
-      totalPrice += parseFloat(c.orderDetail.price);
+      totalPrice += parseFloat(c.portion.price);//CHANGED
 
     });
 

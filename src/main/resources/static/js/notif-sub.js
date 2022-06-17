@@ -1,5 +1,5 @@
-//when page is fully loaded
-$( document ).ready(function() {
+
+$( document ).ready(function() {//ucitana
 
     connect();
 
@@ -77,7 +77,7 @@ function notif_bell_animate(){
 }
 
 function connect() {
-    var socket = new SockJS('/secured/notif-websocket');//knock knock connection
+    var socket = new SockJS('/secured/notif-websocket');
     stompClient = Stomp.over(socket);//stomp protocol
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);

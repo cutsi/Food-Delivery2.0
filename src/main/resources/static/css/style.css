@@ -6,6 +6,11 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+
+}
+.mainLoginInput::-webkit-input-placeholder {
+    font-family: 'myFont', Arial, Helvetica, sans-serif;
+
 }
 
 p {

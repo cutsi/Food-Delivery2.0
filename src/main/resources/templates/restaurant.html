@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments/general :: head"></head>
@@ -366,7 +366,7 @@
                     <div class="media-block">
                       <div class="media-body">
                         <div class="mar-btm">
-                          <p class="" style="color: black">[[${comment.getUser().getName()}]]</p>
+                          <p class="" style="color: black">[[${comment.getCustomer().getName()}]]</p>
                           <p class="text-muted text-sm" style="font-size: 0.79rem;">
                             [[${comment.getCreatedAt().getDayOfMonth()}]].[[${comment.getCreatedAt().getMonthValue()}]].[[${comment.getCreatedAt().getYear()}]].
                           </p>
@@ -424,14 +424,14 @@
                         <th:block th:each="portion: ${foodItem.getPortions()}">
                           <label th:for="${foodItem.getId()} + '_portion_' + ${portion.getId()}">
                             <div class="checkbox-item">
-                                                            <span th:if="${portion.isChecked()}">
-                                                                <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;" checked='checked'
-                                                                       th:portion-name="${portion.getName().getName()}" th:portion-price="${portion.getPrice()}" >
-                                                            </span>
+                                                             <span th:if="${portion.isChecked()}">
+                                                                 <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;" checked='checked'
+                                                                        th:portion-name="${portion.getName().getName()}" th:portion-price="${portion.getPrice()}" >
+                                                             </span>
                               <span th:if="${!portion.isChecked()}">
-                                                                <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;"
-                                                                       th:portion-name="${portion.getName().getName()}" th:portion-price="${portion.getPrice()}">
-                                                            </span>
+                                                                 <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;"
+                                                                        th:portion-name="${portion.getName().getName()}" th:portion-price="${portion.getPrice()}">
+                                                             </span>
 
                               <div class="checkbox-text">
                                 <div class="checkbox-heading">
@@ -1121,7 +1121,6 @@
                   `
                                             </ul>
                                         </div>
-
                                     `;
 
         }else{
@@ -1237,7 +1236,7 @@
           id: 0,
           name: "",
           image: "",
-          orderDetail: {}
+          uniqueId: "", price: 0, portion: {}, condiments: [], quantity: 1
 
         };
 
@@ -1255,7 +1254,7 @@
         portion.name =  portionTemp.attr("portion-name");
         portion.price =  +portionTemp.attr("portion-price");
         //add portion to order
-        order.portion = portion;
+        foodItemObj.portion = portion;
         //add order to fooItem
         foodItemObj.orderDetail = order;
 
@@ -1359,6 +1358,9 @@
   })();
 </script>
 
+
+
+</body></html>
 
 
 </body></html>

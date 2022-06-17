@@ -1,5 +1,7 @@
 package com.example.fooddelivery2_0.services;
 import com.example.fooddelivery2_0.entities.Category;
+import com.example.fooddelivery2_0.entities.FoodItem;
+import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.repos.CategoryRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepo categoryRepo;
+    private final FoodItemService foodItemService;
 
-    public Optional<Category> getCategoryByCategoryName(String categoryName){
+    public Optional<Category> getCategoryByName(String categoryName){
         return categoryRepo.findByName(categoryName);
     }
     public Optional<Category> getCategoryById(Long id){
@@ -24,4 +27,5 @@ public class CategoryService {
     public List<Category> getAll() {
         return categoryRepo.findAll();
     }
+
 }

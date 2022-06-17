@@ -101,101 +101,54 @@
         </div>
         <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
           <h3 class="mb-4">Narudžbe</h3>
-          <div class="row">
+          <div class="row-order">
             <div class="col-md-6">
               <div class="form-group">
                 <div class="table">
+                  <th:block th:each="order: ${orders}">
 
-                  <div class="row header green">
-                    <div class="cell">
-                      Product
+                    <div class="row-order header green">
+                      <div class="cell">
+                        Naziv
+                      </div>
+                      <div class="cell">
+                        Cijena
+                      </div>
+                      <div class="cell">
+                        Ukupno
+                      </div>
+                      <div class="cell">
+                        Datum
+                      </div>
+                      <div class="cell">
+                        Status
+                      </div>
                     </div>
-                    <div class="cell">
-                      Unit Price
-                    </div>
-                    <div class="cell">
-                      Quantity
-                    </div>
-                    <div class="cell">
-                      Date Sold
-                    </div>
-                    <div class="cell">
-                      Status
-                    </div>
-                  </div>
 
-                  <div class="row">
-                    <div class="cell" data-title="Product">
-                      Solid oak work table
-                    </div>
-                    <div class="cell" data-title="Unit Price">
-                      $800
-                    </div>
-                    <div class="cell" data-title="Quantity">
-                      10
-                    </div>
-                    <div class="cell" data-title="Date Sold">
-                      03/15/2014
-                    </div>
-                    <div class="cell" data-title="Status">
-                      Waiting for Pickup
-                    </div>
-                  </div>
+                    <div class="row-order">
+                      <div class="cell" data-title="Product">
+                        <th:block th:each="content: ${order.getContents()}">
+                          ([[${content.getQuantity()}]]X) [[${content.getName()}]]<br>
+                        </th:block>
 
-                  <div class="row">
-                    <div class="cell" data-title="Product">
-                      Leather iPhone wallet
-                    </div>
-                    <div class="cell" data-title="Unit Price">
-                      $45
-                    </div>
-                    <div class="cell" data-title="Quantity">
-                      120
-                    </div>
-                    <div class="cell" data-title="Date Sold">
-                      02/28/2014
-                    </div>
-                    <div class="cell" data-title="Status">
-                      In Transit
-                    </div>
-                  </div>
+                      </div>
+                      <div class="cell" data-title="Unit Price">
 
-                  <div class="row">
-                    <div class="cell" data-title="Product">
-                      27" Apple Thunderbolt displays
+                        <th:block th:each="content: ${order.getContents()}">
+                          KM<br>
+                        </th:block>
+                      </div>
+                      <div class="cell" data-title="total-price">
+                        [[${order.getPrice()}]]
+                      </div>
+                      <div class="cell" data-title="Date Sold">
+                        [[${order.getCreatedAtDMYHM()}]]
+                      </div>
+                      <div class="cell" data-title="Status">
+                        [[${order.getStatus()}]]
+                      </div>
                     </div>
-                    <div class="cell" data-title="Unit Price">
-                      $1000
-                    </div>
-                    <div class="cell" data-title="Quantity">
-                      25
-                    </div>
-                    <div class="cell" data-title="Date Sold">
-                      02/10/2014
-                    </div>
-                    <div class="cell" data-title="Status">
-                      Delivered
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="cell" data-title="Product">
-                      Bose studio headphones
-                    </div>
-                    <div class="cell" data-title="Unit Price">
-                      $60
-                    </div>
-                    <div class="cell" data-title="Quantity">
-                      90
-                    </div>
-                    <div class="cell" data-title="Date Sold">
-                      01/14/2014
-                    </div>
-                    <div class="cell" data-title="Status">
-                      Delivered
-                    </div>
-                  </div>
-
+                  </th:block>
                 </div>
               </div>
             </div>

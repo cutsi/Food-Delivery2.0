@@ -38,7 +38,7 @@ public class RestaurantController {
         Collections.sort(orders);
 
         model.addAttribute("orders", orders);
-        model.addAttribute("total", orderRequestService.getTotal(orders));
+        //model.addAttribute("total", orderRequestService.getTotal(orders));
         return "restaurant_orders";
     }
     @GetMapping(path = "menu")

@@ -1,14 +1,24 @@
 package com.example.fooddelivery2_0.Controllers;
-import com.example.fooddelivery2_0.entities.ContactMessage;
-import com.example.fooddelivery2_0.entities.Image;
-import com.example.fooddelivery2_0.entities.Restaurant;
+import com.example.fooddelivery2_0.Utils.UserRole;
+import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+// restoran food item 1 n
+//restoran id vuce se kroy sve tablice
+//portions food item 1 -> n
+// price u food itemu visak
+//admin
+//report (Statiska)
+// steps ne moze bit page kojem se ne moze pristuput
+// filtering i searching nad svim restoranima (home page)
+// i pojedini restoranima npr user moze vidit sve mijesane pizze iz svih restorana
+// every food item is unique, every food name is unique,
+// remove restaurants_food_items, add resturant_id to food_item
+//
 @Controller
 @RequestMapping(path = "/")
 @AllArgsConstructor
@@ -18,6 +28,9 @@ public class FrontPageController {
     private final ImageService imageService;
     private final RatingService ratingService;
     private final WorkingHoursService workingHoursService;
+    private final OrderService orderService;
+    private final FoodItemService foodItemService;
+    private final FilterService filterService;
     @GetMapping(path = {"/", "/home"})
     public String home(Model model){
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
@@ -27,6 +40,17 @@ public class FrontPageController {
             userRole = userService.getCurrentUser().get().getUserRole().toString();
         }
         model.addAttribute("userRole", userRole);
+        return "home";
+    }
+    @GetMapping(path = "filter")
+    public String homeFilter(Model model,@RequestParam("kod") String codeWord){
+        //List<Restaurant> restaurants =  List.of(restaurantService.getRestaurantById(foodItemService.getByName(codeWord).get().getRestaurant().getId()).get());
+        List<Restaurant> filteredRestaurants = filterService.filter(codeWord);
+        if(filteredRestaurants.isEmpty()){
+            model.addAttribute("message", "Nažalost, vaše pretraživanje nema rezultata.");
+            return "filter-fail";
+        }
+        model.addAttribute("restaurants", filterService.filter(codeWord));
         return "home";
     }
 
@@ -51,11 +75,15 @@ public class FrontPageController {
     @GetMapping(path="/login")
     public String getLogin(){
         return "login";
-    }
+    }//TODO unit podatke za restoran i jos jela i kategorija
 
     @GetMapping(path = "my-profile")
     public String myProfile(Model model){
         model.addAttribute("user", userService.getCurrentUser().get());
+        if(userService.getCurrentUser().get().getUserRole().equals(UserRole.CUSTOMER))
+            model.addAttribute("orders", orderService.getAllOrdersByCustomerOrderByCreatedAtDesc((Customer) userService.getCurrentUser().get()));
+        else if (userService.getCurrentUser().get().getUserRole().equals(UserRole.SUPER_RESTAURANT))
+            model.addAttribute("orders", orderService.getAllByRestaurantOrderByCreatedAtDesc(restaurantService.getRestaurantByOwner((RestaurantOwner) userService.getCurrentUser().get()).get()));
         return "myProfile";
     }
 

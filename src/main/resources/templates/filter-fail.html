@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <link href="../static/css/search-bar.css" th:href="@{/css/search-bar.css}" rel="stylesheet" />
+
+  <style>
+    .mobile {
+      padding: 5rem 1rem
+    }
+    @media screen and (min-width: 960px) {
+      .mobile {
+        padding: 5rem 1rem
+      }
+    }
+    .filter-message{
+      margin: 5rem 3rem 4rem 3rem;
+      padding: 1rem;
+      border: solid;
+      border-radius: 2rem;
+      background: antiquewhite;
+    }
+  </style>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style1.css">
+  <script src="https://kit.fontawesome.com/43dcc20e7a.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+<main role="main" class="flex-shrink-0">
+  <header th:replace="fragments/general :: header"></header>
+
+  <section id="page-header">
+    <div class="mobile jumbotron jumbotron-fluid">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-width">
+            <h2 class="jumbotron-header" style="font-family: sans-serif">Zamezi na </h2>
+            <h2 class="jumbotron-header" style="font-family: auto">MEZI!</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <form th:action="@{/filter}" method="get">
+      <div class="wrap">
+        <div class="search">
+          <input type="text" name="kod" class="searchTerm mainLoginInput" placeholder="Tražite nešto specifično? npr. tortilja">
+          <button type="submit" class="searchButton">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+
+  <section>
+    <div class="filter-message">
+      Nažalost ne možemo pronaći ono što tražite. Pokušajte sa nekom drugom riječi ili <a href="/">pregledajte naše restorane</a>.
+    </div>
+  </section>
+</main>
+
+<footer th:replace="fragments/general :: footer">
+
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+
+</body>
+
+</html>

@@ -2,13 +2,14 @@ package com.example.fooddelivery2_0.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "portions")
-public class Portion implements Comparable<Portion>{ //DONE
+public class Portion implements Comparable<Portion>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,7 +19,8 @@ public class Portion implements Comparable<Portion>{ //DONE
     private boolean isChecked;
     @ManyToOne
     private PortionName name;
-
+    @ManyToOne
+    private FoodItem foodItem;
     public Portion(String price, boolean isChecked, PortionName portionName) {
         this.price = price;
         this.isChecked = isChecked;

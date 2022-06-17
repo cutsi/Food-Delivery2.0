@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org">
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 
-<head th:replace="fragments/general :: head">
+<head th:replace="fragments/general :: head"></head>
+<head>
+    <link href="../static/css/search-bar.css" th:href="@{/css/search-bar.css}" rel="stylesheet" />
 
     <style>
         .mobile {
@@ -9,10 +12,16 @@
         }
         @media screen and (min-width: 960px) {
             .mobile {
-                padding: 3rem 1rem
+                padding: 5rem 1rem
             }
         }
     </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style1.css">
+    <script src="https://kit.fontawesome.com/43dcc20e7a.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -31,6 +40,21 @@
             </div>
         </div>
     </section>
+
+    <section>
+        <form th:action="@{/filter}" method="get">
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" name="kod" class="searchTerm mainLoginInput" placeholder="Tražite nešto specifično? npr. tortilja">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+
     <section id="about">
 
         <div class="container card-container">

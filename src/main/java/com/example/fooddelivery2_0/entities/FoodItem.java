@@ -17,13 +17,15 @@ public class FoodItem { //DONE
     private String image;
     private String name;
     private String info;
-    private String price; //will be fill with the check (default) portion
+    private String price;
     @ManyToOne
     private Category category;
-    @OneToMany
+    @OneToMany(mappedBy = "foodItem")
     private List<Portion> portions;
-    @OneToMany
+    @OneToMany(mappedBy = "foodItem")
     private List<Condiment> condiments;
+    @ManyToOne
+    private Restaurant restaurant;
 
     public FoodItem(String image, String name, String info, Category category, List<Portion> portions, List<Condiment> condiments) {
         this.image = image;
