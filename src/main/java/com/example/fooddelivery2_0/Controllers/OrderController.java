@@ -33,14 +33,7 @@ public class OrderController {
     public String checkout(@RequestParam String[] foodItems,
                            @RequestParam Long restaurant_id,
                            Model model) {
-        for (String foodItem: foodItems
-             ) {System.out.println("FOODITEMSSS: " + foodItem);
 
-        }
-        foodItems = orderService.serialize(foodItems);
-        for (String foodItem: foodItems) {
-            System.out.println("SERIALIZED FOOD ITEM: " + foodItem);
-        }
 
         model.addAttribute("restaurantId", restaurant_id);
         model.addAttribute("foodItems", orderRequestService.getCartItems(foodItems));

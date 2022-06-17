@@ -543,6 +543,8 @@
             500
     )
   });
+
+
   document.querySelector("#klose").addEventListener("click", function(){
     document.querySelector(".overlay1").style.display = "none";
   });
@@ -552,33 +554,21 @@
 </script>
 <script>
   let btnItem = document.querySelector('.menu-item');
-
   $(".menu-item").on('click',function(event){
-
-
     if(this.classList.contains("is-open")){
-
       $(this).css('backgroundColor','whitesmoke');
-
     }else{
-
       $(this).css('backgroundColor','#e7e9ed');
-
     }
-
   });
-
 </script>
 <script>
   const accordionBtns = document.querySelectorAll(".menu-item");
-
   accordionBtns.forEach((accordion) => {
     accordion.onclick = function () {
       this.classList.toggle("is-open");
-
       let content = this.nextElementSibling;
       //console.log(content);
-
       if (content.style.maxHeight) {
         //this is if the accordion is open
         content.style.maxHeight = null;
@@ -590,11 +580,9 @@
     };
   });
 </script>
-
 <script>
   // Utility function
   function Util () {};
-
   /*
       class manipulation functions
   */
@@ -602,14 +590,12 @@
     if (el.classList) return el.classList.contains(className);
     else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
   };
-
   Util.addClass = function(el, className) {
     var classList = className.split(' ');
     if (el.classList) el.classList.add(classList[0]);
     else if (!Util.hasClass(el, classList[0])) el.className += " " + classList[0];
     if (classList.length > 1) Util.addClass(el, classList.slice(1).join(' '));
   };
-
   Util.removeClass = function(el, className) {
     var classList = className.split(' ');
     if (el.classList) el.classList.remove(classList[0]);
@@ -619,18 +605,15 @@
     }
     if (classList.length > 1) Util.removeClass(el, classList.slice(1).join(' '));
   };
-
   Util.toggleClass = function(el, className, bool) {
     if(bool) Util.addClass(el, className);
     else Util.removeClass(el, className);
   };
-
   Util.setAttributes = function(el, attrs) {
     for(var key in attrs) {
       el.setAttribute(key, attrs[key]);
     }
   };
-
   /*
     DOM manipulation
   */
@@ -642,14 +625,12 @@
     }
     return childrenByClass;
   };
-
   /*
       Animate height of an element
   */
   Util.setHeight = function(start, to, element, duration, cb) {
     var change = to - start,
             currentTime = null;
-
     var animateHeight = function(timestamp){
       if (!currentTime) currentTime = timestamp;
       var progress = timestamp - currentTime;
@@ -662,20 +643,16 @@
         cb();
       }
     };
-
     //set the height of the element before starting animation -> fix bug on Safari
     element.setAttribute("style", "height:"+start+"px;");
     window.requestAnimationFrame(animateHeight);
   };
-
   /*
       Smooth Scroll
   */
-
   Util.scrollTo = function(final, duration, cb) {
     var start = window.scrollY || document.documentElement.scrollTop,
             currentTime = null;
-
     var animateScroll = function(timestamp){
       if (!currentTime) currentTime = timestamp;
       var progress = timestamp - currentTime;
@@ -688,14 +665,11 @@
         cb && cb();
       }
     };
-
     window.requestAnimationFrame(animateScroll);
   };
-
   /*
     Focus utility classes
   */
-
   //Move focus to an element
   Util.moveFocus = function (element) {
     if( !element ) element = document.getElementsByTagName("body")[0];
@@ -705,15 +679,12 @@
       element.focus();
     }
   };
-
   /*
     Misc
   */
-
   Util.getIndexInArray = function(array, el) {
     return Array.prototype.indexOf.call(array, el);
   };
-
   Util.cssSupports = function(property, value) {
     if('CSS' in window) {
       return CSS.supports(property, value);
@@ -722,7 +693,6 @@
       return jsProperty in document.body.style;
     }
   };
-
   /*
       Polyfills
   */
@@ -730,7 +700,6 @@
   if (!Element.prototype.matches) {
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
   }
-
   if (!Element.prototype.closest) {
     Element.prototype.closest = function(s) {
       var el = this;
@@ -742,22 +711,17 @@
       return null;
     };
   }
-
   //Custom Event() constructor
   if ( typeof window.CustomEvent !== "function" ) {
-
     function CustomEvent ( event, params ) {
       params = params || { bubbles: false, cancelable: false, detail: undefined };
       var evt = document.createEvent( 'CustomEvent' );
       evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
       return evt;
     }
-
     CustomEvent.prototype = window.Event.prototype;
-
     window.CustomEvent = CustomEvent;
   }
-
   /*
       Animation curves
   */
@@ -770,7 +734,6 @@
 </script>
 <script type="text/javascript">
   (function(){
-
     var storageCartItem = {
       cart_count : 0,
       cart : []
@@ -787,7 +750,6 @@
               cartTotal = cart[0].getElementsByClassName('cd-cart__checkout')[0].getElementsByTagName('span')[0],
               animatingQuantity = false;
       initCartEvents();
-
       //bootstrap function
       function initCartEvents() {
         loadCart();
@@ -796,46 +758,35 @@
           cartAddBtns[i].addEventListener('click', addToCart);
         })(i);}
       };
-
       //add click checkout button click listner
       document.getElementById('checkout-btn').addEventListener('click', function(){
-
         //get form
         var form = document.getElementById("checkout-form");
         var csrf = document.querySelector('meta[name="_csrf"]').content;
         var input;
-
         if(foodItems.length == 1)
           foodItems.push(null);
-
-
         //build inputs inside form to inject product ids
         for(var k=0; k<foodItems.length; k++){
-
           input = document.createElement("input");
           input.setAttribute("type", "hidden");
           input.setAttribute("name", "foodItems");
           input.setAttribute("value",  JSON.stringify(foodItems[k]));
           form.appendChild(input);
         }
-
         //build csrf input
         input = document.createElement("input");
         input.setAttribute("type", "hidden");
         input.setAttribute("name", "_csrf");
         input.setAttribute("value", csrf);
         form.appendChild(input);
-
         //submit the form
         form.submit();
-
       });
-
       //add to cart parent function
       function addToCart(event) {
         event.preventDefault();
         if(animatingQuantity) return;
-
         addProduct(
                 this.getAttribute('item-id'),
                 this.getAttribute('item-image'),
@@ -845,11 +796,8 @@
         $('#btnItem_'+this.getAttribute('item-id')+' .menu-item-price').text(portionPrice.toFixed(2)+'KM');
         $("#btnItem_"+this.getAttribute('item-id')).click();
         $( '[name=condiment_name_'+this.getAttribute("item-id")+']' ).prop( "checked", false );
-
       };
-
       function blinkPrice(productId){
-
         $('#btnItem_'+productId+' .menu-item-price').stop().fadeOut();
         $('#btnItem_'+productId+' .menu-item-price').stop().fadeIn();
         $('#btnItem_'+productId+' .menu-item-price').css("color","#e7e9ed");
@@ -858,12 +806,10 @@
             fadeItIn();
           });
         };
-
         var fadeItIn = function() {
           $('#btnItem_'+productId+' .menu-item-price').fadeIn(100, fadeItOut());
         };
         //fadeItIn();
-
         setTimeout(()=>{
           $('#btnItem_'+productId+' .menu-item-price').stop().fadeOut();
           $('#btnItem_'+productId+' .menu-item-price').stop().fadeIn();
@@ -874,45 +820,31 @@
         //TODO OMOGUCIT RESTORANU FORMU ZA DODAVANJE NOVIH JELA I KATEGORIJA
         //TODO OMOGUCIT RESTORANU SKIDANJE JELA SA STRANICE
         //
-
       }
-
       //portions radio button on change
       $('input[type=radio]').on('change',function(){
-
         const productId = $(this).attr('id').split('_portion_')[0];
         const portionPrice =  +$(this).attr("portion-price");
         let condimentsPrices = 0;
-
         $.each($('input[name="condiment_name_'+productId+'"]:checked'), function(){
-
           let condimentCheckedId = $(this).val();
           condimentsPrices +=  +$(this).attr("condiment-price");
-
         });
         $('#btnItem_'+productId+' .menu-item-price').text((portionPrice+condimentsPrices).toFixed(2)+'KM');
         blinkPrice(productId);
-
       });
-
       //condiments checkbox button on change
       $('input[type=checkbox]').on('change',function(){
-
         const productId = $(this).attr('id').split('_condiment_')[0];
         const portionPrice = +$('input[name="portion_name_'+productId+'"]:checked').attr("portion-price");
         let condimentsPrices =  0;
-
         $.each($('input[name="condiment_name_'+productId+'"]:checked'), function(){
-
           let condimentCheckedId = $(this).val();
           condimentsPrices +=  +$(this).attr("condiment-price");
-
         });
         $('#btnItem_'+productId+' .menu-item-price').text((portionPrice+condimentsPrices).toFixed(2)+'KM');
         blinkPrice(productId);
-
       });
-
       //delete condiment
       $(".cd-cart__content").on("click", ".cd-cart__condiment_remove", function(){
         let currentIndex = -1;
@@ -939,12 +871,9 @@
             break;//delete_condiment_
           }
         }
-
         //if(foodItems[currentIndex].orderDetail.condiments.length === 0)
         //$(".condiments-view ul").append(`<li>Nema dodataka</li>`);
-
       });
-
       function updateCondimentPrice(foodItemObj){
         let condTotal = 0;
         let bareMealPrice = 0;
@@ -962,44 +891,29 @@
         localStorage.setItem("mezi_cart_restaurant_"+restaurant_id,  JSON.stringify(storageCartItem));
         console.log("NEW MEAL PRICE:", fullMeal);
       }
-
       //close cart if click outside
       $(".js-cd-cart.cd-cart").on("click",function(e){
-
         if($(e.target).hasClass("js-cd-cart") && $(e.target).hasClass("cd-cart--open")){
-
           $(".cd-cart").removeClass("cd-cart--open");
           $(".details-container").hide();
-
         }
-
       });
-
       //open/close cart
       $(".js-cd-cart .cd-cart__trigger").on("click",function(e){
-
         e.stopPropagation();
         if($(".cd-cart").hasClass("cd-cart--open")){
-
           $(".cd-cart").removeClass("cd-cart--open");
           $(".details-container").hide();
-
         }
         else $(".cd-cart").addClass("cd-cart--open");
-
       });
-
       //details button onclick
       $(".cd-cart__content").on("click",".cd-cart__details-item",function(){
-
         let itemId = $(this).attr("id").split("btn_detail_")[1];
         $("#order_detail_"+itemId).toggle();
-
       });
-
       //delete button onclick
       $(".cd-cart__content").on("click",".cd-cart__delete-item",function(){
-
         let itemId = $(this).attr("id").split("btn_delete_")[1];
         $("#food_cart_"+itemId).remove();
         $("#order_detail_"+itemId).remove();
@@ -1019,12 +933,9 @@
           $(".cd-cart").removeClass("cd-cart--open");
           $(".cd-cart").addClass("cd-cart--empty");
         }
-
       });
-
       //quantity select onchange
       $(".cd-cart__content").on("change","select[id^='quantity_']",function(){
-
         let id = $(this).attr("id").split("quantity_")[1];
         let foodItemObjTemp = foodItems.filter(f=>{
           return f.orderDetail.uniqueId == id;
@@ -1038,12 +949,9 @@
         storageCartItem.cart = foodItems;
         storageCartItem.cart_count = cartCount;
         localStorage.setItem("mezi_cart_restaurant_"+restaurant_id,  JSON.stringify(storageCartItem));
-
       });
-
       //comparation method to sort condiments array
       function compareCondimetns(cond1,cond2){
-
         if ( cond1.id < cond2.id ){
           return -1;
         }
@@ -1051,15 +959,10 @@
           return 1;
         }
         return 0;
-
       }
-
       //build parts of cart details
       function buildFoodCartParts(foodItemVar){
-
-
         let foodBox =
-
                 `<li id="food_cart_${foodItemVar.orderDetail.uniqueId}" class="cd-cart__product">
                         <div class="cd-cart__image">
                             <a href="#0">
@@ -1091,20 +994,14 @@
                     <div class="details-container" id="order_detail_${foodItemVar.orderDetail.uniqueId}" style="margin-top:10px;display:none">
                         <li class="cd-cart__product" id="order_detail_box_${foodItemVar.orderDetail.uniqueId}">
                             <div class="cd-cart__details" style="padding:0px;display:inline">`;
-
         if(foodItemVar.orderDetail.condiments.length > 0){
-
           foodBox +=
-
                   `(${foodItemVar.orderDetail.portion.name})
                                         <div class="condiments-view" style="margin-top:4px">
                                             <ul style="list-style:disc !important;padding:0px;margin-left:22px">
                                                 `;
-
           foodItemVar.orderDetail.condiments.forEach(c=>{
-
             foodBox +=
-
                     `
                                                     <div id="delete_condiment_${c.id}__${foodItemVar.orderDetail.uniqueId}">
                                                     <li>${c.name}
@@ -1113,28 +1010,20 @@
                                                     </li>
                                                     </div>
                                                     `
-
           });
-
           foodBox +=
-
                   `
                                             </ul>
                                         </div>
                                     `;
-
         }else{
-
           foodBox +=
-
                   `(${foodItemVar.orderDetail.portion.name})
                                     <ul style="list-style:disc !important;padding:0px;margin-left:20px">
                                         <li>Nema dodataka</li>
                                     </ul>
                                     `;
-
         }
-
         foodBox +=
                 `
                             </div>
@@ -1143,12 +1032,9 @@
                     </div>
                     `;
         cartList.insertAdjacentHTML('beforeend', foodBox);
-
       }
-
       //update cart count
       function updateCartCount(onLoad = false){
-
         if(onLoad){
           //cartCount = +localStorage.getItem("mezi_cart-count");
           cartCount = +JSON.parse(localStorage.getItem("mezi_cart_restaurant_"+restaurant_id)).cart_count;
@@ -1158,73 +1044,45 @@
           localStorage.setItem("mezi_cart_restaurant_"+restaurant_id, JSON.stringify(storageCartItem));
         }
         $(".cd-cart__count li").first().text(cartCount);
-
       }
-
       //update prices
       function updateFoodPrice(f){
-
         let condimentsPrice = 0;
-
         if(f.orderDetail.condiments.length > 0){
-
           f.orderDetail.condiments.forEach(c=>{
-
             condimentsPrice += (+c.price);
-
           });
-
         }
-
         f.orderDetail.price = (((+f.orderDetail.portion.price) + (+condimentsPrice)) * (+f.orderDetail.quantity)).toFixed(2);
         $("#food_cart_"+f.orderDetail.uniqueId+" .cd-cart__price").text((+f.orderDetail.price).toFixed(2)+" KM");
-
       }
-
       //update global food price
       function updateCartTotalPrice(){
-
         let cartTotalPrice = 0;
-
         foodItems.forEach(b=>{
-
           cartTotalPrice += (+b.orderDetail.price);
-
         });
-
         $("#checkout-btn em span").text(cartTotalPrice.toFixed(2));
-
       }
-
       function loadCart(){
-
         if(localStorage.getItem("mezi_cart_restaurant_"+restaurant_id) !== null){
-
           const _cart_storage = JSON.parse(localStorage.getItem("mezi_cart_restaurant_"+restaurant_id));
           if(+_cart_storage.cart_count > 0){
-
             const _cart_items = _cart_storage.cart;
-
             _cart_items.forEach( i => {
               buildFoodCartParts(i);
               $("#food_cart_"+i.orderDetail.uniqueId+" .cd-cart__actions #quantity_"+i.orderDetail.uniqueId).val(i.orderDetail.quantity);
               updateFoodPrice(i);
               foodItems.push(i);
             });
-
             updateCartTotalPrice();
             updateCartCount(true);
             $(".cd-cart").removeClass("cd-cart--empty");
-
           }
-
         }
-
       }
-
       //add product to cart
       function addProduct(productId,image,name,onLoad = false) {
-
         let isNewItem=true;
         let uniqueIdSufix = 1;
         //initialize holders
@@ -1232,19 +1090,15 @@
         let portion = { id: 0, name: "", price: 0 };
         let order = { uniqueId: "", price: 0, portion: {}, condiments: [], quantity: 1 };
         let foodItemObj = {
-
           id: 0,
           name: "",
           image: "",
-          uniqueId: "", price: 0, portion: {}, condiments: [], quantity: 1
-
+          orderDetail: {}
         };
-
         //build fooditem object
         foodItemObj.id = productId;
         foodItemObj.name = name;
         foodItemObj.image = image;
-
         //get checked portion id
         let portionCheckedId = $('input[name="portion_name_'+productId+'"]:checked').val();
         //get checked portion input
@@ -1254,13 +1108,11 @@
         portion.name =  portionTemp.attr("portion-name");
         portion.price =  +portionTemp.attr("portion-price");
         //add portion to order
-        foodItemObj.portion = portion;
+        order.portion = portion;
         //add order to fooItem
         foodItemObj.orderDetail = order;
-
         //loop on all checked condiments
         $.each($('input[name="condiment_name_'+productId+'"]:checked'), function(){
-
           //get checked condiment id
           let condimentCheckedId = $(this).val();
           //initialize condiment holder
@@ -1269,37 +1121,27 @@
           condiment.id = condimentCheckedId;
           condiment.name = $(this).attr("condiment-name");
           condiment.price = +$(this).attr("condiment-price");
-
           //push condiment to array
           condiments.push(condiment);
-
         });
-
         //add condiments to order
         order.condiments = condiments.sort(compareCondimetns);
-
         let foodExists = foodItems.filter(f=>{
           return f.id == foodItemObj.id;
         });
-
         if(foodExists.length > 0){
-
           console.log('Food Exists');
-
           let foodExists2 = foodExists.filter(f=>{
             return f.orderDetail.portion.id == foodItemObj.orderDetail.portion.id;
           });
           if(foodExists2.length > 0){
-
             console.log('Same portion');
             let foodExists3 = foodExists2.filter(f=>{
               return JSON.stringify(f.orderDetail.condiments) === JSON.stringify(foodItemObj.orderDetail.condiments);
             });
             if(foodExists3.length > 0){
-
               isNewItem=false;
               if(foodExists3[0].orderDetail.quantity < 9){
-
                 foodExists3[0].orderDetail.quantity = +foodExists3[0].orderDetail.quantity + 1;
                 $("#food_cart_"+foodExists3[0].orderDetail.uniqueId+" .cd-cart__actions #quantity_"+foodExists3[0].orderDetail.uniqueId).val(foodExists3[0].orderDetail.quantity);
                 updateFoodPrice(foodExists3[0]);
@@ -1308,35 +1150,21 @@
                 storageCartItem.cart = foodItems;
                 localStorage.setItem("mezi_cart_restaurant_"+restaurant_id, JSON.stringify(storageCartItem));
                 console.log("Same condiments \n=> Only update quantity and price");
-
               }else{
-
                 console.log("Quantity limit reached")
-
               }
-
             }else{
-
               uniqueIdSufix = foodExists.length + 1;
               console.log('Different condiments');
-
             }
-
           }else{
-
             uniqueIdSufix = foodExists.length + 1;
             console.log('Different portion');
-
           }
-
-
         }else{
-
           console.log('Food does\'nt exist');
-
         }
         if(isNewItem){
-
           foodItemObj.orderDetail.uniqueId = foodItemObj.id+"_"+uniqueIdSufix;
           buildFoodCartParts(foodItemObj);
           updateFoodPrice(foodItemObj);
@@ -1348,20 +1176,11 @@
           if( $(".cd-cart").hasClass("cd-cart--empty") )
             $(".cd-cart").removeClass("cd-cart--empty");
           console.log("=> New order")
-
         }
         console.log(foodItems);
-
       };
-
     }
   })();
 </script>
-
-
-
-</body></html>
-
-
 </body></html>
 
