@@ -74,7 +74,7 @@ public class OrderController {
     //THIS HERE
     @GetMapping(path = "/progress")
     public String orderStatus(@RequestParam("refid") String refId, Model model) {
-
+        System.out.println("I HAVE ENTERED REFID");
         //DO WHAT EVER YOU WANT WITH THE ORDER ID TO DISPLAY STEPS TO THE CLIENT
         Customer customer = (Customer)userService.getCurrentUser().get();
         Order order = orderRequestService.getOrderByRefId(refId, customer);

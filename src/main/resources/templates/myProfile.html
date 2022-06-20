@@ -4,13 +4,46 @@
 <head th:replace="fragments/general :: head"></head>
 <head>
   <meta charset="UTF-8">
-  <title>Moj Profil</title>
+  <title>Moj Profil</title>my-profile-details-button.css
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" type="text/css" href="css/profile.css">
   <link href="../static/css/nav.css" th:href="@{/css/nav.css}" rel="stylesheet" />
   <link href="../static/css/orders_profile.css" th:href="@{/css/orders_profile.css}" rel="stylesheet" />
   <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
+  <link href="../static/css/restaurant_orders.css" th:href="@{/css/restaurant_orders.css}" rel="stylesheet" />
+  <link href="../static/css/my-profile-details-button.css" th:href="@{/css/my-profile-details-button.css}" rel="stylesheet" />
+  <style>
+    .overlay1{
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      opacity: 1;
+      z-index: 2;
+      display: none;
+    }
+  </style>
+  <script>
+      function changeOrderColor() {
 
+      let element = document.getElementsByName("DELIVERED");
+      for(let i = 0; i<element.length; i++){
+          element[i].style.backgroundColor = '#27ae60';
+        }
+
+        let element1 = document.getElementsByName("DECLINED");
+        for(let i = 0; i<element1.length; i++){
+          element1[i].style.backgroundColor = '#f80505';
+        }
+    }
+    window.onload=changeOrderColor;
+  </script>
+
+
+  </script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -103,12 +136,12 @@
         <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
           <h3 class="mb-4">Narudžbe</h3>
           <div class="row-order">
-            <div class="col-md-6">
+            <div class="col-md-6"  style="max-width: none;">
               <div class="form-group">
                 <div class="table">
                   <th:block th:each="order: ${orders}">
 
-                    <div class="row-order header green">
+                    <div class="row-order header" th:name="${order.getStatus()}">
                       <div class="cell">
                         Cijena
                       </div>
@@ -135,15 +168,31 @@
                       </div>
                       <div class="cell" data-title="Detalji">
                         <form action="#popup1">
-                          <input class="button-content-cell" type="submit" value="Detalji" />
+                          <input th:data-order-id="${order.getId()}" onclick="showDetails(this.getAttribute('data-order-id'),2)"
+                                  class="" type="submit" value="Detalji" />
                         </form>
                       </div>
                     </div>
                   </th:block>
                 </div>
+                <div id="popup1" class="overlay1 pop">
+                  <div class="popup" style="height: 85%; overflow-y: auto;">
+                    <h2 class="popup-header">Detalji narudžbe</h2>
+                    <a class="close">&times;</a>
+                    <h3 class="content-header">Narudžba</h3>
+                    <div class="content-wrapper">
+                    </div>
+                    <div class="Ukupno">
+                      UKUPNO
+                    </div>
+                    <div class="ukupno-price" id="ukupno-price">
+                      <b> </b>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" >
               <div class="form-group">
 
               </div>
@@ -183,43 +232,73 @@
   </div>
 </section>
 
-<section>
-  <div id="popup1" class="overlay pop">
-    <div class="popup" style="height: 85%; overflow-y: auto;">
-      <h2 class="popup-header">Detalji narudžbe</h2>
-      <a class="close">&times;</a>
-      <h3 class="content-header">Narudžba</h3>
 
-      <div class="content-wrapper">
-
-      </div>
-
-
-      <div class="Ukupno">
-        UKUPNO
-      </div>
-      <div class="ukupno-price">
-        <b>37.50KM</b>
-      </div>
-      <div class="accept-orders">
-        <a>
-          <button class="decline button-content-cell" style="background: #1e7e34; margin-top: 2rem;background: #D9391C;">Decline</button>
-        </a>
-        <a>
-          <button class="accept button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Accept</button>
-        </a>
-        <a>
-          <button class="deliver button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Deliver</button>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <footer th:replace="fragments/general :: footer">
 </footer>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script th:inline="javascript">
+  $(".close").on("click",function (e){
+    $(".pop").css("display","none");
+  })
+  function showDetails(orderId, popup){
+    let currentOrder = [[${orders}]].filter(o=>  o.id == orderId);
+    currentRefId = currentOrder[0].orderReference + currentOrder[0].id;
+    let contents = currentOrder[0].contents;
+    console.log(contents);
+    let contentHtml = ``;
+    let totalPrice = 0.00;
 
+
+    contents.forEach((c,i)=>{
+
+      contentHtml += `
+
+                                <div class="content" style="overflow: unset;margin-bottom: 4rem;">
+                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div>
+                                    <div class="item-price">${c.portion.price}KM</div>
+                                    <div class="condiments">
+                            `;
+
+      c.condiments.forEach(cond=>{
+
+        contentHtml += `
+                                        <div class="condiment">+${cond.name.name}</div>
+                                        <div class="condiment-price">${cond.price}KM</div>
+
+                                   `;
+
+      });
+
+      contentHtml += `
+
+                                   </div>
+                                   <div class="item-total">
+                                        ${c.price}
+                                    </div>
+                                </div>
+
+                        `;
+      totalPrice += parseFloat(c.price);
+
+    });
+
+    console.log(currentOrder[0]);
+    if(!$(".bill-table .order-"+currentOrder[0].id).hasClass("NotAcceptedOrder")){
+      $(".accept").css("display","none");
+      $(".deliver").css("display","block");
+    }else{
+      $(".deliver").css("display","none");
+      $(".accept").css("display","block");
+    }
+    $("#popup1 "+ ".content-wrapper").html(contentHtml);
+    $("#popup1").css("display","block");
+    $("#ukupno-price").html(totalPrice.toFixed(2)+"KM");
+
+  }
+</script>
+</script>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -231,6 +310,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
 </script>
+
+
 </body>
 
 </html>

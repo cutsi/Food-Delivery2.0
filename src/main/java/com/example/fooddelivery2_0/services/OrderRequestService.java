@@ -30,7 +30,7 @@ public class OrderRequestService {
     private OrderRepo orderRepo;
     private RestaurantRepo restaurantRepo;
     private OrderContentRepo orderContentRepo;
-    private OrderContentDetailsRepo orderContentDetailRepo;
+    //private OrderContentDetailsRepo orderContentDetailRepo;
     private static final DecimalFormat df = new DecimalFormat("0.00");
     public String getTotal(List<Order> orders){
         Double totalPrice = 0.00;
@@ -75,19 +75,26 @@ public class OrderRequestService {
         /*order.getFoodItems().stream().forEach(p->{
             orderContentDetailRepo.save(p.getOrderDetail());//TO CHANGE
         });*/
-        List<OrderContent> contents = orderContentRepo.saveAll(order.getFoodItems());
-        Order newOrder = new Order(ReferenceGenerator.generateReference(), customer, restaurantRepo.getById(restaurantId), contents,  Status.ORDERED);
+        Order newOrder = new Order(ReferenceGenerator.generateReference(), customer, restaurantRepo.getById(restaurantId), null,  Status.ORDERED);
         newOrder.setDeliveryNote(order.getDeliveryNote());
         newOrder.setRestaurantNote(order.getRestaurantNote());
         newOrder.setPhone(order.getPhone());
-        //set address
+        orderRepo.save(newOrder);
 
+        List<OrderContent> content = order.getFoodItems();
+        content.forEach(f-> f.setOrder(newOrder));
+        content = orderContentRepo.saveAll(content);
+
+        newOrder.setContents(content);
         return orderRepo.save(newOrder);
 
+        //set address
     }
 
     public Order getOrderByRefId(String refid,Customer customer){
         String[] refidSplit = refid.split("\\$");
+        System.out.println("REFID SPLIT:" + refidSplit);
+        System.out.println("refidSplit[0]:" + refidSplit[0]);
         Optional<Order> orderOpt =
                 orderRepo.findByOrderReferenceAndIdAndCustomer(refidSplit[0]+"$",Long.parseLong(refidSplit[1]), customer);
         if(orderOpt.isPresent()){
@@ -153,5 +160,12 @@ public class OrderRequestService {
 
     }
 
+
+    public List<Order> getNotDeliveredOrder() {//GETS ALL ACTIVE ORDERS NOT JUST RESTAURANT ONES
+        return orderRepo.findByStatusOrStatus(Status.ORDERED, Status.ACCEPTED);
+    }
+    public List<Order> getActiveOrdersByCustomer(Customer customer){
+        return orderRepo.findAllByStatusOrStatusAndCustomer(Status.ORDERED, Status.ACCEPTED, customer);
+    }
 
 }

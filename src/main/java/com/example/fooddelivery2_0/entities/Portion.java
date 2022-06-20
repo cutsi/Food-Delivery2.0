@@ -1,4 +1,5 @@
 package com.example.fooddelivery2_0.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,12 +20,19 @@ public class Portion implements Comparable<Portion>{
     private boolean isChecked;
     @ManyToOne
     private PortionName name;
+    @JsonBackReference
     @ManyToOne
     private FoodItem foodItem;
     public Portion(String price, boolean isChecked, PortionName portionName) {
         this.price = price;
         this.isChecked = isChecked;
         this.name = portionName;
+    }
+    public Portion(String price, boolean isChecked, PortionName portionName, FoodItem foodItem) {
+        this.price = price;
+        this.isChecked = isChecked;
+        this.name = portionName;
+        this.foodItem = foodItem;
     }
 
     @Override

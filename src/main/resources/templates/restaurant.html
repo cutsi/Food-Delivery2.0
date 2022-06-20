@@ -853,13 +853,13 @@
         let foodItemId = condimentId.split("__")[1];
         console.log("FOOD ITEM ID:", foodItemId);
         for (let i=0; i<foodItems.length; i++){
-          if(foodItems[i].orderDetail.uniqueId == foodItemId){
+          if(foodItems[i].uniqueId == foodItemId){
             let condimentUniqueId = condimentId.split("__")[0];
-            let condimentLength = Object.keys(foodItems[i].orderDetail.condiments).length;
+            let condimentLength = Object.keys(foodItems[i].condiments).length;
             for(let j=0; j<condimentLength;j++){
-              if(foodItems[i].orderDetail.condiments[j].id == condimentUniqueId){
+              if(foodItems[i].condiments[j].id == condimentUniqueId){
                 console.log("PROPER CONDIMENT ID:", condimentUniqueId);
-                foodItems[i].orderDetail.condiments.splice(j, 1);
+                foodItems[i].condiments.splice(j, 1);
                 console.log("#delete_condiment_"+condimentId);
                 $("#delete_condiment_"+condimentId).remove();
                 currentIndex = i;
@@ -871,22 +871,22 @@
             break;//delete_condiment_
           }
         }
-        //if(foodItems[currentIndex].orderDetail.condiments.length === 0)
+        //if(foodItems[currentIndex].condiments.length === 0)
         //$(".condiments-view ul").append(`<li>Nema dodataka</li>`);
       });
       function updateCondimentPrice(foodItemObj){
         let condTotal = 0;
         let bareMealPrice = 0;
         for(let i = 0; i<foodItems.length;i++){
-          if(foodItems[i].orderDetail.uniqueId == foodItemObj.orderDetail.uniqueId){
-            foodItemObj.orderDetail.condiments.forEach(value => condTotal += +(value.price));
-            condTotal = condTotal * +(foodItemObj.orderDetail.quantity);
-            bareMealPrice = +(foodItemObj.orderDetail.portion.price) * +(foodItemObj.orderDetail.quantity);
-            foodItems[i].orderDetail.price = +(condTotal+bareMealPrice);
+          if(foodItems[i].uniqueId == foodItemObj.uniqueId){
+            foodItemObj.condiments.forEach(value => condTotal += +(value.price));
+            condTotal = condTotal * +(foodItemObj.quantity);
+            bareMealPrice = +(foodItemObj.portion.price) * +(foodItemObj.quantity);
+            foodItems[i].price = +(condTotal+bareMealPrice);
           }
         }
         let fullMeal = condTotal + bareMealPrice;
-        $("#item_price_"+foodItemObj.orderDetail.uniqueId).text(fullMeal.toFixed(2)+" KM");
+        $("#item_price_"+foodItemObj.uniqueId).text(fullMeal.toFixed(2)+" KM");
         storageCartItem.cart = foodItems;
         localStorage.setItem("mezi_cart_restaurant_"+restaurant_id,  JSON.stringify(storageCartItem));
         console.log("NEW MEAL PRICE:", fullMeal);
@@ -918,12 +918,12 @@
         $("#food_cart_"+itemId).remove();
         $("#order_detail_"+itemId).remove();
         let item = foodItems.filter(f=>{
-          return f.orderDetail.uniqueId == itemId;
+          return f.uniqueId == itemId;
         })[0];
-        cartCount -= item.orderDetail.quantity;
+        cartCount -= item.quantity;
         $(".cd-cart__count li").first().text(cartCount);
         foodItems = foodItems.filter(f=>{
-          return f.orderDetail.uniqueId != itemId;
+          return f.uniqueId != itemId;
         });
         updateCartTotalPrice();
         storageCartItem.cart = foodItems;
@@ -938,10 +938,10 @@
       $(".cd-cart__content").on("change","select[id^='quantity_']",function(){
         let id = $(this).attr("id").split("quantity_")[1];
         let foodItemObjTemp = foodItems.filter(f=>{
-          return f.orderDetail.uniqueId == id;
+          return f.uniqueId == id;
         })[0];
-        cartCount -= (+foodItemObjTemp.orderDetail.quantity);
-        foodItemObjTemp.orderDetail.quantity = (+$(this).val());
+        cartCount -= (+foodItemObjTemp.quantity);
+        foodItemObjTemp.quantity = (+$(this).val());
         cartCount += (+$(this).val());
         $(".cd-cart__count li").first().text(cartCount);
         updateFoodPrice(foodItemObjTemp,false);
@@ -963,7 +963,7 @@
       //build parts of cart details
       function buildFoodCartParts(foodItemVar){
         let foodBox =
-                `<li id="food_cart_${foodItemVar.orderDetail.uniqueId}" class="cd-cart__product">
+                `<li id="food_cart_${foodItemVar.uniqueId}" class="cd-cart__product">
                         <div class="cd-cart__image">
                             <a href="#0">
                                 <img src="${foodItemVar.image}" alt="placeholder">
@@ -973,9 +973,9 @@
                             <h3 class="truncate slide-right">
                                 <a style="font-size:medium;margin-bottom:5px">${foodItemVar.name} </a>
                             </h3>
-                            <span class="cd-cart__price" id="item_price_${foodItemVar.orderDetail.uniqueId}" style="color:#007bff"></span>
+                            <span class="cd-cart__price" id="item_price_${foodItemVar.uniqueId}" style="color:#007bff"></span>
                             <div class="cd-cart__actions" style="display:block;margin-top:4px">
-                                <select id="quantity_${foodItemVar.orderDetail.uniqueId}" style="border-radius:50px;">
+                                <select id="quantity_${foodItemVar.uniqueId}" style="border-radius:50px;">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -986,27 +986,27 @@
                                         <option value="8">8</option>
                                         <option value="9">9</option>
                                     </select>
-                                <a style="cursor:pointer;margin-left:8px" class="cd-cart__details-item" id="btn_detail_${foodItemVar.orderDetail.uniqueId}"><i class="fa fa-plus-circle"></i> Detalji</a>
-                                <a style="cursor:pointer;color:red;margin-left:5px" class="cd-cart__delete-item" id="btn_delete_${foodItemVar.orderDetail.uniqueId}"><i class="fa fa-trash"></i> Ukloni</a>
+                                <a style="cursor:pointer;margin-left:8px" class="cd-cart__details-item" id="btn_detail_${foodItemVar.uniqueId}"><i class="fa fa-plus-circle"></i> Detalji</a>
+                                <a style="cursor:pointer;color:red;margin-left:5px" class="cd-cart__delete-item" id="btn_delete_${foodItemVar.uniqueId}"><i class="fa fa-trash"></i> Ukloni</a>
                             </div>
                         </div>
                     </li>
-                    <div class="details-container" id="order_detail_${foodItemVar.orderDetail.uniqueId}" style="margin-top:10px;display:none">
-                        <li class="cd-cart__product" id="order_detail_box_${foodItemVar.orderDetail.uniqueId}">
+                    <div class="details-container" id="order_detail_${foodItemVar.uniqueId}" style="margin-top:10px;display:none">
+                        <li class="cd-cart__product" id="order_detail_box_${foodItemVar.uniqueId}">
                             <div class="cd-cart__details" style="padding:0px;display:inline">`;
-        if(foodItemVar.orderDetail.condiments.length > 0){
+        if(foodItemVar.condiments.length > 0){
           foodBox +=
-                  `(${foodItemVar.orderDetail.portion.name})
+                  `(${foodItemVar.portion.name})
                                         <div class="condiments-view" style="margin-top:4px">
                                             <ul style="list-style:disc !important;padding:0px;margin-left:22px">
                                                 `;
-          foodItemVar.orderDetail.condiments.forEach(c=>{
+          foodItemVar.condiments.forEach(c=>{
             foodBox +=
                     `
-                                                    <div id="delete_condiment_${c.id}__${foodItemVar.orderDetail.uniqueId}">
+                                                    <div id="delete_condiment_${c.id}__${foodItemVar.uniqueId}">
                                                     <li>${c.name}
                                                         <span class="cd-cart__price" style="width: 0;"></span>
-                                                        <span style="font-weight: bolder;">(${c.price} KM)</span><a style="cursor:pointer;color:red;margin-left:5px;float: right;width: 10%;" class="cd-cart__condiment_remove" id="condiment_delete_${c.id}__${foodItemVar.orderDetail.uniqueId}"><i class="fa fa-trash"></i></a>
+                                                        <span style="font-weight: bolder;">(${c.price} KM)</span><a style="cursor:pointer;color:red;margin-left:5px;float: right;width: 10%;" class="cd-cart__condiment_remove" id="condiment_delete_${c.id}__${foodItemVar.uniqueId}"><i class="fa fa-trash"></i></a>
                                                     </li>
                                                     </div>
                                                     `
@@ -1018,7 +1018,7 @@
                                     `;
         }else{
           foodBox +=
-                  `(${foodItemVar.orderDetail.portion.name})
+                  `(${foodItemVar.portion.name})
                                     <ul style="list-style:disc !important;padding:0px;margin-left:20px">
                                         <li>Nema dodataka</li>
                                     </ul>
@@ -1048,19 +1048,19 @@
       //update prices
       function updateFoodPrice(f){
         let condimentsPrice = 0;
-        if(f.orderDetail.condiments.length > 0){
-          f.orderDetail.condiments.forEach(c=>{
+        if(f.condiments.length > 0){
+          f.condiments.forEach(c=>{
             condimentsPrice += (+c.price);
           });
         }
-        f.orderDetail.price = (((+f.orderDetail.portion.price) + (+condimentsPrice)) * (+f.orderDetail.quantity)).toFixed(2);
-        $("#food_cart_"+f.orderDetail.uniqueId+" .cd-cart__price").text((+f.orderDetail.price).toFixed(2)+" KM");
+        f.price = (((+f.portion.price) + (+condimentsPrice)) * (+f.quantity)).toFixed(2);
+        $("#food_cart_"+f.uniqueId+" .cd-cart__price").text((+f.price).toFixed(2)+" KM");
       }
       //update global food price
       function updateCartTotalPrice(){
         let cartTotalPrice = 0;
         foodItems.forEach(b=>{
-          cartTotalPrice += (+b.orderDetail.price);
+          cartTotalPrice += (+b.price);
         });
         $("#checkout-btn em span").text(cartTotalPrice.toFixed(2));
       }
@@ -1071,7 +1071,7 @@
             const _cart_items = _cart_storage.cart;
             _cart_items.forEach( i => {
               buildFoodCartParts(i);
-              $("#food_cart_"+i.orderDetail.uniqueId+" .cd-cart__actions #quantity_"+i.orderDetail.uniqueId).val(i.orderDetail.quantity);
+              $("#food_cart_"+i.uniqueId+" .cd-cart__actions #quantity_"+i.uniqueId).val(i.quantity);
               updateFoodPrice(i);
               foodItems.push(i);
             });
@@ -1088,12 +1088,15 @@
         //initialize holders
         let condiments = [];
         let portion = { id: 0, name: "", price: 0 };
-        let order = { uniqueId: "", price: 0, portion: {}, condiments: [], quantity: 1 };
         let foodItemObj = {
           id: 0,
           name: "",
           image: "",
-          orderDetail: {}
+          uniqueId: "",
+          price: 0,
+          portion: {},
+          condiments: [],
+          quantity: 1
         };
         //build fooditem object
         foodItemObj.id = productId;
@@ -1107,10 +1110,8 @@
         portion.id = portionCheckedId;
         portion.name =  portionTemp.attr("portion-name");
         portion.price =  +portionTemp.attr("portion-price");
-        //add portion to order
-        order.portion = portion;
-        //add order to fooItem
-        foodItemObj.orderDetail = order;
+        //add portion to foodItem
+        foodItemObj.portion = portion;
         //loop on all checked condiments
         $.each($('input[name="condiment_name_'+productId+'"]:checked'), function(){
           //get checked condiment id
@@ -1124,26 +1125,26 @@
           //push condiment to array
           condiments.push(condiment);
         });
-        //add condiments to order
-        order.condiments = condiments.sort(compareCondimetns);
+        //add condiments to foodItem
+        foodItemObj.condiments = condiments.sort(compareCondimetns);
         let foodExists = foodItems.filter(f=>{
           return f.id == foodItemObj.id;
         });
         if(foodExists.length > 0){
           console.log('Food Exists');
           let foodExists2 = foodExists.filter(f=>{
-            return f.orderDetail.portion.id == foodItemObj.orderDetail.portion.id;
+            return f.portion.id == foodItemObj.portion.id;
           });
           if(foodExists2.length > 0){
             console.log('Same portion');
             let foodExists3 = foodExists2.filter(f=>{
-              return JSON.stringify(f.orderDetail.condiments) === JSON.stringify(foodItemObj.orderDetail.condiments);
+              return JSON.stringify(f.condiments) === JSON.stringify(foodItemObj.condiments);
             });
             if(foodExists3.length > 0){
               isNewItem=false;
-              if(foodExists3[0].orderDetail.quantity < 9){
-                foodExists3[0].orderDetail.quantity = +foodExists3[0].orderDetail.quantity + 1;
-                $("#food_cart_"+foodExists3[0].orderDetail.uniqueId+" .cd-cart__actions #quantity_"+foodExists3[0].orderDetail.uniqueId).val(foodExists3[0].orderDetail.quantity);
+              if(foodExists3[0].quantity < 9){
+                foodExists3[0].quantity = +foodExists3[0].quantity + 1;
+                $("#food_cart_"+foodExists3[0].uniqueId+" .cd-cart__actions #quantity_"+foodExists3[0].uniqueId).val(foodExists3[0].quantity);
                 updateFoodPrice(foodExists3[0]);
                 updateCartTotalPrice();
                 updateCartCount();
@@ -1165,7 +1166,7 @@
           console.log('Food does\'nt exist');
         }
         if(isNewItem){
-          foodItemObj.orderDetail.uniqueId = foodItemObj.id+"_"+uniqueIdSufix;
+          foodItemObj.uniqueId = foodItemObj.id+"_"+uniqueIdSufix;
           buildFoodCartParts(foodItemObj);
           updateFoodPrice(foodItemObj);
           foodItems.push(foodItemObj);

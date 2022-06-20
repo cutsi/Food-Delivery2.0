@@ -20,15 +20,17 @@ public class OrderContent {
     private Long id;
     private String image;
     private String name;
-
     @JsonIgnore
     @Transient
     private String uniqueId;
     private int quantity;
     @ManyToOne
     private Portion portion;
-    @ManyToMany()
+    @ManyToMany
     private List<Condiment> condiments;
     private String price;
+    @ManyToOne
+    @JsonIgnore
+    private Order order;
 }
 

@@ -271,8 +271,8 @@
         'Content-Type': 'application/json'
       },
       success: function(data) {
-        if(data.status === "success"){
 
+        if(data.status === "success"){
           g_orders = g_orders.filter(o=>  o.id != currentRefId.split("$")[1]);
           $(".bill-table .order-"+currentRefId.split("$")[1]).remove();
           $(".pop").css("display","none");
@@ -307,12 +307,12 @@
       contentHtml += `
 
                                 <div class="content">
-                                    <div class="item-name"><b>${c.orderDetail.quantity} X  ${c.name} </b> (${c.orderDetail.portion.name.name})</div>
-                                    <div class="item-price">${c.orderDetail.portion.price}KM</div>
+                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div>
+                                    <div class="item-price">${c.portion.price}KM</div>
                                     <div class="condiments">
                             `;
 
-      c.orderDetail.condiments.forEach(cond=>{
+      c.condiments.forEach(cond=>{
 
         contentHtml += `
                                         <div class="condiment">+${cond.name.name}</div>
@@ -326,12 +326,12 @@
 
                                    </div>
                                    <div class="item-total">
-                                        ${c.orderDetail.price}
+                                        ${c.price}
                                     </div>
                                 </div>
 
                         `;
-      totalPrice += parseFloat(c.orderDetail.price);
+      totalPrice += parseFloat(c.price);
 
     });
 

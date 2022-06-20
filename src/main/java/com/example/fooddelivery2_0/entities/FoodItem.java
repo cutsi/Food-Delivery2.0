@@ -1,4 +1,6 @@
 package com.example.fooddelivery2_0.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,10 +20,13 @@ public class FoodItem { //DONE
     private String name;
     private String info;
     private String price;
+    @JsonBackReference
     @ManyToOne
     private Category category;
+    @JsonManagedReference
     @OneToMany(mappedBy = "foodItem")
     private List<Portion> portions;
+    @JsonManagedReference
     @OneToMany(mappedBy = "foodItem")
     private List<Condiment> condiments;
     @ManyToOne
@@ -38,6 +43,7 @@ public class FoodItem { //DONE
 
     public void setDefaultPrice(){
         if (portions!=null){
+            System.out.println(portions.size());
             portions.forEach(p->{
                 if(p.isChecked())this.price=p.getPrice();
             });

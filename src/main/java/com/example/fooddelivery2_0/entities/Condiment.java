@@ -1,5 +1,6 @@
 package com.example.fooddelivery2_0.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Condiment { //DONE
     private String price;
     @ManyToOne
     private CondimentName name;
+    @JsonBackReference
     @ManyToOne
     private FoodItem foodItem;
     //@ManyToMany(mappedBy = "condiments")
@@ -32,6 +34,12 @@ public class Condiment { //DONE
     public Condiment(String price, CondimentName condimentName) {
         this.price = price;
         this.name = condimentName;
+    }
+
+    public Condiment(String price, CondimentName condimentName, FoodItem foodItem) {
+        this.price = price;
+        this.name = condimentName;
+        this.foodItem = foodItem;
     }
 
 }

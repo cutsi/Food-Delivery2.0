@@ -1,5 +1,6 @@
 package com.example.fooddelivery2_0.repos;
 
+import com.example.fooddelivery2_0.Utils.Status;
 import com.example.fooddelivery2_0.entities.Customer;
 import com.example.fooddelivery2_0.entities.Order;
 import com.example.fooddelivery2_0.entities.Restaurant;
@@ -21,4 +22,6 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Order> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
     List<Order> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);
 
+    List<Order> findByStatusOrStatus(Status ordered, Status accepted);
+    List<Order> findAllByStatusOrStatusAndCustomer(Status ordered, Status accepted, Customer customer);
 }

@@ -1,5 +1,5 @@
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 2000px) {
     body {
         font-size: 16px;
         line-height: 22px;
@@ -18,7 +18,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     display: table;
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 2000px) {
     .table {
         display: block;
     }
@@ -45,7 +45,7 @@
 .row-order.blue {
     background: #2980b9;
     }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 2000px) {
     .row-order {
         padding: 14px 0 7px;
         display: block; }
@@ -76,7 +76,7 @@
     padding: 6px 12px;
     display: table-cell;
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 2000px) {
     .cell {
         padding: 2px 16px;
         display: block;

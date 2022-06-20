@@ -109,85 +109,6 @@ public class DatabaseInitializer {
             Category category2 = new Category("Category_2", "images/hamburger1.jpg");
             categoryRepo.saveAll(List.of(category1, category2));
 
-            //ADD 3 PORTION NAMES
-            PortionName large = new PortionName("Large");
-            PortionName medium = new PortionName("Medium");
-            PortionName small = new PortionName("Small");
-            portionNameRepo.saveAll(List.of(large, medium, small));
-
-            //ADD 3 PORTIONS FOR FOOD_ITEM NUMBER 1
-            Portion portion1Food1 = new Portion("1.5", true, small);
-            Portion portion2Food1 = new Portion("2", false, medium);
-            Portion portion3Food1 = new Portion("3", false, large);
-            List<Portion> portionsFood1 = List.of(portion1Food1, portion2Food1, portion3Food1);
-            portionRepo.saveAll(portionsFood1);
-            //ADD 2 PORTIONS FOR FOOD_ITEM NUMBER 2
-            Portion portion1Food2 = new Portion("1", true, small);
-            Portion portion2Food2 = new Portion("2.5", false, large);
-            List<Portion> portionsFood2 = List.of(portion1Food2, portion2Food2);
-            portionRepo.saveAll(portionsFood2);
-            //ADD 3 PORTIONS FOR FOOD_ITEM NUMBER 3
-            Portion portion1Food3 = new Portion("3", true, small);
-            Portion portion2Food3 = new Portion("5.5", false, medium);
-            Portion portion3Food3 = new Portion("9", false, large);
-            List<Portion> portionsFood3 = List.of(portion1Food3, portion2Food3, portion3Food3);
-            portionRepo.saveAll(portionsFood3);
-
-            //ADD 3 CONDIMENT NAMES
-            CondimentName ketchup = new CondimentName("Ketchup");
-            CondimentName mayonnaise = new CondimentName("Mayonnaise");
-            CondimentName salt = new CondimentName("Salt");
-            CondimentName sugar = new CondimentName("Sugar");
-            condimentNameRepo.saveAll(List.of(ketchup, mayonnaise, salt, sugar));
-
-            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 1
-            Condiment condiment1Food1 = new Condiment("0", ketchup);
-            Condiment condiment2Food1 = new Condiment("0", mayonnaise);
-            List<Condiment> condimentsFood1 = List.of(condiment1Food1, condiment2Food1);
-            condimentRepo.saveAll(condimentsFood1);
-            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 2
-            Condiment condiment1Food2 = new Condiment("0", sugar);
-            Condiment condiment2Food2 = new Condiment("0.5", salt);
-            List<Condiment> condimentsFood2 = List.of(condiment1Food2, condiment2Food2);
-            condimentRepo.saveAll(condimentsFood2);
-            //ADD 3 CONDIMENTS FOR FOOD_ITEM NUMBER 3
-            Condiment condiment1Food3 = new Condiment("0", ketchup);
-            Condiment condiment2Food3 = new Condiment("1", mayonnaise);
-            Condiment condiment3Food3 = new Condiment("0.5", salt);
-            List<Condiment> condimentsFood3 = List.of(condiment1Food3, condiment2Food3, condiment3Food3);
-            condimentRepo.saveAll(condimentsFood3);
-
-            //ADD 3 FOOD_ITEMS FOR RESTAURANT NUMBER 1
-            FoodItem foodItem1 = new FoodItem(
-                    "images/1.jpg",
-                    "food_item_1",
-                    "Info about food_item_1",
-                    category1,
-                    portionsFood1,
-                    condimentsFood1
-            );
-            foodItem1.setDefaultPrice();
-            FoodItem foodItem2 = new FoodItem(
-                    "images/2.jpg",
-                    "food_item_2",
-                    "Info about food_item_2",
-                    category1,
-                    portionsFood2,
-                    condimentsFood2
-            );
-            foodItem2.setDefaultPrice();
-            FoodItem foodItem3 = new FoodItem(
-                    "images/3.jpg",
-                    "food_item_3",
-                    "Info about food_item_3",
-                    category2,
-                    portionsFood3,
-                    condimentsFood3
-            );
-            foodItem3.setDefaultPrice();
-            List<FoodItem> foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3);
-            foodItemRepo.saveAll(foodItemsRest1);
-
             //ADD ADDRESS FOR RESTAURANT NUMBER 1
             RestaurantAddress restaurant1Address = new RestaurantAddress("Address_1", "Zagreb", "Croatia");
             restaurantAddressRepo.save(restaurant1Address);
@@ -200,10 +121,97 @@ public class DatabaseInitializer {
                     "images/nuggets1.jpg",
                     "5",
                     restaurant1Address,
-                    foodItemsRest1
+                    null
             );
             restaurant1.setNotificationReference(ReferenceGenerator.generateReference());
             restaurantRepo.save(restaurant1);
+
+            //ADD 3 FOOD_ITEMS FOR RESTAURANT NUMBER 1
+            FoodItem foodItem1 = new FoodItem(
+                    "images/1.jpg",
+                    "food_item_1",
+                    "Info about food_item_1",
+                    category1,
+                    null,
+                    null
+            );
+            foodItem1.setRestaurant(restaurant1);
+            foodItem1.setDefaultPrice();
+            FoodItem foodItem2 = new FoodItem(
+                    "images/2.jpg",
+                    "food_item_2",
+                    "Info about food_item_2",
+                    category1,
+                    null,
+                    null
+            );
+            foodItem2.setRestaurant(restaurant1);
+            FoodItem foodItem3 = new FoodItem(
+                    "images/3.jpg",
+                    "food_item_3",
+                    "Info about food_item_3",
+                    category2,
+                    null,
+                    null
+            );
+            foodItem3.setRestaurant(restaurant1);
+            List<FoodItem> foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3);
+            foodItemRepo.saveAll(foodItemsRest1);
+
+            //ADD 3 PORTION NAMES
+            PortionName large = new PortionName("Large");
+            PortionName medium = new PortionName("Medium");
+            PortionName small = new PortionName("Small");
+            portionNameRepo.saveAll(List.of(large, medium, small));
+
+            //ADD 3 PORTIONS FOR FOOD_ITEM NUMBER 1
+            Portion portion1Food1 = new Portion("1.5", true, small, foodItem1);
+            Portion portion2Food1 = new Portion("2", false, medium, foodItem1);
+            Portion portion3Food1 = new Portion("3", false, large, foodItem1);
+            List<Portion> portionsFood1 = List.of(portion1Food1, portion2Food1, portion3Food1);
+            portionRepo.saveAll(portionsFood1);
+            //ADD 2 PORTIONS FOR FOOD_ITEM NUMBER 2
+            Portion portion1Food2 = new Portion("1", true, small, foodItem2);
+            Portion portion2Food2 = new Portion("2.5", false, large, foodItem2);
+            List<Portion> portionsFood2 = List.of(portion1Food2, portion2Food2);
+            portionRepo.saveAll(portionsFood2);
+            //ADD 3 PORTIONS FOR FOOD_ITEM NUMBER 3
+            Portion portion1Food3 = new Portion("3", true, small, foodItem3);
+            Portion portion2Food3 = new Portion("5.5", false, medium, foodItem3);
+            Portion portion3Food3 = new Portion("9", false, large, foodItem3);
+            List<Portion> portionsFood3 = List.of(portion1Food3, portion2Food3, portion3Food3);
+            portionRepo.saveAll(portionsFood3);
+
+            //SET DEFAULT PRICES FOR FOOD ITEMS AFTER PORTION AFFECTATION
+            //foodItem1.setDefaultPrice();
+            //foodItem2.setDefaultPrice();
+            //foodItem3.setDefaultPrice();
+            //foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3);
+            //foodItemRepo.save(foodItem1);
+
+            //ADD 3 CONDIMENT NAMES
+            CondimentName ketchup = new CondimentName("Ketchup");
+            CondimentName mayonnaise = new CondimentName("Mayonnaise");
+            CondimentName salt = new CondimentName("Salt");
+            CondimentName sugar = new CondimentName("Sugar");
+            condimentNameRepo.saveAll(List.of(ketchup, mayonnaise, salt, sugar));
+
+            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 1
+            Condiment condiment1Food1 = new Condiment("0", ketchup, foodItem1);
+            Condiment condiment2Food1 = new Condiment("0", mayonnaise, foodItem1);
+            List<Condiment> condimentsFood1 = List.of(condiment1Food1, condiment2Food1);
+            condimentRepo.saveAll(condimentsFood1);
+            //ADD 2 CONDIMENTS FOR FOOD_ITEM NUMBER 2
+            Condiment condiment1Food2 = new Condiment("0", sugar, foodItem2);
+            Condiment condiment2Food2 = new Condiment("0.5", salt, foodItem2);
+            List<Condiment> condimentsFood2 = List.of(condiment1Food2, condiment2Food2);
+            condimentRepo.saveAll(condimentsFood2);
+            //ADD 3 CONDIMENTS FOR FOOD_ITEM NUMBER 3
+            Condiment condiment1Food3 = new Condiment("0", ketchup, foodItem3);
+            Condiment condiment2Food3 = new Condiment("1", mayonnaise, foodItem3);
+            Condiment condiment3Food3 = new Condiment("0.5", salt, foodItem3);
+            List<Condiment> condimentsFood3 = List.of(condiment1Food3, condiment2Food3, condiment3Food3);
+            condimentRepo.saveAll(condimentsFood3);
 
             //ADD 7 WORKING HOURS FOR RESTAURANT NUMBER 1
             WorkingHours monday = new WorkingHours("08:00", "23:00", PONEDJELJAK, restaurant1);

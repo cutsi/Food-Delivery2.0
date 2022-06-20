@@ -1,4 +1,5 @@
 package com.example.fooddelivery2_0.entities;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Category { //DONE
     private Long id;
     private String name;
     private String image;
+    @JsonManagedReference
     @OneToMany(mappedBy = "category")
     private List<FoodItem> foodItems;
 
@@ -23,6 +25,7 @@ public class Category { //DONE
         this.name = name;
         this.image = image;
     }
+//TODO unit podatke u bazu, napravit trenutna narudžba stranicu, pocistit kucu, kontaktirat muhameda, radit na poslovnom planu
 
 //    @OneToMany(mappedBy = "category")
 //    private Set<FoodItem> foodItems = new HashSet<>();

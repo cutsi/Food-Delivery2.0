@@ -31,6 +31,7 @@ public class FrontPageController {
     private final OrderService orderService;
     private final FoodItemService foodItemService;
     private final FilterService filterService;
+    private final OrderRequestService orderRequestService;
     @GetMapping(path = {"/", "/home"})
     public String home(Model model){
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
@@ -85,6 +86,14 @@ public class FrontPageController {
         else if (userService.getCurrentUser().get().getUserRole().equals(UserRole.SUPER_RESTAURANT))
             model.addAttribute("orders", orderService.getAllByRestaurantOrderByCreatedAtDesc(restaurantService.getRestaurantByOwner((RestaurantOwner) userService.getCurrentUser().get()).get()));
         return "myProfile";
+    }
+    @GetMapping(path = "Trenutne-narudzbe")
+    public String ongoing_orders(Model model){
+        model.addAttribute("orders",orderRequestService.getActiveOrdersByCustomer((Customer)userService.getCurrentUser().get()));
+        for (Order order:orderRequestService.getActiveOrdersByCustomer((Customer)userService.getCurrentUser().get())) {
+            System.out.println("ONGOING ORDER: " + order.getStatus());
+        }
+        return "ongoing_orders";
     }
 
     //TODO onemogucit narucivanje kad je restoran zatvoren

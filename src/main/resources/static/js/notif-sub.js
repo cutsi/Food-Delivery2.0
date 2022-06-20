@@ -2,11 +2,11 @@
 $( document ).ready(function() {//ucitana
 
     connect();
-
     $("#notif-bell").on("click",function (){
         if($(this).hasClass("notif-bell-on")){
             $("#notif-bell").removeClass("notif-bell-on");
             appendOrders();
+            orders = [];
         }
 
     });
@@ -16,7 +16,7 @@ $( document ).ready(function() {//ucitana
 var stompClient = null;
 var orders = [];
 
-function appendOrders(order) {
+function appendOrders() {
     let orderHtml = ``;
     orders.forEach((o,index)=>{
 

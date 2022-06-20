@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Uspjeh</title>
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/success.css" th:href="@{/css/success.css}" rel="stylesheet" />
+  <link href="../static/css/orders_profile.css" th:href="@{/css/orders_profile.css}" rel="stylesheet" />
+  <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
+  <link href="../static/css/restaurant_orders.css" th:href="@{/css/restaurant_orders.css}" rel="stylesheet" />
+  <style>
+    .overlay1{
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      opacity: 1;
+      z-index: 2;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+
+  <section>
+    <h3 class="mb-4">Narudžbe</h3>
+    <div class="row-order">
+      <div class="col-md-6"  style="max-width: none;">
+        <div class="form-group">
+          <div class="table">
+            <th:block th:each="order: ${orders}">
+
+              <div class="row-order header" th:name="${order.getStatus()}">
+                <div class="cell">
+                  Cijena
+                </div>
+                <div class="cell">
+                  Datum
+                </div>
+                <div class="cell">
+                  Status
+                </div>
+                <div class="cell">
+                  Detalji
+                </div>
+              </div>
+
+              <div class="row-order">
+                <div class="cell" data-title="Cijena">
+                  [[${order.getPrice()}]]KM
+                </div>
+                <div class="cell" data-title="Datum">
+                  [[${order.getCreatedAtDMYHM()}]]
+                </div>
+                <div class="cell" data-title="Status">
+                  [[${order.getStatus()}]]
+                </div>
+                <div class="cell" data-title="Detalji">
+                  <form action="#popup1">
+                    <input th:data-order-id="${order.getId()}" onclick="showDetails(this.getAttribute('data-order-id'),2)"
+                           class="" type="submit" value="Detalji" />
+                  </form>
+                    <a th:href="@{narudzba/progress?refid=}+${order.getOrderReference()}+${order.getId()}">
+                      <input class="" type="submit" value="Prati narudžbu">
+                    </a>
+                  </form>
+
+
+                </div>
+              </div>
+            </th:block>
+          </div>
+          <div id="popup1" class="overlay1 pop">
+            <div class="popup" style="height: 85%; overflow-y: auto;">
+              <h2 class="popup-header">Detalji narudžbe</h2>
+              <a class="close">&times;</a>
+              <h3 class="content-header">Narudžba</h3>
+              <div class="content-wrapper">
+              </div>
+              <div class="Ukupno">
+                UKUPNO
+              </div>
+              <div class="ukupno-price" id="ukupno-price">
+                <b> </b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" >
+        <div class="form-group">
+
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="form-check">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script th:inline="javascript">
+  $(".close").on("click",function (e){
+    $(".pop").css("display","none");
+  })
+  function showDetails(orderId, popup){
+    let currentOrder = [[${orders}]].filter(o=>  o.id == orderId);
+    currentRefId = currentOrder[0].orderReference + currentOrder[0].id;
+    let contents = currentOrder[0].contents;
+    console.log(contents);
+    let contentHtml = ``;
+    let totalPrice = 0.00;
+
+
+    contents.forEach((c,i)=>{
+
+      contentHtml += `
+
+                                <div class="content" style="overflow: unset;margin-bottom: 4rem;">
+                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div>
+                                    <div class="item-price">${c.portion.price}KM</div>
+                                    <div class="condiments">
+                            `;
+
+      c.condiments.forEach(cond=>{
+
+        contentHtml += `
+                                        <div class="condiment">+${cond.name.name}</div>
+                                        <div class="condiment-price">${cond.price}KM</div>
+
+                                   `;
+
+      });
+
+      contentHtml += `
+
+                                   </div>
+                                   <div class="item-total">
+                                        ${c.price}
+                                    </div>
+                                </div>
+
+                        `;
+      totalPrice += parseFloat(c.price);
+
+    });
+
+    console.log(currentOrder[0]);
+    if(!$(".bill-table .order-"+currentOrder[0].id).hasClass("NotAcceptedOrder")){
+      $(".accept").css("display","none");
+      $(".deliver").css("display","block");
+    }else{
+      $(".deliver").css("display","none");
+      $(".accept").css("display","block");
+    }
+    $("#popup1 "+ ".content-wrapper").html(contentHtml);
+    $("#popup1").css("display","block");
+    $("#ukupno-price").html(totalPrice.toFixed(2)+"KM");
+
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+</body>
+</html>
