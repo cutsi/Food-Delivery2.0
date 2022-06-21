@@ -18,10 +18,8 @@ import java.beans.Transient;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Service
@@ -44,7 +42,7 @@ public class OrderRequestService {
     }
     public String addPrices(List<OrderContent> cartItems){
         return df.format(cartItems.stream()
-                .mapToDouble(cartItem -> Double.parseDouble(cartItem.getPortion().getPrice()))//CHANGE
+                .mapToDouble(cartItem -> Double.parseDouble(cartItem.getPrice()))//CHANGE
                 .sum());
     }
 
@@ -65,9 +63,13 @@ public class OrderRequestService {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            Map<OrderContent, String> orderAndPrice = new HashMap<>();
 
         });
         return cartItems;
+    }
+    private String getFoodItemCondimentPrice(OrderContent orderContent){
+        return null;
     }
     @Transient
     public Order saveNewOrder(OrderRequest order, Customer customer, Long restaurantId) throws NoSuchAlgorithmException {
@@ -161,8 +163,8 @@ public class OrderRequestService {
     }
 
 
-    public List<Order> getNotDeliveredOrder() {//GETS ALL ACTIVE ORDERS NOT JUST RESTAURANT ONES
-        return orderRepo.findByStatusOrStatus(Status.ORDERED, Status.ACCEPTED);
+    public List<Order> getNotDeliveredOrder(Restaurant restaurant) {//GETS ALL ACTIVE ORDERS NOT JUST RESTAURANT ONES
+        return orderRepo.findByStatusOrStatusAndRestaurant(Status.ORDERED, Status.ACCEPTED, restaurant);
     }
     public List<Order> getActiveOrdersByCustomer(Customer customer){
         return orderRepo.findAllByStatusOrStatusAndCustomer(Status.ORDERED, Status.ACCEPTED, customer);

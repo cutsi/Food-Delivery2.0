@@ -10,20 +10,8 @@
   <link href="../static/css/orders_profile.css" th:href="@{/css/orders_profile.css}" rel="stylesheet" />
   <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
   <link href="../static/css/restaurant_orders.css" th:href="@{/css/restaurant_orders.css}" rel="stylesheet" />
-  <style>
-    .overlay1{
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.7);
-      transition: opacity 500ms;
-      opacity: 1;
-      z-index: 2;
-      display: none;
-    }
-  </style>
+  <link href="../static/css/my-profile-details-button.css" th:href="@{/css/my-profile-details-button.css}" rel="stylesheet" />
+
 </head>
 <body>
 <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
@@ -39,6 +27,9 @@
 
               <div class="row-order header" th:name="${order.getStatus()}">
                 <div class="cell">
+                  Restoran
+                </div>
+                <div class="cell">
                   Cijena
                 </div>
                 <div class="cell">
@@ -50,9 +41,15 @@
                 <div class="cell">
                   Detalji
                 </div>
+                <div class="cell">
+                  Stanje narudžbe
+                </div>
               </div>
 
               <div class="row-order">
+                <div class="cell" data-title="Restoran">
+                  [[${order.getRestaurant().getName()}]]
+                </div>
                 <div class="cell" data-title="Cijena">
                   [[${order.getPrice()}]]KM
                 </div>
@@ -65,15 +62,15 @@
                 <div class="cell" data-title="Detalji">
                   <form action="#popup1">
                     <input th:data-order-id="${order.getId()}" onclick="showDetails(this.getAttribute('data-order-id'),2)"
-                           class="" type="submit" value="Detalji" />
+                           class="button-3" type="submit" value="Detalji" />
                   </form>
-                    <a th:href="@{narudzba/progress?refid=}+${order.getOrderReference()}+${order.getId()}">
-                      <input class="" type="submit" value="Prati narudžbu">
-                    </a>
-                  </form>
-
-
                 </div>
+                <div class="cell" data-title="Prati narudžbu">
+                  <a th:href="@{narudzba/progress?refid=}+${order.getOrderReference()}+${order.getId()}">
+                    <input class="button-3" type="submit" value="Prati narudžbu">
+                  </a>
+                </div>
+
               </div>
             </th:block>
           </div>
@@ -131,7 +128,7 @@
       contentHtml += `
 
                                 <div class="content" style="overflow: unset;margin-bottom: 4rem;">
-                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> (${c.portion.name.name})</div>
+                                    <div class="item-name"><b>${c.quantity} X  ${c.name} </b> <br>(${c.portion.name.name})</div>
                                     <div class="item-price">${c.portion.price}KM</div>
                                     <div class="condiments">
                             `;

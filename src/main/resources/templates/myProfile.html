@@ -12,20 +12,7 @@
   <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
   <link href="../static/css/restaurant_orders.css" th:href="@{/css/restaurant_orders.css}" rel="stylesheet" />
   <link href="../static/css/my-profile-details-button.css" th:href="@{/css/my-profile-details-button.css}" rel="stylesheet" />
-  <style>
-    .overlay1{
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.7);
-      transition: opacity 500ms;
-      opacity: 1;
-      z-index: 2;
-      display: none;
-    }
-  </style>
+
   <script>
       function changeOrderColor() {
 
@@ -40,9 +27,6 @@
         }
     }
     window.onload=changeOrderColor;
-  </script>
-
-
   </script>
 </head>
 
@@ -143,6 +127,9 @@
 
                     <div class="row-order header" th:name="${order.getStatus()}">
                       <div class="cell">
+                        Restoran
+                      </div>
+                      <div class="cell">
                         Cijena
                       </div>
                       <div class="cell">
@@ -157,6 +144,9 @@
                     </div>
 
                     <div class="row-order">
+                      <div class="cell" data-title="Restoran">
+                        [[${order.getRestaurant().getName()}]]
+                      </div>
                       <div class="cell" data-title="Cijena">
                         [[${order.getPrice()}]]KM
                       </div>
@@ -169,7 +159,7 @@
                       <div class="cell" data-title="Detalji">
                         <form action="#popup1">
                           <input th:data-order-id="${order.getId()}" onclick="showDetails(this.getAttribute('data-order-id'),2)"
-                                  class="" type="submit" value="Detalji" />
+                                  class="button-3" type="submit" value="Detalji" />
                         </form>
                       </div>
                     </div>

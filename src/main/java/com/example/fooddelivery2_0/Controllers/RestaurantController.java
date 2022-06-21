@@ -34,7 +34,7 @@ public class RestaurantController {
         model.addAttribute("item", restaurant);
         model.addAttribute("notif_ref", restaurant.getNotificationReference());
 
-        List<Order> orders = orderRequestService.getNotDeliveredOrder();
+        List<Order> orders = orderRequestService.getNotDeliveredOrder(restaurant);
         Collections.sort(orders);
 
         model.addAttribute("orders", orders);

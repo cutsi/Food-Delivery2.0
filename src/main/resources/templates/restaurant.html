@@ -408,7 +408,11 @@
                   <div class="menu-item-text">
                     <h3 class="menu-item-heading">
                       <span class="menu-item-name">[[${foodItem.getName()}]]</span>
-                      <span class="menu-item-price">[[${foodItem.getPrice()}]]KM</span>
+                      <th:block th:each="portion: ${foodItem.getPortions()}">
+                        <span th:if="${portion.isChecked()}">
+                          <span class="menu-item-price">[[${portion.getPrice()}]]KM</span>
+                        </span>
+                      </th:block>
                     </h3>
                     <h4 class="menu-item-info">
                       [[${foodItem.getInfo()}]]

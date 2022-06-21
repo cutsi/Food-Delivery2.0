@@ -24,4 +24,5 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
     List<Order> findByStatusOrStatus(Status ordered, Status accepted);
     List<Order> findAllByStatusOrStatusAndCustomer(Status ordered, Status accepted, Customer customer);
+    List<Order> findByStatusOrStatusAndRestaurant(Status ordered, Status accepted, Restaurant restaurant);
 }

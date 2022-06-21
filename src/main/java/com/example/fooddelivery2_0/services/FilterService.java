@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +20,8 @@ public class FilterService {
 
 
     public List<Restaurant> filter(String filter){
+        filter = filter.substring(0, 1).toUpperCase() + filter.substring(1).toLowerCase(Locale.ROOT);
+
         List<Restaurant> restaurantsByCategory = filterCategories(filter);
         List<Restaurant> restaurantsByFoodItem = filterFoodItems(filter);
 

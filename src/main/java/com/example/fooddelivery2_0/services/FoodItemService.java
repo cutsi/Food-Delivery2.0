@@ -5,6 +5,8 @@ import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.repos.FoodItemRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class FoodItemService {
     private final FoodItemRepo foodItemRepo;
-
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     public List<FoodItem> getAllFoodItems(){
         return foodItemRepo.findAll();
     }
@@ -31,4 +33,6 @@ public class FoodItemService {
     public List<FoodItem> getAllByName(String name){
         return foodItemRepo.findAllByName(name);
     }
+
 }
+
