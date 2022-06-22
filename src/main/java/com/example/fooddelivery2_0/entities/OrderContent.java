@@ -29,7 +29,7 @@ public class OrderContent {
     @ManyToMany
     private List<Condiment> condiments;
     private String price;
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnore
     private Order order;
 }

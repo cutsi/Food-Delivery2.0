@@ -163,8 +163,8 @@ public class OrderRequestService {
     }
 
 
-    public List<Order> getNotDeliveredOrder(Restaurant restaurant) {//GETS ALL ACTIVE ORDERS NOT JUST RESTAURANT ONES
-        return orderRepo.findByStatusOrStatusAndRestaurant(Status.ORDERED, Status.ACCEPTED, restaurant);
+    public List<Order> getNotDeliveredOrder(Long restaurant) {//GETS ALL ACTIVE ORDERS NOT JUST RESTAURANT ONES
+        return orderRepo.findNotDelivered(Status.ORDERED.name(), Status.ACCEPTED.name(), restaurant);
     }
     public List<Order> getActiveOrdersByCustomer(Customer customer){
         return orderRepo.findAllByStatusOrStatusAndCustomer(Status.ORDERED, Status.ACCEPTED, customer);

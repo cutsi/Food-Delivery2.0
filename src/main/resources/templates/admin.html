@@ -7,24 +7,66 @@
   <title>Admin</title>
   <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
   <link href="../static/css/success.css" th:href="@{/css/success.css}" rel="stylesheet" />
+  <link href="../static/css/admin-style.css" th:href="@{/css/admin-style.css}" rel="stylesheet" />
 
 </head>
-<body>
-<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
-  <header th:replace="fragments/general :: header"></header>
-</main>
+  <body>
+    <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+      <header th:replace="fragments/general :: header"></header>
+    </main>
+    <section>
+      <div class="cardsBody">
+        <div class="cardContainer">
+          <div class="main">
+            <div class="cardBox">
 
-<br><br><br>
-<footer th:replace="fragments/general :: footer">
-</footer>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-</script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-</script>
-</body>
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">1942</div>
+                  <div class="cardName">Daily views</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">234</div>
+                  <div class="cardName">Prodaja</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">122KM</div>
+                  <div class="cardName">Zarada</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-usd" aria-hidden="true"></i>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <br><br><br>
+    <footer th:replace="fragments/general :: footer">
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+  </body>
 </html>

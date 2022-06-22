@@ -34,7 +34,7 @@ public class Order implements Comparable<Order>{ //DONE
     @ManyToOne
     @JsonIgnore
     private Restaurant restaurant;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order")
     private List<OrderContent> contents;
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -56,9 +56,7 @@ public class Order implements Comparable<Order>{ //DONE
         return contents;
     }
     @Override
-
     public int compareTo(Order o) {
         return this.createdAt.compareTo(o.getCreatedAt());
     }
-
 }

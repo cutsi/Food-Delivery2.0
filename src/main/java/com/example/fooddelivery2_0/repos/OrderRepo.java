@@ -6,6 +6,7 @@ import com.example.fooddelivery2_0.entities.Order;
 import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.entities.RestaurantOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,9 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
     List<Order> findByStatusOrStatus(Status ordered, Status accepted);
     List<Order> findAllByStatusOrStatusAndCustomer(Status ordered, Status accepted, Customer customer);
-    List<Order> findByStatusOrStatusAndRestaurant(Status ordered, Status accepted, Restaurant restaurant);
+
+    @Query(nativeQuery = true,
+    value = "select * from orders where (status = ?1 or status = ?2) and restaurant_id = ?3")
+    List<Order> findNotDelivered(String ordered, String accepted, Long id);
+    //List<Order> findByStatusOrStatus
 }
