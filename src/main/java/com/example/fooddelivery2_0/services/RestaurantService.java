@@ -44,6 +44,9 @@ public class RestaurantService {
         return restaurantRepo.findByOwners(owner);
         //return Optional.empty();
     }
+    public void save(Restaurant restaurant){
+        restaurantRepo.save(restaurant);
+    }
 
 }
 

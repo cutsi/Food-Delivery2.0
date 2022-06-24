@@ -12,13 +12,19 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String address;
-    private String city;
+    private String name;
+    @OneToOne
+    private City city;
     private String country;
 
-    public Address(String address, String city, String country) {
-        this.address = address;
+    public Address(String name, City city, String country) {
+        this.name = name;
         this.city = city;
         this.country = country;
     }
+    public Address(String name, City city) {
+        this.name = name;
+        this.city = city;
+    }
+
 }

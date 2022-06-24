@@ -210,7 +210,7 @@
 
 
   <section id="page-header">
-    <div class="jumbotron jumbotron-fluid" th:style="'background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + ${restaurant.getImage()} + ');'">
+    <div class="jumbotron jumbotron-fluid" th:style="'background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(' + ${restaurant.getBanner()} + ');'">
       <div class="container">
         <div class="row">
           <div class="col-lg-6 col-width">
@@ -300,7 +300,7 @@
         <a class="close" href="#close">&times;</a>
         <h3 class="content-header">Adresa</h3>
         <div class="content">
-          [[${restaurant.getAddress()}]]
+          [[${restaurant.getAddress().getName()}]]
         </div>
         <h3 class="content-header">Cijena dostave</h3>
         <div class="content">

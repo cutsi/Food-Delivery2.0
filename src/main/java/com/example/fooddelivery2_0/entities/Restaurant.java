@@ -22,7 +22,9 @@ public class Restaurant {
     private String banner;
     private String deliveryCost;
     @OneToOne
-    private RestaurantAddress address;
+    private Address address;
+    @OneToOne
+    private City city;
     @OneToMany(mappedBy = "restaurant")
     private List<RestaurantOwner> owners; //MAX 2 (1 owner and  1 employee created by the owner)
     @OneToMany(mappedBy = "restaurant")
@@ -38,7 +40,7 @@ public class Restaurant {
     @JsonIgnore
     private String notificationReference;
 
-    public Restaurant(String phone, String image, String name, String banner, String deliveryCost, RestaurantAddress address, List<FoodItem> foodItems) {
+    public Restaurant(String phone, String image, String name, String banner, String deliveryCost, Address address, List<FoodItem> foodItems) {
         this.phone = phone;
         this.image = image;
         this.name = name;
@@ -47,5 +49,18 @@ public class Restaurant {
         this.address = address;
         this.foodItems = foodItems;
     }
-
+    public Restaurant(String phone, String name, String image, String banner){
+        this.phone = phone;
+        this.name = name;
+        this.image=image;
+        this.banner = banner;
+    }
+    public Restaurant(String phone, String name, Address address, String image, String banner){
+        this.phone = phone;
+        this.name = name;
+        this.image=image;
+        this.banner = banner;
+        this.address = address;
+        this.city = city;
+    }
 }

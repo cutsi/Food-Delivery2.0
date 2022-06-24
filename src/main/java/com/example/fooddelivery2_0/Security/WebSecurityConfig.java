@@ -28,11 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 //.and()
                 //THIS HERE
-                .csrf().ignoringAntMatchers("/home/filter", "/home").and() //only for development
+                .csrf().ignoringAntMatchers("/home/filter", "/home", "/admin/**").and() //only for development
                 .authorizeRequests()
                 .antMatchers("/restaurant","/css/**", "/js/**", "/css/**", "/audio/**", "/","/style.css","/index")
                 .permitAll()
-                .antMatchers("/admin").hasAuthority("ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/secured/notification-websocket/**").hasAnyAuthority("RESTAURANT","SUPER_RESTAURANT")
                 .antMatchers("/secured/order-progress-websocket/**").hasAuthority("CUSTOMER")
                 .antMatchers("/Restoran/**", "/restaurant_orders/**").hasAnyAuthority("ADMIN", "RESTAURANT","SUPER_RESTAURANT")

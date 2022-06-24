@@ -28,34 +28,34 @@
   <div class = "center">
     <div class="container1">
       <div class="title">Registracija</div>
-      <div class="content">
-        <form onSubmit = "return checkPassword(this)" th:action="@{/prijava}" th:object="${user}" method="POST">
-          <div class="user-details">
-            <div class="input-box">
-              <span class="details">IME</span>
-              <input type="text" th:field="*{name}" placeholder="Unesite ime" required>
+        <div class="content">
+          <form onSubmit = "return checkPassword(this)" th:action="@{/prijava}" th:object="${user}" method="POST">
+            <div class="user-details">
+              <div class="input-box">
+                <span class="details">IME</span>
+                <input type="text" th:field="*{name}" placeholder="Unesite ime" required>
+              </div>
+              <div class="input-box">
+                <span class="details">EMAIL</span>
+                <input type="email" th:field="*{email}" placeholder="Unesite email" required>
+              </div>
+              <div class="input-box">
+                <span class="details">BROJ TELEFONA</span>
+                <input type="text" th:field="*{phone}" placeholder="Unesite broj telefona" required>
+              </div>
+              <div class="input-box">
+                <span class="details">LOZINKA</span>
+                <input type="password" name="password1" placeholder="Unesite lozinku" required>
+              </div>
+              <div class="input-box">
+                <span class="details">POTVRDITE LOZINKU</span>
+                <input type="password" name="password2" placeholder="Ponovo unesite lozinku" required>
+              </div>
             </div>
-            <div class="input-box">
-              <span class="details">EMAIL</span>
-              <input type="email" th:field="*{email}" placeholder="Unesite email" required>
+            <div class="button">
+              <input type="submit" value="Registracija">
             </div>
-            <div class="input-box">
-              <span class="details">BROJ TELEFONA</span>
-              <input type="text" th:field="*{phone}" placeholder="Unesite broj telefona" required>
-            </div>
-            <div class="input-box">
-              <span class="details">LOZINKA</span>
-              <input type="password" name="password1" placeholder="Unesite lozinku" required>
-            </div>
-            <div class="input-box">
-              <span class="details">POTVRDITE LOZINKU</span>
-              <input type="password" name="password2" placeholder="Ponovo unesite lozinku" required>
-            </div>
-          </div>
-          <div class="button">
-            <input type="submit" value="Registracija">
-          </div>
-        </form>
+          </form>
       </div>
     </div>
   </div>

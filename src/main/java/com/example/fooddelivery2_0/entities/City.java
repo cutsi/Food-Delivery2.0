@@ -6,12 +6,16 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-//@Entity
+@Entity
 @AllArgsConstructor
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String cityName;
+    private String name;
     private String zip;
+
+    public City(String name){
+        this.name = name;
+    }
 }

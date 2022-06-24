@@ -18,7 +18,6 @@ public class DatabaseInitializer {
     private final CondimentNameRepo condimentNameRepo;
     private final CondimentRepo condimentRepo;
     private final FoodItemRepo foodItemRepo;
-    private final RestaurantAddressRepo restaurantAddressRepo;
     private final RestaurantRepo restaurantRepo;
     private final RestaurantOwnerRepo restaurantOwnerRepo;
     private final WorkingHoursRepo workingHoursRepo;
@@ -27,6 +26,7 @@ public class DatabaseInitializer {
     private final EmployeeFunctionRepo employeeFunctionRepo;
     private final UserRepo userRepo;
     private final ImageRepo imageRepo;
+    private final AddressRepo addressRepo;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -39,12 +39,11 @@ public class DatabaseInitializer {
                                CondimentNameRepo condimentNameRepo,
                                CondimentRepo condimentRepo,
                                FoodItemRepo foodItemRepo,
-                               RestaurantAddressRepo restaurantAddressRepo,
                                RestaurantRepo restaurantRepo,
                                RestaurantOwnerRepo restaurantOwnerRepo,
                                WorkingHoursRepo workingHoursRepo,
                                EmployeeFunctionRepo employeeFunctionRepo,
-                               UserRepo userRepo, ImageRepo imageRepo) {
+                               UserRepo userRepo, ImageRepo imageRepo, AddressRepo addressRepo) {
 
         this.categoryRepo = categoryRepo;
         this.portionNameRepo = portionNameRepo;
@@ -52,7 +51,6 @@ public class DatabaseInitializer {
         this.condimentNameRepo = condimentNameRepo;
         this.condimentRepo = condimentRepo;
         this.foodItemRepo = foodItemRepo;
-        this.restaurantAddressRepo = restaurantAddressRepo;
         this.restaurantRepo = restaurantRepo;
         this.restaurantOwnerRepo = restaurantOwnerRepo;
         this.workingHoursRepo = workingHoursRepo;
@@ -61,6 +59,7 @@ public class DatabaseInitializer {
         this.employeeFunctionRepo = employeeFunctionRepo;
         this.userRepo = userRepo;
         this.imageRepo = imageRepo;
+        this.addressRepo = addressRepo;
     }
 
     private final String PONEDJELJAK = "Ponedjeljak";
@@ -84,7 +83,7 @@ public class DatabaseInitializer {
                     "0923329275",
                     bCryptPasswordEncoder.encode("user")
             );
-            customer.setCustomerAddress(List.of(new Address("Address_1", "Imotski", "Croatia")));
+            customer.setCustomerAddress(List.of(new Address("Address_1", new City("Imotski"), "Croatia")));
             customer.setUserRole(UserRole.CUSTOMER);
             customer.setIsEnabled(true);
             customerRepo.save(customer);
@@ -110,8 +109,8 @@ public class DatabaseInitializer {
             categoryRepo.saveAll(List.of(category1, category2));
 
             //ADD ADDRESS FOR RESTAURANT NUMBER 1
-            RestaurantAddress restaurant1Address = new RestaurantAddress("Address_1", "Zagreb", "Croatia");
-            restaurantAddressRepo.save(restaurant1Address);
+            Address restaurant1Address = new Address("Address_1", new City("Zagreb"), "Croatia");
+            addressRepo.save(restaurant1Address);
 
             //ADD RESTAURANT NUMBER 1
             Restaurant restaurant1 = new Restaurant(

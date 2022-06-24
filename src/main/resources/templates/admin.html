@@ -5,54 +5,196 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin</title>
+  <link href="../static/css/admin-style.css" th:href="@{/css/admin-style.css}" rel="stylesheet" />
   <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
   <link href="../static/css/success.css" th:href="@{/css/success.css}" rel="stylesheet" />
-  <link href="../static/css/admin-style.css" th:href="@{/css/admin-style.css}" rel="stylesheet" />
 
 </head>
   <body>
     <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
       <header th:replace="fragments/general :: header"></header>
     </main>
+
     <section>
-      <div class="cardsBody">
-        <div class="cardContainer">
-          <div class="main">
-            <div class="cardBox">
+        <div class="cardsBody">
+          <div class="cardContainer">
+              <div class="cardBox">
 
-              <div class="infoCard">
-                <div>
-                  <div class="numbers">1942</div>
-                  <div class="cardName">Daily views</div>
+                <div class="infoCard">
+                  <div>
+                    <div class="numbers">1942</div>
+                    <div class="cardName">Novih korisnika danas</div>
+                  </div>
+                  <div class="iconBox">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                  </div>
                 </div>
-                <div class="iconBox">
-                  <i class="fa fa-eye" aria-hidden="true"></i>
+
+                <div class="infoCard">
+                  <div>
+                    <div class="numbers">234</div>
+                    <div class="cardName">Prodaja</div>
+                  </div>
+                  <div class="iconBox">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                  </div>
+                </div>
+
+                <div class="infoCard">
+                  <div>
+                    <div class="numbers">122KM</div>
+                    <div class="cardName">Zarada</div>
+                  </div>
+                  <div class="iconBox">
+                    <i class="fa fa-usd" aria-hidden="true"></i>
+                  </div>
                 </div>
               </div>
 
-              <div class="infoCard">
-                <div>
-                  <div class="numbers">234</div>
-                  <div class="cardName">Prodaja</div>
+
+            <div class="main">
+              <div class="admin-details">
+                <div class="recentOrders">
+                  <div class="cardHeader">
+                    <h2>Restorani</h2>
+                  </div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <td>Ime restorana</td>
+                        <td>Broj narudžbi</td>
+                        <td>Status</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    <tr>
+                      <td>Star Refrigerator</td>
+                      <td>$1200</td>
+                      <td><span class="status delivered">Delivered</span></td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="iconBox">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+
+                <div class="recentCustomers">
+                  <div class="cardHeader">
+                    <h2>Novi komentari</h2>
+                  </div>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr><tr>
+                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
+                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
+                          <button class="accept-btn">Prihvati</button>
+                          <button class="decline-btn">Odbij</button>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
-              <div class="infoCard">
-                <div>
-                  <div class="numbers">122KM</div>
-                  <div class="cardName">Zarada</div>
-                </div>
-                <div class="iconBox">
-                  <i class="fa fa-usd" aria-hidden="true"></i>
-                </div>
-              </div>
+
+            </div>
           </div>
         </div>
-      </div>
-
     </section>
 
 

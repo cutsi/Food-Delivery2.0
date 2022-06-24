@@ -1,11 +1,7 @@
-*{
-    margin-top: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+
 .main{
-    position: absolute;
-    width: calc(100% - 300px);
+    /*position: absolute;*/
+    /*width: calc(100% - 300px);*/
     left: 300px;
     min-height: 100vh;
     background: #f5f5f5;
@@ -22,18 +18,19 @@
 .cardBox{
     position: relative;
     width: 100%;
-    padding-bottom: 20px;
     display: grid;
     grid-template-columns: repeat(3,1fr);
     grid-gap: 20px;
+    padding: 45px;
+    margin-top: -3rem;
 }
 .cardBox .infoCard{
     position: relative;
     background: #fff;
-    padding-bottom: 20px;
     display: flex;
     justify-content: space-evenly;
     cursor: pointer;
+    border-radius: 50px;
 }
 .cardBox .infoCard .numbers{
     position: relative;
@@ -47,3 +44,189 @@
     font-size: 2.5em;
     color: #03a9f4;
 }
+
+.admin-details{
+    position: relative;
+    width: 100%;
+
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 2fr 1fr;
+}
+.recentCustomers{
+    max-height: 600px;
+    overflow-x: auto;
+    position: relative;
+
+}
+.admin-details .recentOrders{
+    position: relative;
+    /*display: grid;*/
+    min-height: 530px;
+    background: #fff;
+    max-height: 600px;
+    overflow-x: auto;
+}
+
+.cardHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.cardHeader h2{
+    font-weight: 600;
+    padding: 2rem;
+    font-size: 2rem;
+}
+
+.btn{
+    position: relative;
+    padding: 5px 10px;
+    background: #1199FF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.admin-details table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.admin-details table thead td{
+    font-weight: 600;
+}
+
+.admin-details .recentOrders table tr{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.admin-details .recentOrders table tbody tr:last-child{
+    border-bottom: none;
+}
+
+.admin-details .recentOrders table tbody tr:hover{
+    background: #03a9f4;
+    color: #fff;
+}
+
+.admin-details .recentOrders table tr td{
+    padding: 6px;
+}
+admin-details .recentOrders table thead tr td:last-child,
+.admin-details .recentOrders table tbody tr td:last-child{
+    text-align: right;
+
+}
+
+admin-details .recentOrders table thead tr td:nth-child(2),
+.admin-details .recentOrders table tbody tr td:nth-child(2){
+
+}
+
+admin-details .recentOrders table thead tr td:nth-child(3),
+.admin-details .recentOrders table tbody tr td:nth-child(3){
+    text-align: left;
+}
+
+.status{
+    position: relative;
+    background: #f00;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    padding: 2px;
+}
+.delivered{
+    background: #8de02c;
+
+}
+.pending{
+    background: #f9ca3f;
+
+}
+.return{
+    background: #f00;
+}
+.inprogress{
+    background: dodgerblue;
+}
+
+.admin-details .recentCustomers{
+    position: relative;
+    min-height: 530px;
+    background: #fff;
+}
+.admin-details .recentCustomers table tr td h4 span{
+    font-size: 14px;
+    color: #999;
+
+}
+.admin-details .recentCustomers table tr:hover td h4 span,
+.admin-details .recentCustomers table tr:hover{
+    background: #03a9f4;
+    color: #fff;
+}
+.admin-details .recentCustomers table tr td{
+    border-bottom: 1px solid lightgray;
+}
+.accept-btn{
+    border-radius: 15px;
+    background: #8de02e;
+    border: 1px solid;
+}
+.decline-btn{
+    border-radius: 15px;
+    background: #ff4949;;
+    border: 1px solid;
+}
+.admin-details .recentCustomers table tr td h4{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.2em;
+}
+
+@media (max-width:960px){
+    .main{
+        width: 100%;
+        left: 0;
+    }
+    .main.active{
+        width: calc(100% - 300px);
+        left: 300px;
+    }
+    .cardBox{
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+
+@media (max-width:768px){
+    .admin-details{
+        grid-template-columns: repeat(1,1fr);
+    }
+    .cardHeader{
+        font-weight: 600;
+        font-size: 18px;
+    }
+}
+@media (max-width:480px){
+    .cardBox{
+        grid-template-columns: repeat(1,1fr);
+    }
+    .admin-details .recentCustomers{
+        overflow-x: auto;
+    }
+    .admin-details .recentCustomers table{
+        /*width: 600px;*/
+    }
+    .main,
+    .main.active{
+        width: 100%;
+        left: 0;
+    }
+}
+

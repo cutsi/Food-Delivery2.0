@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Uspjeh</title>
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/signup.css" th:href="@{/css/signup.css}" rel="stylesheet" />
+  <link href="../static/css/choose-file.css" th:href="@{/css/choose-file.css}" rel="stylesheet" />
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script th:inline="javascript">
+    $('#chooseFile').bind('change', function () {
+      var filename = $("#chooseFile").val();
+      if (/^\s*$/.test(filename)) {
+        $(".file-upload").removeClass('active');
+        $("#noFile").text("No file chosen...");
+      }
+      else {
+        $(".file-upload").addClass('active');
+        $("#noFile").text(filename.replace("C:\\fakepath\\", ""));
+      }
+    });
+
+    $('#chooseFile1').bind('change', function () {
+      var filename = $("#chooseFile1").val();
+      if (/^\s*$/.test(filename)) {
+        $(".file-upload").removeClass('active');
+        $("#noFile1").text("No file chosen...");
+      }
+      else {
+        $(".file-upload").addClass('active');
+        $("#noFile1").text(filename.replace("C:\\fakepath\\", ""));
+      }
+    });
+
+  </script>
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+
+    <div class = "center">
+      <div class="container1">
+        <div class="title">Novi restoran</div>
+        <div class="content">
+          <form th:action="@{/admin/save/restaurant}"
+                th:object="${restaurant}" method="post"
+                enctype="multipart/form-data">
+            <div class="user-details">
+              <div class="input-box">
+                <span class="details">IME</span>
+                <input type="text" th:field="*{name}" placeholder="Unesite ime restorana" required>
+              </div>
+
+              <div class="input-box">
+                <span class="details">BROJ TELEFONA</span>
+                <input type="text" th:field="*{phone}" placeholder="Unesite broj telefona" required>
+              </div>
+
+              <div class="input-box">
+                <span class="details">ADRESA</span>
+                <input type="text" th:field="*{address}" placeholder="Unesite adresu" required>
+              </div>
+
+              <div class="input-box">
+                <span class="details">GRAD</span>
+                <select name="city" th:field="*{city}">
+                  <th:block th:each="city: ${cities}">
+                    <option th:value="${city.getName()}">[[${city.getName()}]]</option>
+                  </th:block>
+                </select>
+              </div>
+
+
+              <div class="input-box">
+                <span class="details">ID VLASNIKA</span>
+                <input type="text" name="ownerId" placeholder="Unesite ID vlasnika">
+              </div>
+
+              <div class="input-box">
+                <span class="details">SLIKA</span>
+                <input style="padding: 1px; border-color: #cccccc;" type="file" name="image" id="chooseFile" accept="image/png, image/jpeg, image/jpg" />
+              </div>
+
+              <div class="input-box">
+                <span class="details">ZASLON</span>
+                <input style="padding: 1px; border-color: #cccccc;" type="file" name="banner" id="chooseFile1" accept="image/png, image/jpeg, image/jpg" />
+              </div>
+            </div>
+            <div class="button">
+              <input type="submit" value="Registracija">
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+</body>
+</html>
