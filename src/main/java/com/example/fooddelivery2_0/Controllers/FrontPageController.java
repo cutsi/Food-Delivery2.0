@@ -3,9 +3,15 @@ import com.example.fooddelivery2_0.Utils.UserRole;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 // restoran food item 1 n
 //restoran id vuce se kroy sve tablice
@@ -29,11 +35,16 @@ public class FrontPageController {
     private final RatingService ratingService;
     private final WorkingHoursService workingHoursService;
     private final OrderService orderService;
+
     private final FoodItemService foodItemService;
     private final FilterService filterService;
     private final OrderRequestService orderRequestService;
     @GetMapping(path = {"/", "/home"})
     public String home(Model model){
+        for (Order order:orderRequestService.getAllOrdersByCreatedAtTodayAndRestaurant(6L)) {
+            System.out.println("TODAYS ORDERS: " + order.getCreatedAt());
+        }
+
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
         String userRole = "";
         model.addAttribute("restaurants",restaurants);

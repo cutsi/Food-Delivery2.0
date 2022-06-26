@@ -18,6 +18,9 @@ import java.beans.Transient;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -28,6 +31,7 @@ public class OrderRequestService {
     private OrderRepo orderRepo;
     private RestaurantRepo restaurantRepo;
     private OrderContentRepo orderContentRepo;
+    private RestaurantService restaurantService;
     //private OrderContentDetailsRepo orderContentDetailRepo;
     private static final DecimalFormat df = new DecimalFormat("0.00");
     public String getTotal(List<Order> orders){
@@ -170,4 +174,31 @@ public class OrderRequestService {
         return orderRepo.findAllByStatusOrStatusAndCustomer(Status.ORDERED, Status.ACCEPTED, customer);
     }
 
+    public Order getById(Long id) {
+        return orderRepo.findById(id).get();
+    }
+
+    private LocalDateTime getEndOfDay(){
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.of(23, 59, 59, 999999 );
+        return LocalDateTime.of(currentDate, currentTime);
+    }
+
+    private LocalDateTime getStartOfDay(){
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.of(0, 0, 0, 0 );
+        return LocalDateTime.of(currentDate, currentTime);
+    }
+    public List<Order> getAllOrdersByCreatedAtTodayAndRestaurant(Long restaurantId){
+         return orderRepo.findAllByCreatedAtAndRestaurant(getStartOfDay(), getEndOfDay(), restaurantId);
+    }
+
+    public Map<Restaurant, Integer> getRestaurantsAndOrdersByRestaurantToday(){
+        Map<Restaurant,Integer> numberOfOrdersPerRestaurantToday = new HashMap<>();
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+        for (Restaurant restaurant: restaurants) {
+            numberOfOrdersPerRestaurantToday.put(restaurant, getAllOrdersByCreatedAtTodayAndRestaurant(restaurant.getId()).size());
+        }
+        return numberOfOrdersPerRestaurantToday;
+    }
 }

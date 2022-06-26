@@ -55,7 +55,7 @@ public class OrderController {
         //var response = new HashMap<String ,String>(); //TODO PROVJERIT VAR
         try {
 
-            order = orderRequestService.saveNewOrder(orderRequest, (Customer) principal.getPrincipal(), restaurantId);
+            order = orderRequestService.saveNewOrder(orderRequest, (Customer) principal.getPrincipal(), restaurantId);//ASK
             order.setPrice(orderRequestService.addPrices(order.getContents()));
 
             orderService.save(order);

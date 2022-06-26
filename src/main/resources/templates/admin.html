@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
-<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/general :: head"></head>
 <head>
   <meta charset="UTF-8">
@@ -8,6 +9,7 @@
   <link href="../static/css/admin-style.css" th:href="@{/css/admin-style.css}" rel="stylesheet" />
   <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
   <link href="../static/css/success.css" th:href="@{/css/success.css}" rel="stylesheet" />
+  <meta sec:authorize='isAuthenticated()' name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 </head>
   <body>
@@ -62,71 +64,18 @@
                     <thead>
                       <tr>
                         <td>Ime restorana</td>
-                        <td>Broj narudžbi</td>
+                        <td>Broj narudžbi danas</td>
                         <td>Status</td>
                       </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
-                    <tr>
-                      <td>Star Refrigerator</td>
-                      <td>$1200</td>
-                      <td><span class="status delivered">Delivered</span></td>
-                    </tr>
+                      <th:block th:each="restaurant: ${restaurants}">
+                        <tr>
+                          <td>[[${restaurant.key.getName()}]]</td>
+                          <td>[[${restaurant.value}]]</td>
+                          <td><span class="status delivered">Delivered</span></td>
+                        </tr>
+                      </th:block>
                     </tbody>
                   </table>
                 </div>
@@ -137,55 +86,26 @@
                   </div>
                   <table>
                     <tbody>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr><tr>
-                        <td><h4>Ante Antic<br><span>13.3.2022 14:56</span></h4>
-                          <div class="" style="margin-bottom: 10px;"> Ovo je novi komentar. Bla blaba lba blabalbalb alb alb albla</div>
-                          <button class="accept-btn">Prihvati</button>
-                          <button class="decline-btn">Odbij</button>
-                        </td>
-                      </tr>
+                    <th:block th:each="rating: ${ratings}">
+                        <tr>
+                          <td>
+                            <h4>
+                            [[${rating.getCustomer().getName()}]]<br>
+                            <span>[[${rating.getCreatedAtDMYHM()}]]</span><br>
+                            <span>Za restoran: <a th:href="@{restaurant?ime=}+${rating.getRestaurant().getName()}">[[${rating.getRestaurant().getName()}]]</a>
+                          </span>
+                          </h4>
+                            <input type="hidden" id="ratingId" name="approve" th:value="${rating.getId()}">
+                            <div class="" style="margin-bottom: 10px;"> [[${rating.getContent()}]]</div>
 
+                            <button th:data-rating-id="${rating.getId()}" class="accept-btn"
+                                    onclick="acceptComment(this.getAttribute('data-rating-id'), 'accept')">Prihvati</button>
+
+                            <button th:data-rating-id="${rating.getId()}" class="decline-btn"
+                                    onclick="acceptComment(this.getAttribute('data-rating-id'), 'decline')">Izbriši</button>
+                          </td>
+                        </tr>
+                    </th:block>
                     </tbody>
                   </table>
                 </div>
@@ -201,8 +121,35 @@
     <br><br><br>
     <footer th:replace="fragments/general :: footer">
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script th:inline="javascript">
+
+      function acceptComment(ratingId, decision) {
+
+        let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+        let csrf = document.querySelector('meta[name="_csrf"]').content;
+
+        $(function () {
+          $.ajax({
+            url: `admin/approve`,
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              [csrf_header]: csrf
+            },
+            data: ratingId,
+            data: (ratingId + "=" + decision),
+            success: function (data) {
+              console.log("AJAX EXERCISE: " + data.toString());
+              window.location.href =  window.location.protocol + "//" + window.location.host + "/admin";
+            },
+            error: function (data){
+              console.log("AJAX EXERCISE ERROR: " + data);
+            }
+          });
+        });
+      }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
             integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">

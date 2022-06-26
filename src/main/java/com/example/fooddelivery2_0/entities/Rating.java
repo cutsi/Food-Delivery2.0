@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -32,7 +33,6 @@ public class Rating {
 
     @ManyToOne
     private Restaurant restaurant;
-
     public Rating(String content, Restaurant restaurant, Customer user, Integer rating) {
         this.content = content;
         this.restaurant = restaurant;
@@ -41,7 +41,27 @@ public class Rating {
         this.createdAt = LocalDateTime.now(ZoneId.of("CET"));
         this.isApproved = false;
     }
+    public String getCreatedAtDMYHM(){
+        String dayOfMonth = String.valueOf(createdAt.getDayOfMonth());
+        String month = String.valueOf(createdAt.getMonthValue());
+        String hour = String.valueOf(createdAt.getHour());
+        String minute = String.valueOf(createdAt.getMinute());
 
+        if(createdAt.getDayOfMonth()<10){
+            dayOfMonth = '0' + String.valueOf(createdAt.getDayOfMonth());
+        }
+        if(createdAt.getMonthValue()<10){
+            month = '0' + String.valueOf(createdAt.getMonthValue());
+        }
+        if(createdAt.getHour()<10){
+            hour = '0' + String.valueOf(createdAt.getHour());
+        }
+        if(createdAt.getMinute()<10){
+            minute = '0'+ String.valueOf(createdAt.getMinute());
+        }
+
+        return  dayOfMonth + "." + month + "." + createdAt.getYear() + " " + hour + ":" + minute;
+    }
 //    private Long responseId;
 //
 //    @ManyToOne(cascade = { CascadeType.REMOVE }) //one user can have many comments

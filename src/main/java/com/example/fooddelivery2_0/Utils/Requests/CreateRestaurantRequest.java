@@ -1,5 +1,6 @@
 package com.example.fooddelivery2_0.Utils.Requests;
 
+import com.example.fooddelivery2_0.entities.City;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

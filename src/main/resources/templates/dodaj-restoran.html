@@ -67,9 +67,9 @@
 
               <div class="input-box">
                 <span class="details">GRAD</span>
-                <select name="city" th:field="*{city}">
+                <select name="city">
                   <th:block th:each="city: ${cities}">
-                    <option th:value="${city.getName()}">[[${city.getName()}]]</option>
+                    <option th:value="${city}">[[${city}]]</option>
                   </th:block>
                 </select>
               </div>
@@ -77,7 +77,7 @@
 
               <div class="input-box">
                 <span class="details">ID VLASNIKA</span>
-                <input type="text" name="ownerId" placeholder="Unesite ID vlasnika">
+                <input style="border-color: #cdcdcd;" type="text" name="ownerId" placeholder="Unesite ID vlasnika">
               </div>
 
               <div class="input-box">

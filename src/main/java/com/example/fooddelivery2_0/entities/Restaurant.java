@@ -10,7 +10,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "restaurants")
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,8 +23,6 @@ public class Restaurant {
     private String deliveryCost;
     @OneToOne
     private Address address;
-    @OneToOne
-    private City city;
     @OneToMany(mappedBy = "restaurant")
     private List<RestaurantOwner> owners; //MAX 2 (1 owner and  1 employee created by the owner)
     @OneToMany(mappedBy = "restaurant")
@@ -61,6 +59,10 @@ public class Restaurant {
         this.image=image;
         this.banner = banner;
         this.address = address;
-        this.city = city;
+    }
+
+    @Override
+    public int compareTo(Restaurant restaurant) {
+        return (int)(this.id - restaurant.getId());
     }
 }

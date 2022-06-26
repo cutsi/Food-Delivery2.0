@@ -5,6 +5,7 @@ import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.entities.User;
 import com.example.fooddelivery2_0.repos.RatingRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -41,6 +42,12 @@ public class RatingService {
     public List<Rating> getAllByRestaurant(Restaurant restaurant){
         return ratingRepo.findAllByRestaurant(restaurant);
     }
+    public List<Rating> getAllByIsApprovedFalse(){
+        return ratingRepo.findAllByIsApprovedFalse();
+    }
+    public void delete(Rating rating){
+        ratingRepo.delete(rating);
+    }
     public String getAverageRating(Restaurant restaurant){
         List<Rating> ratings = ratingRepo.findAllByRestaurant(restaurant);
         double avgRating = 0.00;
@@ -52,6 +59,7 @@ public class RatingService {
         return df.format(avgRating/ (double) ratings.size());
         //return avgRating/Double.valueOf(comments.size());
     }
+
     public void save(Rating rating){
         ratingRepo.save(rating);
     }

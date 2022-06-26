@@ -123,7 +123,7 @@ admin-details .recentOrders table thead tr td:last-child,
 
 admin-details .recentOrders table thead tr td:nth-child(2),
 .admin-details .recentOrders table tbody tr td:nth-child(2){
-
+    text-align: center;
 }
 
 admin-details .recentOrders table thead tr td:nth-child(3),
