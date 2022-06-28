@@ -1,15 +1,13 @@
 package com.example.fooddelivery2_0.Controllers;
-import com.example.fooddelivery2_0.entities.Order;
-import com.example.fooddelivery2_0.entities.Restaurant;
-import com.example.fooddelivery2_0.entities.RestaurantOwner;
-import com.example.fooddelivery2_0.services.OrderRequestService;
-import com.example.fooddelivery2_0.services.RestaurantService;
-import com.example.fooddelivery2_0.services.UserService;
+import com.example.fooddelivery2_0.entities.*;
+import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +19,10 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final UserService userService;
     private final OrderRequestService orderRequestService;
+    private final FoodItemService foodItemService;
+    private final CondimentService condimentService;
+    private final PortionService portionService;
+    private final CategoryService categoryService;
     @GetMapping(path = "")
     public String getRestaurant(){
         return "about-us";
@@ -57,6 +59,42 @@ public class RestaurantController {
     @GetMapping(path = "statistika")
     public String getStats(){
         return "stats";
+    }
+
+    @GetMapping(path = "edit")
+    public String editMeal(Model model,@RequestParam("itemId") String itemId){
+        for (Condiment condiment: condimentService.getAllCondimentsByRestaurant(foodItemService.getById(Long.valueOf(itemId)).get().getRestaurant())) {
+            System.out.println("condiment: " + condiment.getName().getName());
+
+        }
+        model.addAttribute("foodItem", foodItemService.getById(Long.valueOf(itemId)).get());
+        model.addAttribute("condiments", condimentService.getAllCondimentsByRestaurant(foodItemService.getById(Long.valueOf(itemId)).get().getRestaurant()));
+        return "editMeal";
+    }
+
+    @PostMapping(path = "edit")
+    public String editMealPost(Model model,@RequestParam("portion") String portion){
+        System.out.println("ITEMID: " + portion);
+
+        Restaurant restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
+        model.addAttribute("menu",restaurant.getFoodItems());
+        model.addAttribute("categories", restaurantService.getCategoriesFromRestaurant(restaurant.getFoodItems()));
+        return "menu";
+    }
+
+    @GetMapping(path = "dodaj-jelo")
+    public String addNewMeal(Model model){
+        RestaurantOwner restaurantOwner = (RestaurantOwner) userService.getCurrentUser().get();
+        model.addAttribute("condiments", condimentService.getAllCondimentsByRestaurant(restaurantOwner.getRestaurant()));
+        model.addAttribute("portions", portionService.getAllPortionNames());
+        model.addAttribute("categories", categoryService.getAll());
+
+        return "addMeal";
+    }
+
+    @GetMapping(path = "dodaj-dodatak")
+    public String addCondiment(){
+        return "addCondiment";
     }
 
     @GetMapping(path = "stanje_narudzbe")

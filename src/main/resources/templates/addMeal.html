@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Dodaj jelo</title>
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/multiple-select.css" th:href="@{/css/multiple-select.css}" rel="stylesheet" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script th:src="@{/js/multi-select.js}"></script>
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+<div class="container bootstrap snippets bootdeys">
+  <div class="row" style="justify-content: center; margin-bottom: 6rem;">
+    <div class="col-xs-12 col-sm-9">
+      <form class="form-horizontal" method="POST" th:action="@{/menu}">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Dodaj novo jelo</h1>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Ime jela</label>
+              <div class="col-sm-10">
+                <input placeholder="Ime jela" type="text" style="width: 20rem" name="name" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Info</label>
+              <div class="col-sm-10">
+                <textarea placeholder="Kratke informacije o jelu" type="text" style="width: 20rem" name="info" class="form-control"></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Kategorija</label>
+              <div class="col-sm-10">
+                <select class="form-select" aria-label="Default select example">
+                  <th:block th:each="category: ${categories}">
+                    <option th:name="${category.getName()}" th:value="${category.getName()}">[[${category.getName()}]]</option>
+                  </th:block>
+                </select>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Porcije</label>
+              <div class="col-sm-10">
+                <select id='my-select' multiple='multiple'>
+                  <optgroup label='Sve porcije'>
+                    <th:block th:each="portion: ${portions}">
+                        <option th:value="${portion.getId()}">[[${portion.getName()}]]
+                        </option>
+                    </th:block>
+                  </optgroup>
+
+                  <optgroup label='Trenutni porcije'>
+                  </optgroup>
+
+                </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Dodaci</label>
+              <div class="col-sm-10">
+                <select id='pre-selected-options' multiple='multiple'>
+
+                  <optgroup label='Svi dodaci'>
+                    <th:block th:each="condiment: ${condiments}">
+                        <option th:value="${condiment.getId()}">[[${condiment.getName().getName()}]]
+                          <div class>([[${condiment.getPrice()}]]KM)</div>
+                        </option>
+                    </th:block>
+                  </optgroup>
+
+                  <optgroup label='Trenutni dodaci'>
+                  </optgroup>
+
+                </select>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Spremi</button>
+            <button type="reset" class="btn btn-default">Odustani</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script type="text/javascript">
+  // run pre selected options
+  $('#pre-selected-options').multiSelect();
+  $('#my-select').multiSelect();
+
+</script>
+</body>
+
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+</body>
+</html>

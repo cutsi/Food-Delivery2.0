@@ -10,27 +10,10 @@
   <link href="../static/css/test.css" th:href="@{/css/test.css}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script>
-    const accordionBtns = document.querySelectorAll(".menu-item");
 
-    accordionBtns.forEach((accordion) => {
-      accordion.onclick = function () {
-        this.classList.toggle("is-open");
-
-        let content = this.nextElementSibling;
-        //console.log(content);
-
-        if (content.style.maxHeight) {
-          //this is if the accordion is open
-          content.style.maxHeight = null;
-        } else {
-          //if the accordion is currently closed
-          content.style.maxHeight = content.scrollHeight + "px";
-          //console.log(content.style.maxHeight);
-        }
-      };
-    });
-  </script>
+  <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet">
 
 
 </head>
@@ -38,109 +21,114 @@
 <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
   <header th:replace="fragments/general :: header"></header>
 </main>
-<section id="about">
 
+<h2 style="padding: 1rem;margin-top: -2rem;margin-bottom: -3rem;margin-left: 2rem;font-weight: 600;font-size: x-large;">
+  JELOVNIK
+</h2>
+
+<section id="about">
   <div class="container card-container">
-    <div class="menu">
-      <th:block th:each="category: ${categories}">
-        <div class ="menu-group-heading">
-          [[${category.getName()}]]
-        </div>
-        <div class="menu-group">
-          <th:block th:each="foodItem: ${menu}">
-            <div th:if="${foodItem.getCategory().getId() == category.getId()}">
-              <button class="menu-item" th:id="'btnItem_'+${foodItem.getId()}">
-                <img class="menu-item-image" th:src="${foodItem.getImage()}" src ="${foodItem.getImage()}">
-                <div class="menu-item-text">
-                  <h3 class="menu-item-heading">
-                    <span class="menu-item-name">[[${foodItem.getName()}]]</span>
-                    <span class="menu-item-price">[[${foodItem.getPrice()}]]KM</span>
-                  </h3>
-                  <h4 class="menu-item-info">
-                    [[${foodItem.getInfo()}]]
-                  </h4>
-                </div>
+    <div class="">
+      <table id="example" class="display nowrap" style="width:100%">
+        <thead>
+        <tr>
+          <th>Slika</th>
+          <th>Naziv jela</th>
+          <th>Broj narudžbi</th>
+          <th>Kategorija</th>
+          <th>Uredi</th>
+          <th>Sakrij</th>
+          <th>Dodatci</th>
+          <th>Porcije</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="item: ${menu}">
+          <tr>
+            <td>
+              <img th:src="${item.getImage()}" src ="${item.getImage()}">
+            </td>
+            <td>[[${item.getName()}]]</td>
+            <td>8KM</td>
+            <td>[[${item.getCategory().getName()}]]</td>
+            <td>
+              <form></form>
+              <form th:action="@{/edit}" method="get">
+                <button type="submit" style="border: none" name="itemId" th:value="${item.getId()}">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+              </form>
+            </td>
+            <td>
+              <button style="border: none" th:item-id="${item.getId()}" class="accept-btn" onclick="ban(this.getAttribute('item-id'))">
+                <i class="fa fa-ban" aria-hidden="true"></i>
               </button>
 
-              <div class="menu-item-content">
+            </td>
+            <td>
+              <th:block th:each="condiment: ${item.getCondiments()}">
+                [[${condiment.getName().getName()}]],
+              </th:block>
+            </td>
+            <td><br>
+              <th:block th:each="portion: ${item.getPortions()}">
+                [[${portion.getName().getName()}]] : [[${portion.getPrice()}]]KM<br>
+              </th:block>
+            </td>
 
-                <div class ="radiobutton-heading">
-                  <form th:id="${foodItem.getId()}">
-                    <div class="portion-group">
-                      <th:block th:each="portion: ${foodItem.getPortionsOrderById()}">
-                        <label th:for="${foodItem.getId()} + '_portion_' + ${portion.getId()}">
-                          <div class="checkbox-item">
-                              <span th:if="${portion.isChecked()}">
-                                <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;" checked='checked'
-                                       th:portion-name="${portion.getName()}" th:portion-price="${portion.getPrice()}" >
-                              </span>
-                            <span th:if="${!portion.isChecked()}">
-                                <input type="radio" th:id="${foodItem.getId()} + '_portion_' + ${portion.getId()}" th:name="'portion_name_' + ${foodItem.getId()}" th:value="${portion.getId()}" style="margin: revert; margin-right: 10px; margin-top: 7px;"
-                                       th:portion-name="${portion.getName()}" th:portion-price="${portion.getPrice()}">
-                              </span>
+          </tr>
+        </th:block>
 
-                            <div class="checkbox-text">
-                              <div class="checkbox-heading">
-                                <span class="checkbox-name">[[${portion.getName()}]]</span>
-                                <span class="checkbox-price">[[${portion.getPrice()}]]KM</span>
-                              </div>
-                            </div>
-                          </div>
-                        </label>
-                      </th:block>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="checkbox-group">
-                  <script>
-                    $(document).ready(function(){
-                      $(".check").click(function(){
-                        $("#myCheck").prop("checked", true);
-                      });
-                      $(".uncheck").click(function(){
-                        $("#myCheck").prop("checked", false);
-                      });
-                    });
-                  </script>
-                  <th:block th:each="condiment: ${foodItem.getCondiments()}">
-                    <label th:for="${foodItem.getId()} + '_condiment_' + ${condiment.getId()}">
-                      <div class="checkbox-item">
-                        <input type="checkbox" th:id="${foodItem.getId()} + '_condiment_' + ${condiment.getId()}" th:name="'condiment_name_' + ${foodItem.getId()}" th:value="${condiment.getId()}" style="margin: revert; margin-right: 10px; margin-top: 6px;"
-                               th:condiment-name="${condiment.getName()}" th:condiment-price="${condiment.getPrice()}">
-                        <div class="checkbox-text">
-                          <div class="checkbox-heading">
-                            <span class="checkbox-name">[[${condiment.getName()}]]</span>
-                            <span class="checkbox-price">[[${condiment.getPrice()}]]KM</span>
-                          </div>
-                        </div>
-                      </div>
-                    </label>
-
-                  </th:block>
-
-                </div>
-                <div th:if="${isClosed == true}">
-                  <a href="" class="cd-add-to-cart js-cd-add-to-cart" th:item-id="${foodItem.getId()}" th:item-image="${foodItem.getImage()}" th:item-name="${foodItem.getName()}">Dodaj</a>
-                </div>
-              </div>
-            </div>
-          </th:block>
-        </div>
-      </th:block>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
+
+<section style="display: flex">
+  <form th:action="@{/dodaj-jelo}" method="GET" style="padding-left: 4rem;padding-bottom: 4rem;">
+    <button type="submit" style="    background: forestgreen;border-radius: 12px;color: white;font-weight: 400;padding: 0.5rem;font-size: 18px;">
+      Dodaj novo jelo  +
+    </button>
+  </form>
+  <form th:action="@{/dodaj-dodatak}" method="GET" style="padding-left: 4rem;padding-bottom: 4rem;">
+    <button type="submit" style="    background: forestgreen;border-radius: 12px;color: white;font-weight: 400;padding: 0.5rem;font-size: 18px;">
+      Dodaj novi dodatak  +
+    </button>
+  </form>
+</section>
 <footer th:replace="fragments/general :: footer">
 </footer>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+
+<script th:inline="javascript">
+  $(document).ready(function() {
+    var table = $('#example').DataTable( {
+      responsive: true
+    } );
+
+    new $.fn.dataTable.FixedHeader( table );
+  } );
+</script>
+<script th:inline="javascript">
+
+  function edit(itemId) {
+    console.log("PRITISNUTO:" + itemId)
+
+
+  }
+  function ban(itemId) {
+
+  }
 </script>
 </body>
 </html>

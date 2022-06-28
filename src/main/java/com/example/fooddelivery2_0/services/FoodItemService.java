@@ -21,8 +21,8 @@ public class FoodItemService {
     public Optional<FoodItem> getById(Long id){
         return foodItemRepo.findById(id);
     }
-    public Optional<FoodItem> getByRestaurant(Restaurant restaurant){
-        return foodItemRepo.findByRestaurant(restaurant);
+    public List<FoodItem> getAllByRestaurant(Restaurant restaurant){
+        return foodItemRepo.findAllByRestaurant(restaurant);
     }
     public Optional<FoodItem> getByName(String name){
         return foodItemRepo.findByName(name);

@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+  <head th:replace="fragments/general :: head"></head>
+  <head>
+    <meta charset="UTF-8">
+    <title>Uspjeh</title>
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+    <link href="../static/css/editMeal.css" th:href="@{/css/editMeal.css}" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/css/multiple-select.css" th:href="@{/css/multiple-select.css}" rel="stylesheet" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script th:src="@{/js/multi-select.js}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+    <script th:inline="javascript">
+      $('#my-select').multiSelect();
+      $('#my-select').multiSelect('select_all');
+    </script>
+  </head>
+  <body>
+    <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+      <header th:replace="fragments/general :: header"></header>
+    </main>
+    <div class="container bootstrap snippets bootdeys">
+      <div class="row" style="justify-content: center; margin-bottom: 6rem;">
+        <div class="col-xs-12 col-sm-9">
+          <form class="form-horizontal" method="POST" th:action="@{/edit}">
+            <div class="panel panel-default">
+              <div class="panel-body text-center">
+                <img class="img-circle profile-avatar" style="border-radius: 50%" th:src="${foodItem.getImage()}" src ="${foodItem.getImage()}" alt="" width="40">
+
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title">Uredi</h1>
+              </div>
+              <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Ime jela</label>
+                  <div class="col-sm-10">
+                    <input type="text" style="width: 20rem" name="name" class="form-control" th:value="${foodItem.getName()}">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Info</label>
+                  <div class="col-sm-10">
+                    <textarea type="text" style="width: 20rem" name="info" class="form-control">[[${foodItem.getInfo()}]]</textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Kategorija</label>
+                  <div class="col-sm-10">
+                    <input type="text" style="width: 20rem" name="category" class="form-control" th:value="${foodItem.getCategory().getName()}" readonly>
+                  </div>
+                </div>
+
+                <div class="form-group" style="width: 26rem;">
+                  <label class="col-sm-2 control-label">Porcije</label>
+                  <div class="col-sm-10">
+                    <th:block th:each="portion: ${foodItem.getPortions()}">
+                      <label type="text" th:for="${portion.getId()}" th:value="${portion.getName().getName()}">
+                        [[${portion.getName().getName()}]]
+                      </label>
+                      <div style="float: right">KM</div>
+                        <input type="number" style="float: right;width: 5rem;text-align: right; border:none;" name="${portion.getId()}" id="{portion.getId()}"
+                               step="0.01" th:value="${portion.getPrice()}"><br>
+
+                    </th:block>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Dodaci</label>
+                  <div class="col-sm-10">
+                    <select id='pre-selected-options' multiple='multiple'>
+
+                      <optgroup label='Svi dodaci'>
+                        <th:block th:each="condiment: ${condiments}">
+                          <div th:if="${!#lists.contains(foodItem.getCondiments(), condiment)}">
+                            <option th:value="${condiment.getId()}">[[${condiment.getName().getName()}]]
+                              <div class>([[${condiment.getPrice()}]]KM)</div>
+                            </option>
+                          </div>
+                        </th:block>
+                      </optgroup>
+
+                      <optgroup label='Trenutni dodaci'>
+                        <th:block th:each="condiment: ${foodItem.getCondiments()}">
+                          <option th:value="${condiment.getId()}" selected>[[${condiment.getName().getName()}]]
+                            <div class>([[${condiment.getPrice()}]]KM)</div>
+                          </option>
+                        </th:block>
+                      </optgroup>
+
+                    </select>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Spremi</button>
+                <button type="reset" class="btn btn-default">Odustani</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer th:replace="fragments/general :: footer">
+    </footer>
+    <script type="text/javascript">
+      // run pre selected options
+      $('#pre-selected-options').multiSelect();
+    </script>
+  </body>
+</html>
