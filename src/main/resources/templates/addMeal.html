@@ -21,74 +21,82 @@
           <div class="panel-heading">
             <h1 class="panel-title">Dodaj novo jelo</h1>
           </div>
-          <div class="panel-body">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Ime jela</label>
-              <div class="col-sm-10">
-                <input placeholder="Ime jela" type="text" style="width: 20rem" name="name" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Info</label>
-              <div class="col-sm-10">
-                <textarea placeholder="Kratke informacije o jelu" type="text" style="width: 20rem" name="info" class="form-control"></textarea>
-              </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Kategorija</label>
-              <div class="col-sm-10">
-                <select class="form-select" aria-label="Default select example">
-                  <th:block th:each="category: ${categories}">
-                    <option th:name="${category.getName()}" th:value="${category.getName()}">[[${category.getName()}]]</option>
-                  </th:block>
-                </select>
-
+          <form th:action="@{/dodaj-jelo}" method="post" enctype="multipart/form-data">
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Ime jela</label>
+                <div class="col-sm-10">
+                  <input placeholder="Ime jela" type="text" style="width: 20rem" name="name" class="form-control" required>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Porcije</label>
-              <div class="col-sm-10">
-                <select id='my-select' multiple='multiple'>
-                  <optgroup label='Sve porcije'>
-                    <th:block th:each="portion: ${portions}">
-                        <option th:value="${portion.getId()}">[[${portion.getName()}]]
-                        </option>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Dodajte sliku</label>
+                <div class="col-sm-10">
+                  <input style="padding: 1px; border-color: #cccccc;" type="file" name="image" id="chooseFile" accept="image/png, image/jpeg, image/jpg" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Info</label>
+                <div class="col-sm-10">
+                  <textarea placeholder="Kratke informacije o jelu" type="text" style="width: 20rem" name="info" class="form-control"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Kategorija</label>
+                <div class="col-sm-10">
+                  <select class="form-select" aria-label="Default select example">
+                    <th:block th:each="category: ${categories}">
+                      <option th:name="${category.getName()}" th:value="${category.getName()}">[[${category.getName()}]]</option>
                     </th:block>
-                  </optgroup>
+                  </select>
 
-                  <optgroup label='Trenutni porcije'>
-                  </optgroup>
+                </div>
+              </div>
 
-                </select>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Porcije</label>
+                <div class="col-sm-10">
+                  <select id='my-select' multiple='multiple'>
+                    <optgroup label='Sve porcije'>
+                      <th:block th:each="portion: ${portions}">
+                          <option th:value="${portion.getId()}">[[${portion.getName()}]]
+                          </option>
+                      </th:block>
+                    </optgroup>
+
+                    <optgroup label='Trenutni porcije'>
+                    </optgroup>
+
+                  </select>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Dodaci</label>
+                <div class="col-sm-10">
+                  <select id='pre-selected-options' multiple='multiple'>
+
+                    <optgroup label='Svi dodaci'>
+                      <th:block th:each="condiment: ${condiments}">
+                          <option th:value="${condiment.getId()}">[[${condiment.getName().getName()}]]
+                            <div class>([[${condiment.getPrice()}]]KM)</div>
+                          </option>
+                      </th:block>
+                    </optgroup>
+
+                    <optgroup label='Trenutni dodaci'>
+                    </optgroup>
+
+                  </select>
+                </div>
               </div>
             </div>
-
-
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Dodaci</label>
-              <div class="col-sm-10">
-                <select id='pre-selected-options' multiple='multiple'>
-
-                  <optgroup label='Svi dodaci'>
-                    <th:block th:each="condiment: ${condiments}">
-                        <option th:value="${condiment.getId()}">[[${condiment.getName().getName()}]]
-                          <div class>([[${condiment.getPrice()}]]KM)</div>
-                        </option>
-                    </th:block>
-                  </optgroup>
-
-                  <optgroup label='Trenutni dodaci'>
-                  </optgroup>
-
-                </select>
-              </div>
-            </div>
-
-
-
-          </div>
+          </form>
         </div>
 
         <div class="form-group">

@@ -57,14 +57,13 @@
     max-height: 600px;
     overflow-x: auto;
     position: relative;
-
 }
 .admin-details .recentOrders{
     position: relative;
     /*display: grid;*/
-    min-height: 530px;
+    min-height: 30rem;
     background: #fff;
-    max-height: 600px;
+    max-height: 30rem;
     overflow-x: auto;
 }
 
