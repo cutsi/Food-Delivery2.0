@@ -1,9 +1,6 @@
 package com.example.fooddelivery2_0.services;
 
-import com.example.fooddelivery2_0.entities.Category;
-import com.example.fooddelivery2_0.entities.FoodItem;
-import com.example.fooddelivery2_0.entities.Restaurant;
-import com.example.fooddelivery2_0.entities.RestaurantOwner;
+import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.repos.RestaurantRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +43,10 @@ public class RestaurantService {
     }
     public void save(Restaurant restaurant){
         restaurantRepo.save(restaurant);
+    }
+
+    public List<Restaurant> getAllRestaurantsByCity(City city){
+        return restaurantRepo.findAllByAddress_City(city);
     }
 
 }

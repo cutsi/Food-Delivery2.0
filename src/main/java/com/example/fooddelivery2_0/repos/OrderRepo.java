@@ -24,9 +24,10 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Order> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
     List<Order> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);
 
-    List<Order> findByStatusOrStatus(Status ordered, Status accepted);
+    @Query(nativeQuery = true, value = "select * from orders where (status = ?1 or status = ?2) and restaurant_id = ?3")
+    List<Order> findByStatusOrStatusAndRestaurant(Status ordered, Status accepted, Long id);
     List<Order> findAllByStatusOrStatusAndCustomer(Status ordered, Status accepted, Customer customer);
-
+    List<Order> findAllByStatusAndRestaurant(Status status, Restaurant restaurant);
     @Query(nativeQuery = true,
     value = "select * from orders where (status = ?1 or status = ?2) and restaurant_id = ?3")
     List<Order> findNotDelivered(String ordered, String accepted, Long id);
@@ -34,4 +35,31 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true,
     value = "select * from orders where created_at>?1 and created_at<?2 and restaurant_id=?3")
     List<Order> findAllByCreatedAtAndRestaurant(LocalDateTime dayStart, LocalDateTime dayFinish, Long restaurant);
+
+
+
+    @Query(nativeQuery = true,
+            value = "select * from orders where created_at between ?1 and ?2")
+    List<Order> findOrdersCountBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query(nativeQuery = true,
+            value = "select sum(CAST(price AS FLOAT)) from orders")
+    Double findAllIncome();
+
+    @Query(nativeQuery = true,
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(day from created_at) = ?1 and extract(month from created_at) = ?2 and extract(year from created_at) = ?3")
+    Double findIncomeByDate(Integer day, Integer month, Integer year);
+
+    @Query(nativeQuery = true,
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(month from created_at) = ?1 and extract(year from created_at) = ?2")
+    Double findIncomeByMonthAndYear(Integer month, Integer year);
+
+    @Query(nativeQuery = true,
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(year from created_at) = ?1")
+    Double findIncomeByYear(Integer lastYear);
+
+    @Query(nativeQuery = true,
+            value = "SELECT customer_id FROM orders GROUP BY customer_id;")
+    List<Integer> findCustomersCountList();
 }
+

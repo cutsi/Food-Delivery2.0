@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <link href="../static/css/statistics.css" th:href="@{/css/statistics.css}" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+
+
+<div class="orders-count-container">
+
+  <div class="order-card all-orders">
+    <div class="order-text">All orders</div>
+    <div class="order-count">
+      <div th:val="${ordersStats.allOrdersCount}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="order-card pending-orders">
+    <div class="order-text">Pending orders</div>
+    <div class="order-count">
+      <div th:val="${ordersStats.pendingOrdersCount}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="order-card declined-orders">
+    <div class="order-text">Declined orders</div>
+    <div class="order-count">
+      <div th:val="${ordersStats.declinedOrdersCount}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="order-card delivered-orders">
+    <div class="order-text">Delivered orders</div>
+    <div class="order-count">
+      <div th:val="${ordersStats.deliveredOrdersCount}">
+        0
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- ***************** -->
+<div class="orders-count-container">
+
+  <div class="income-card total-income">
+    <div class="income-text">Total income</div>
+    <div class="income-count">
+      <div th:val="${ordersStats.totalIncome}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="income-card today-income">
+    <div class="income-text">Today income</div>
+    <div class="income-count">
+      <div th:val="${ordersStats.todayIncome}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="income-card last-month-income">
+    <div class="income-text">Month income</div>
+    <div class="income-count">
+      <div th:val="${ordersStats.monthIncome}">
+        0
+      </div>
+    </div>
+  </div>
+  <div class="income-card last-year-income">
+    <div class="income-text">Last year income</div>
+    <div class="income-count">
+      <div th:val="${ordersStats.lastYearIncome}">
+        0
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="orders-statistics">
+  <div class="orders-bar-container">
+    <div class="orders-bar">
+      <button class="butt active" id="order-btn" onclick="changeDisplay(this)" value="order">Last week orders</button>
+      <button class="butt" id="income-btn" onclick="changeDisplay(this)" value="income">Last week income</button>
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+  <div class="orders-diver-container">
+    <h5 class="compared-title">Compared to last year</h5>
+    <div class="order-diver-cards-row">
+      <div class="orders-diver-card" style="margin-right: 30px;">
+        <div class="order-text">Today orders</div>
+        <div class="order-count">...</div>
+      </div>
+      <div class="orders-diver-card">
+        <div class="order-text">Month orders</div>
+        <div class="order-count">...</div>
+      </div>
+    </div>
+    <div class="order-diver-cards-row" style="margin-top: 30px">
+      <div class="orders-diver-card" style="margin-right: 30px;">
+        <div class="order-text">Today income</div>
+        <div class="order-count today-income-compare">...</div>
+      </div>
+      <div class="orders-diver-card">
+        <div class="order-text">Month income</div>
+        <div class="order-count month-income-compare">...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+
+<script th:inline="javascript">
+
+  let customersCountList = [[${customersCountList}]];
+  $(".total-customers .order-count").text(customersCountList.length);
+  console.log("CUSTOMERS COUNT LIST :",customersCountList);
+
+  let ordersStats = [[${ordersStats}]];
+  console.log("ORDERS COUNTS:",ordersStats);
+
+  assignComparisonPercentage(ordersStats.todayLastYearIncome, ordersStats.todayIncome, '.today-income-compare');
+  assignComparisonPercentage(ordersStats.monthLastYearIncome, ordersStats.monthIncome, '.month-income-compare');
+
+  function assignComparisonPercentage(previous, now, className){
+
+    if(now + previous == 0){
+      $(className).text("0%");
+      return;
+    }
+    if(previous == 0){
+      $(className).text("+ 100%");
+      $(className).addClass('green-percentage');
+      return;
+    }
+    const diff = now - previous;
+    const percentage = ((diff / previous) * 100).toFixed(2);
+    let colorClass='';
+    let sign='';
+
+    if(diff > 0){
+      colorClass = 'green-percentage';
+      sign = '+';
+    }else if (diff < 0){
+      colorClass = 'red-percentage';
+      sign = '-';
+    }
+    $(className).text(sign+" "+Math.abs(percentage)+"%");
+    $(className).addClass(colorClass);
+  }
+
+  let lastSevenDaysOrders = ordersStats.lastSevenDaysOrders;
+  let lastSevenDaysIncome = ordersStats.lastSevenDaysIncome;
+
+  const counters = document.querySelectorAll('.order-card .order-count div,.income-card .income-count div');
+  const speed = 100;
+
+  counters.forEach( counter => {//THIS HERE
+    const animate = () => {
+      const value = +counter.getAttribute('val');
+      const data = +counter.innerText;
+
+      const time = value / speed;
+      if(data < value) {
+        counter.innerText = Math.ceil(data + time);
+        setTimeout(animate, 1);
+      }else{
+        counter.innerText = value;
+      }
+
+    }
+    animate();
+  });
+
+
+
+
+  // setup
+  const data = {
+    datasets: [{
+      label: 'Last week orders',
+      data: lastSevenDaysOrders,
+      backgroundColor: [
+        'rgba(255, 26, 104, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(0, 0, 0, 0.2)'
+      ],
+      borderColor: [
+        'black'
+      ],
+      borderWidth: 1
+    }]
+  };
+
+  // config
+  const config = {
+    type: 'bar',
+    data,
+    options: {
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            unit: 'day'
+          }
+        },
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+
+  // render init block
+  const myChart = new Chart(
+          document.getElementById('myChart'),
+          config
+  );
+
+  function changeDisplay(e){
+
+    if(!e.classList.contains('active')){//if you are not active, you are clickable
+      if(e.value === 'order'){
+        myChart.config.data.datasets[0].data = lastSevenDaysOrders;
+        myChart.config.data.datasets[0].label = "Last week orders";
+        e.classList.add('active');
+        document.getElementById("income-btn").classList.remove('active');
+      }
+      if(e.value === 'income'){
+        myChart.config.data.datasets[0].data = lastSevenDaysIncome;
+        myChart.config.data.datasets[0].label = "Last week income";
+        e.classList.add('active');
+        document.getElementById("order-btn").classList.remove('active');
+      }
+
+      myChart.update();
+    }
+
+  };
+</script>
+
+
+</body>
+</html>

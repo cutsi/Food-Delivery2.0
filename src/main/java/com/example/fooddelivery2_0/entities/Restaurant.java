@@ -1,6 +1,8 @@
 package com.example.fooddelivery2_0.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import javax.persistence.*;
 import java.util.*;
@@ -25,6 +27,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private Address address;
     @OneToMany(mappedBy = "restaurant")
     private List<RestaurantOwner> owners; //MAX 2 (1 owner and  1 employee created by the owner)
+    @JsonManagedReference
     @OneToMany(mappedBy = "restaurant")
     private List<Rating> ratings;
     @OneToMany(mappedBy = "restaurant")

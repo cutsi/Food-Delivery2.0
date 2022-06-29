@@ -106,10 +106,7 @@
     border-bottom: none;
 }
 
-.admin-details .recentOrders table tbody tr:hover{
-    background: #03a9f4;
-    color: #fff;
-}
+
 
 .admin-details .recentOrders table tr td{
     padding: 6px;
@@ -157,7 +154,7 @@ admin-details .recentOrders table thead tr td:nth-child(3),
 
 .admin-details .recentCustomers{
     position: relative;
-    min-height: 530px;
+    min-height: 30rem;
     background: #fff;
 }
 .admin-details .recentCustomers table tr td h4 span{
@@ -165,11 +162,7 @@ admin-details .recentOrders table thead tr td:nth-child(3),
     color: #999;
 
 }
-.admin-details .recentCustomers table tr:hover td h4 span,
-.admin-details .recentCustomers table tr:hover{
-    background: #03a9f4;
-    color: #fff;
-}
+
 .admin-details .recentCustomers table tr td{
     border-bottom: 1px solid lightgray;
 }
@@ -227,5 +220,10 @@ admin-details .recentOrders table thead tr td:nth-child(3),
         width: 100%;
         left: 0;
     }
-}
 
+
+}
+.response{
+    width: 90%;
+
+}

@@ -15,6 +15,21 @@
                 padding: 5rem 1rem
             }
         }
+        .city-btn-section{
+            margin-top: 1rem;
+            margin-bottom: -1rem;
+            margin-left: 1rem;
+        }
+        .city-button{
+
+
+            border: none;
+            color: white;
+            font-weight: 300;
+            background: darkred;
+            border-radius: 10px;
+            padding: 6px;
+        }
     </style>
 
     <meta charset="UTF-8">
@@ -54,7 +69,19 @@
         </form>
     </section>
 
+    <section id="city" class="city-btn-section">
+        <form th:action="@{/grad}" method="get">
+            <select class="searchTerm mainLoginInput" style="width: 12rem;padding: 0.4rem;border: 0px solid darkred;margin-right: -6px;height: 3rem;" name="ime" id="ime">
+                <th:block th:each="city: ${cities}">
+                    <option th:value="${city}">[[${city}]]</option>
+                </th:block>>
+            </select>
+            <button type="submit" class="searchButton" style="height: 3rem;">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
 
+    </section>
     <section id="about">
 
         <div class="container card-container">

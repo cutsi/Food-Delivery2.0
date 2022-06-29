@@ -1,4 +1,5 @@
 package com.example.fooddelivery2_0.entities;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Response { //DONE
     private String content;
     @CreationTimestamp
     private LocalDateTime createdAt;
+    @JsonManagedReference
     @OneToOne(mappedBy = "response")
     private Rating rating;
     @ManyToOne

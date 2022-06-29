@@ -60,6 +60,11 @@ public class RatingService {
         //return avgRating/Double.valueOf(comments.size());
     }
 
+    public List<Rating> getRatingsWithNoResponse(){
+        return ratingRepo.findAllByResponseIsNull();
+    }
+
+
     public void save(Rating rating){
         ratingRepo.save(rating);
     }

@@ -1,6 +1,7 @@
 package com.example.fooddelivery2_0.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ public class Customer extends User{
     @JsonIgnore
     private List<Order> orders;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<Rating> userRatings;

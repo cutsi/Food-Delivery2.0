@@ -63,42 +63,48 @@
             <div class="main">
               <div class="admin-details">
                 <div class="recentOrders">
-                  <section id="about">
-                    <div class="container card-container">
-                      <div class="">
-                        <table id="example" class="display nowrap" style="width:100%">
-                          <thead>
+                  <div class="cardHeader">
+                    <h2>Restorani</h2>
+                  </div>
+                  <div class="container card-container">
+                    <div class="">
+                      <table id="example" class="display nowrap" style="width:100%">
+                        <thead>
+                        <tr>
+                          <th>Restoran</th>
+                          <th>Broj narudžbi</th>
+                          <th>Grad</th>
+                          <th>Telefon</th>
+                          <th>Status</th>
+                          <th>Report</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="restaurant: ${restaurants}">
                           <tr>
-                            <th>Restoran</th>
-                            <th>Broj narudžbi</th>
-                            <th>Grad</th>
-                            <th>Telefon</th>
-                            <th>Status</th>
+                            <td>[[${restaurant.key.getName()}]]</td>
 
+                            <td>[[${restaurant.value}]]</td>
+
+                            <td>[[${restaurant.key.getAddress().getCity().getName()}]]</td>
+
+                            <td>[[${restaurant.key.getPhone()}]]</td>
+
+                            <td><span class="status delivered">OTVOREN</span></td>
+
+                            <td>
+                              <a th:href="@{admin/restaurant/stats/}+${restaurant.key.getId()}">
+                                Detalji
+                              </a>
+                            </td>
                           </tr>
-                          </thead>
-                          <tbody>
-                          <th:block th:each="restaurant: ${restaurants}">
-                            <tr>
+                        </th:block>
 
-                              <td>[[${restaurant.key.getName()}]]</td>
-
-                              <td>[[${restaurant.value}]]</td>
-
-                              <td>[[${restaurant.key.getAddress().getCity().getName()}]]</td>
-
-                              <td>[[${restaurant.key.getPhone()}]]</td>
-
-                              <td><span class="status delivered">OTVOREN</span></td>
-
-                            </tr>
-                          </th:block>
-
-                          </tbody>
-                        </table>
-                      </div>
+                        </tbody>
+                      </table>
                     </div>
-                  </section>
+                  </div>
                 </div>
 
                 <div class="recentCustomers">
@@ -139,7 +145,9 @@
     </section>
 
 
+    <section id="about">
 
+    </section>
 
     <br><br><br>
     <footer th:replace="fragments/general :: footer">

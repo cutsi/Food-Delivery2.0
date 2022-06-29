@@ -1,0 +1,159 @@
+.orders-count-container{
+
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+    margin: 20px;
+
+}
+
+.orders-statistics{
+    margin: 0px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.orders-bar-container{
+    width: 65%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.orders-bar{
+    width: 100%;
+    height: 100%;
+    padding: 0px 15px;
+}
+
+
+.orders-diver-container{
+    width: 35%;
+    height: 100%;
+}
+
+.order-diver-cards-row{
+    display: flex;
+    justify-content: center;
+    padding: 0px 15px;
+}
+
+.order-diver-list-row{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.order-diver-list-row div{
+    margin-top: 10px;
+}
+
+.orders-pie-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orders-pie{
+    width: 100%;
+    height: 100%;
+}
+
+.order-card,.income-card{
+
+    width: 23%;
+    height: 120px;
+    border-radius: 5px;
+    border: 1px solid rgb(49, 48, 48);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 20px;
+
+}
+
+.income-card{
+    background: #e0d6f9;
+}
+
+.orders-diver-card{
+    width: 46%;
+    height: 120px;
+    border-radius: 5px;
+    border: 1px solid rgb(49, 48, 48);
+    background-color: #3e3e3e;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0px 20px;
+}
+
+
+.all-orders{
+    background: rgb(129,151,251);
+    background: -moz-radial-gradient(circle, rgb(215 236 251) 0%, rgb(104 185 240) 100%);
+    background: -webkit-radial-gradient(circle, rgb(215 236 251) 0%, rgb(104 185 240) 100%);
+    background: radial-gradient(circle, rgb(215 236 251) 0%, rgb(104 185 240) 100%);
+}
+
+.pending-orders{
+    background: rgb(251,198,129);
+    background: -moz-radial-gradient(circle, rgb(255 236 217) 0%, rgb(255 182 110) 100%);
+    background: -webkit-radial-gradient(circle, rgb(255 236 217) 0%, rgb(255 182 110) 100%);
+    background: radial-gradient(circle, rgb(255 236 217) 0%, rgb(255 182 110) 100%);
+}
+
+.declined-orders{
+    background: rgb(255,136,136);
+    background: -moz-radial-gradient(circle, rgb(255 209 225) 0%, rgb(255 83 142) 100%);
+    background: -webkit-radial-gradient(circle, rgb(255 209 225) 0%, rgb(255 83 142) 100%);
+    background: radial-gradient(circle, rgb(255 209 225) 0%, rgb(255 83 142) 100%);
+}
+
+.delivered-orders{
+    background: rgb(180,250,172);
+    background: -moz-radial-gradient(circle, rgb(219 242 242) 0%, rgb(117 207 207) 100%);
+    background: -webkit-radial-gradient(circle, rgb(219 242 242) 0%, rgb(117 207 207) 100%);
+    background: radial-gradient(circle, rgb(219 242 242) 0%, rgb(117 207 207) 100%);
+}
+
+.order-count,.income-count{
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.order-text,.income-text{
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+.butt{
+    padding: 10px;
+    background-color: rgb(175, 175, 175);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+.butt.active{
+    background-color: #3e3e3e;
+}
+
+.compared-title{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.green-percentage{
+    color: rgb(180,250,172);
+}
+
+.red-percentage{
+    color: rgb(255,136,136);
+}

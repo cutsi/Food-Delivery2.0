@@ -20,4 +20,5 @@ public interface RatingRepo extends JpaRepository<Rating, Long> {
     List<Rating> findAllByResponseId(Long responseId);
     List<Rating> findAllByRestaurant(Restaurant restaurant);
     List<Rating>findAllByIsApprovedFalse();
+    List<Rating> findAllByResponseIsNull();
 }

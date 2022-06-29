@@ -19,7 +19,8 @@ public class FoodItem { //DONE
     private String image;
     private String name;
     private String info;
-    private String price;
+    private Boolean isHidden = false;
+
     @JsonBackReference
     @ManyToOne
     private Category category;
@@ -41,14 +42,6 @@ public class FoodItem { //DONE
         this.condiments = condiments;
     }
 
-    public void setDefaultPrice(){
-        if (portions!=null){
-            System.out.println(portions.size());
-            portions.forEach(p->{
-                if(p.isChecked())this.price=p.getPrice();
-            });
-        }
-    }
     public List<Portion> getPortionsOrderById(){
         List<Portion> portionList = new ArrayList<>(portions);
         Collections.sort(portionList);

@@ -23,6 +23,8 @@ public class RestaurantController {
     private final CondimentService condimentService;
     private final PortionService portionService;
     private final CategoryService categoryService;
+    private final OrderService orderService;
+    private final RatingService ratingService;
     @GetMapping(path = "")
     public String getRestaurant(){
         return "about-us";
@@ -57,8 +59,23 @@ public class RestaurantController {
         return "menu";
     }
     @GetMapping(path = "statistika")
-    public String getStats(){
-        return "stats";
+    public String getStats(Model model){
+        RestaurantOwner restaurantOwner = (RestaurantOwner)userService.getCurrentUser().get();
+        Restaurant restaurant = restaurantService.getRestaurantById(restaurantOwner.getRestaurant().getId()).get();
+        model.addAttribute("ordersStats",orderService.getOrdersStats(restaurant));
+        model.addAttribute("customersCountList",orderService.getCustomersCountList());
+
+        return "restaurant-stats";
+    }
+    @GetMapping(path = "komentari")
+    public String getComments(Model model){
+        for (Rating rating:ratingService.getRatingsWithNoResponse()) {
+            System.out.println(rating.getContent());
+        }
+        model.addAttribute("oldRatings", ratingService.getRatingsWithNoResponse());
+        model.addAttribute("ratings", ratingService.getAllByIsApproved());
+       // System.out.println(ratingService.getAllByIsApproved());
+        return "comments";
     }
 
     @GetMapping(path = "edit")

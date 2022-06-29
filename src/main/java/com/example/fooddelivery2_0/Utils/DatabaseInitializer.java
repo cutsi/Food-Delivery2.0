@@ -135,7 +135,6 @@ public class DatabaseInitializer {
                     null
             );
             foodItem1.setRestaurant(restaurant1);
-            foodItem1.setDefaultPrice();
             FoodItem foodItem2 = new FoodItem(
                     "images/2.jpg",
                     "food_item_2",
@@ -181,12 +180,6 @@ public class DatabaseInitializer {
             List<Portion> portionsFood3 = List.of(portion1Food3, portion2Food3, portion3Food3);
             portionRepo.saveAll(portionsFood3);
 
-            //SET DEFAULT PRICES FOR FOOD ITEMS AFTER PORTION AFFECTATION
-            //foodItem1.setDefaultPrice();
-            //foodItem2.setDefaultPrice();
-            //foodItem3.setDefaultPrice();
-            //foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3);
-            //foodItemRepo.save(foodItem1);
 
             //ADD 3 CONDIMENT NAMES
             CondimentName ketchup = new CondimentName("Ketchup");

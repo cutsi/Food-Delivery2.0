@@ -35,10 +35,13 @@ public class FrontPageController {
     private final RatingService ratingService;
     private final WorkingHoursService workingHoursService;
     private final OrderService orderService;
-
+    private final CityService cityService;
     private final FoodItemService foodItemService;
     private final FilterService filterService;
     private final OrderRequestService orderRequestService;
+
+
+
     @GetMapping(path = {"/", "/home"})
     public String home(Model model){
         for (Order order:orderRequestService.getAllOrdersByCreatedAtTodayAndRestaurant(6L)) {
@@ -51,6 +54,7 @@ public class FrontPageController {
         if(userService.getCurrentUser().isPresent()){
             userRole = userService.getCurrentUser().get().getUserRole().toString();
         }
+        model.addAttribute("cities",cityService.getAllCityNames());
         model.addAttribute("userRole", userRole);
         return "home";
     }
@@ -63,6 +67,14 @@ public class FrontPageController {
             return "filter-fail";
         }
         model.addAttribute("restaurants", filterService.filter(codeWord));
+        return "home";
+    }
+
+    @GetMapping(path = "grad")
+    public String getRestaurantByCity(Model model, @RequestParam("ime") String city){
+        System.out.println("GRAD: " + city);
+        model.addAttribute("restaurants", restaurantService.getAllRestaurantsByCity(cityService.getCityByName(city).get()));
+        model.addAttribute("cities", cityService.getAllCityNames());
         return "home";
     }
 

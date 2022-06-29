@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Komentari</title>
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/admin-style.css" th:href="@{/css/admin-style.css}" rel="stylesheet" />
+  <meta sec:authorize='isAuthenticated()' name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet">
+
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+
+<section>
+      <div class="main">
+        <div class="admin-details">
+          <div class="recentOrders">
+            <div class="cardHeader">
+              <h2>Komentari</h2>
+            </div>
+            <div class="container card-container">
+              <div class="">
+                <table id="example" class="display nowrap" style="width:100%">
+                  <thead>
+                  <tr>
+                    <th>Ime</th>
+                    <th>Datum</th>
+                    <th>Ocjena</th>
+                    <th>Detalji</th>
+
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <th:block th:each="rating: ${oldRatings}">
+                    <tr>
+                      <td>[[${rating.getCustomer().getName()}]]</td>
+
+                      <td>[[${rating.getCreatedAtDMYHM()}]]</td>
+
+                      <td>[[${rating.getRating()}]]</td>
+
+                      <td>
+                          <input th:rating-id="${rating.getId()}" onclick="showRatingDetails(this.getAttribute('rating-id'))"
+                                 class="button-3" type="submit" value="details" />
+                      </td>
+                    </tr>
+                  </th:block>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="recentCustomers">
+            <div class="cardHeader">
+              <h2>Novi komentari</h2>
+            </div>
+            <table>
+              <tbody>
+              <th:block th:each="rating: ${ratings}">
+                <tr>
+                  <td>
+                    <h4>
+                      [[${rating.getCustomer().getName()}]]<br>
+                      <b><span>Ocjena: [[${rating.getRating()}]]</span></b>
+                      <span>[[${rating.getCreatedAtDMYHM()}]]</span>
+                      <br>
+                    </h4>
+                    <div class="" style="margin-bottom: 10px;"> [[${rating.getContent()}]]</div>
+                    <div class="response" id="ratingId">
+                      <textarea style="width: 100%"></textarea>
+                    </div>
+                    <button class="accept-btn" th:id="rating"th:rating-id="${rating.getId()}">
+                      Odgovori
+                    </button>
+
+
+                  </td>
+                </tr>
+              </th:block>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+</section>
+
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="/webjars/jquery/jquery.min.js"></script>
+
+<script th:inline="javascript">
+
+  $(function (ratingId){
+    $('#rating').on('click',function (){
+        $('#ratingId').toggle()
+      }
+    )
+  });
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+
+<script th:inline="javascript">
+
+  function showRatingDetails(ratingId){
+    let ratingsList = [[${ratings}]].filter(o=>  o.id == ratingId);
+    console.log(ratingsList);
+
+    let contentHtml = ``;
+  }
+</script>
+
+<script th:inline="javascript">
+  $(document).ready(function() {
+    var table = $('#example').DataTable( {
+      responsive: true
+    } );
+
+    new $.fn.dataTable.FixedHeader( table );
+  } );
+
+</script>
+
+
+</body>
+</html>

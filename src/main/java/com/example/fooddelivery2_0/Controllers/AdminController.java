@@ -34,6 +34,7 @@ public class AdminController {
     private final CityService cityService;
     private final RatingService ratingService;
     private final OrderRequestService orderRequestService;
+    private final OrderService orderService;
     @GetMapping
     public String getAdmin(Model model){
         model.addAttribute("ratings", ratingService.getAllByIsApprovedFalse());
@@ -41,6 +42,16 @@ public class AdminController {
         return "admin";
     }
 
+    @GetMapping("/restaurant/stats/{restId}")
+    public String adminDemo(Model model, @PathVariable Long restId){
+
+        //TODO check if restaurant exists
+        Restaurant restaurant = restaurantService.getRestaurantById(restId).get();
+        model.addAttribute("ordersStats",orderService.getOrdersStats(restaurant));
+        model.addAttribute("customersCountList",orderService.getCustomersCountList());
+
+        return "restaurant-stats";
+    }
 
     @GetMapping("dodaj-restoran")
     public String addNewRestaurant(Model model){
