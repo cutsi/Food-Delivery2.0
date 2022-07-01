@@ -94,7 +94,6 @@ public class DatabaseInitializer {
 //                    "0612345678",
 //                    bCryptPasswordEncoder.encode("rest")
 //            );
-//            customer.setCustomerAddress(List.of(new CustomerAddress("Address_1", "Rabat", "Morocco")));
 //            customer.setUserRole(UserRole.RESTAURANT);
 //            customer.setEnabled(true);
 //            customerRepo.save(customer);
@@ -152,8 +151,26 @@ public class DatabaseInitializer {
                     null,
                     null
             );
+            FoodItem foodItem4 = new FoodItem(
+                    "images/cevapi.jpg",
+                    "Cevapi",
+                    "Cevapi u lepinji",
+                    categoryRepo.findByName("Grill").get(),
+                    null,
+                    null
+            );
+            foodItem4.setRestaurant(restaurant1);
+            FoodItem foodItem5 = new FoodItem(
+                    "images/zagrebacki.jpg",
+                    "Zagrebacki odrezak",
+                    "Pohani odrezak punjen sirom i sunkom",
+                    categoryRepo.findByName("Pohano").get(),
+                    null,
+                    null
+            );
+            foodItem5.setRestaurant(restaurant1);
             foodItem3.setRestaurant(restaurant1);
-            List<FoodItem> foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3);
+            List<FoodItem> foodItemsRest1 = List.of(foodItem1, foodItem2, foodItem3, foodItem4, foodItem5);
             foodItemRepo.saveAll(foodItemsRest1);
 
             //ADD 3 PORTION NAMES
@@ -224,7 +241,7 @@ public class DatabaseInitializer {
 
             //ADD RESTAURANT OWNER FOR RESTAURANT NUMBER 1
             RestaurantOwner owner1 = new RestaurantOwner(
-                    "Moroccan_Owner",
+                    "josip_restaurant",
                     "josipcutura@yopmail.com",
                     "0612345678",
                     bCryptPasswordEncoder.encode("rest")
@@ -235,7 +252,6 @@ public class DatabaseInitializer {
             owner1.setRestaurant(restaurant1);
             restaurantOwnerRepo.save(owner1);
 
-            System.out.println(restaurantRepo.findByName("Restaurant_1").get().getOwners());
 
         }
 

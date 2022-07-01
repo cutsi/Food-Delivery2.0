@@ -2,13 +2,12 @@ package com.example.fooddelivery2_0.Controllers;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class RestaurantController {
     private final CategoryService categoryService;
     private final OrderService orderService;
     private final RatingService ratingService;
+    private final ResponseService responseService;
     @GetMapping(path = "")
     public String getRestaurant(){
         return "about-us";
@@ -69,15 +69,25 @@ public class RestaurantController {
     }
     @GetMapping(path = "komentari")
     public String getComments(Model model){
-        for (Rating rating:ratingService.getRatingsWithNoResponse()) {
-            System.out.println(rating.getContent());
-        }
-        model.addAttribute("oldRatings", ratingService.getRatingsWithNoResponse());
-        model.addAttribute("ratings", ratingService.getAllByIsApproved());
-       // System.out.println(ratingService.getAllByIsApproved());
+        model.addAttribute("ratings", ratingService.getApprovedRatingsWithNoResponse());
+        model.addAttribute("oldRatings", ratingService.getAllByIsApproved());
         return "comments";
     }
 
+    @PostMapping(path = "/respond",  consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void respond(@RequestBody String result){
+        System.out.println("RESULT: " + result);
+        String ratingId = result.split("=")[0];
+        String responseContent = result.split("=")[1];
+
+        Rating rating = ratingService.getById(Long.valueOf(ratingId)).get();
+        Response response = new Response(responseContent, rating, restaurantService.getRestaurantByOwner(
+                        (RestaurantOwner) userService.getCurrentUser().get()).get());
+        responseService.save(response);
+        rating.setResponse(response);
+        ratingService.save(rating);
+    }
     @GetMapping(path = "edit")
     public String editMeal(Model model,@RequestParam("itemId") String itemId){
         for (Condiment condiment: condimentService.getAllCondimentsByRestaurant(foodItemService.getById(Long.valueOf(itemId)).get().getRestaurant())) {

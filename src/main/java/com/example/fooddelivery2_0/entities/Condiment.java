@@ -22,7 +22,7 @@ public class Condiment { //DONE
     private String price;
     @ManyToOne
     private CondimentName name;
-    @JsonBackReference
+    @JsonBackReference(value = "foodItem-condiments")
     @ManyToOne
     private FoodItem foodItem;
     //@ManyToMany(mappedBy = "condiments")

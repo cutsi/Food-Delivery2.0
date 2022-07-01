@@ -19,9 +19,10 @@ function updateProgress(status){
         $("#delivered").addClass("current");
         //add timer and redirect after 2 minutes and make endpoint not accessible
 
-    }else if(status === "DECLINED") {
+    }else if(status.split("=")[0] === "DECLINED") {
         //
-        alert("YOUR ORDER WAS DECLINED");
+        alert(status.split("=")[1]);
+        window.location.href =  window.location.protocol + "//" + window.location.host + "/home";
     }
 }
 

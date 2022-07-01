@@ -1,6 +1,7 @@
 package com.example.fooddelivery2_0.entities;
 
 import com.example.fooddelivery2_0.Utils.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

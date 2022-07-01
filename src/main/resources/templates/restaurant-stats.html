@@ -18,7 +18,7 @@
 <div class="orders-count-container">
 
   <div class="order-card all-orders">
-    <div class="order-text">All orders</div>
+    <div class="order-text">Sve narudžbe</div>
     <div class="order-count">
       <div th:val="${ordersStats.allOrdersCount}">
         0
@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="order-card pending-orders">
-    <div class="order-text">Pending orders</div>
+    <div class="order-text">Narudžbe u tijeku</div>
     <div class="order-count">
       <div th:val="${ordersStats.pendingOrdersCount}">
         0
@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="order-card declined-orders">
-    <div class="order-text">Declined orders</div>
+    <div class="order-text">Odbijene narudžbe</div>
     <div class="order-count">
       <div th:val="${ordersStats.declinedOrdersCount}">
         0
@@ -42,7 +42,7 @@
     </div>
   </div>
   <div class="order-card delivered-orders">
-    <div class="order-text">Delivered orders</div>
+    <div class="order-text">Dostavljene narudžbe</div>
     <div class="order-count">
       <div th:val="${ordersStats.deliveredOrdersCount}">
         0
@@ -55,7 +55,7 @@
 <div class="orders-count-container">
 
   <div class="income-card total-income">
-    <div class="income-text">Total income</div>
+    <div class="income-text">Ukupna zarada</div>
     <div class="income-count">
       <div th:val="${ordersStats.totalIncome}">
         0
@@ -63,7 +63,7 @@
     </div>
   </div>
   <div class="income-card today-income">
-    <div class="income-text">Today income</div>
+    <div class="income-text">Današnja zarada</div>
     <div class="income-count">
       <div th:val="${ordersStats.todayIncome}">
         0
@@ -71,7 +71,7 @@
     </div>
   </div>
   <div class="income-card last-month-income">
-    <div class="income-text">Month income</div>
+    <div class="income-text">Mjesečna zarada</div>
     <div class="income-count">
       <div th:val="${ordersStats.monthIncome}">
         0
@@ -79,7 +79,7 @@
     </div>
   </div>
   <div class="income-card last-year-income">
-    <div class="income-text">Last year income</div>
+    <div class="income-text">Prošlogodišnja zarada</div>
     <div class="income-count">
       <div th:val="${ordersStats.lastYearIncome}">
         0
@@ -99,27 +99,37 @@
     </div>
   </div>
   <div class="orders-diver-container">
-    <h5 class="compared-title">Compared to last year</h5>
+    <h5 class="compared-title">U usporedbi s prošlom godinom</h5>
     <div class="order-diver-cards-row">
       <div class="orders-diver-card" style="margin-right: 30px;">
-        <div class="order-text">Today orders</div>
-        <div class="order-count">...</div>
+        <div class="order-text">Današnje narudžbe</div>
+        <div class="order-count today-order-compare">...</div>
       </div>
       <div class="orders-diver-card">
-        <div class="order-text">Month orders</div>
-        <div class="order-count">...</div>
+        <div class="order-text">Mjesečne narudžbe</div>
+        <div class="order-count month-order-compare">...</div>
       </div>
     </div>
     <div class="order-diver-cards-row" style="margin-top: 30px">
       <div class="orders-diver-card" style="margin-right: 30px;">
-        <div class="order-text">Today income</div>
+        <div class="order-text">Današnja zarada</div>
         <div class="order-count today-income-compare">...</div>
       </div>
       <div class="orders-diver-card">
-        <div class="order-text">Month income</div>
+        <div class="order-text">Mjesečna zarada</div>
         <div class="order-count month-income-compare">...</div>
       </div>
     </div>
+  </div>
+</div>
+<div class="top-3-container">
+  <div class="top-3-customers">
+    <h5><i class="fa fa-star"></i> Top 3 korisnika</h5>
+    <div th:each="customer, index : ${ordersStats.topThreeCustomers}" th:text="'#'+${index.index + 1}+' '+${customer}" style="margin-top: 15px"></div>
+  </div>
+  <div class="top-3-meals">
+    <h5><i class="fa fa-star"></i> Top 3 jela</h5>
+    <div th:each="meal, index : ${ordersStats.topThreeMeals}" th:text="'#'+${index.index + 1}+' '+${meal}" style="margin-top: 15px"></div>
   </div>
 </div>
 
@@ -138,13 +148,15 @@
 
 <script th:inline="javascript">
 
-  let customersCountList = [[${customersCountList}]];
-  $(".total-customers .order-count").text(customersCountList.length);
-  console.log("CUSTOMERS COUNT LIST :",customersCountList);
+  // let customersCountList = [[${customersCountList}]];
+  // $(".total-customers .order-count").text(customersCountList.length);
+  // console.log("CUSTOMERS COUNT LIST :",customersCountList);
 
   let ordersStats = [[${ordersStats}]];
   console.log("ORDERS COUNTS:",ordersStats);
 
+  assignComparisonPercentage(ordersStats.todayLastYearOrdersCount, ordersStats.todayOrdersCount, '.today-order-compare');
+  assignComparisonPercentage(ordersStats.monthLastYearOrdersCount, ordersStats.monthOrdersCount, '.month-order-compare');
   assignComparisonPercentage(ordersStats.todayLastYearIncome, ordersStats.todayIncome, '.today-income-compare');
   assignComparisonPercentage(ordersStats.monthLastYearIncome, ordersStats.monthIncome, '.month-income-compare');
 
@@ -181,7 +193,7 @@
   const counters = document.querySelectorAll('.order-card .order-count div,.income-card .income-count div');
   const speed = 100;
 
-  counters.forEach( counter => {//THIS HERE
+  counters.forEach( counter => {
     const animate = () => {
       const value = +counter.getAttribute('val');
       const data = +counter.innerText;
@@ -250,7 +262,7 @@
 
   function changeDisplay(e){
 
-    if(!e.classList.contains('active')){//if you are not active, you are clickable
+    if(!e.classList.contains('active')){
       if(e.value === 'order'){
         myChart.config.data.datasets[0].data = lastSevenDaysOrders;
         myChart.config.data.datasets[0].label = "Last week orders";

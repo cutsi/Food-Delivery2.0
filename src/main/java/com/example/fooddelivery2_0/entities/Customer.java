@@ -20,12 +20,10 @@ public class Customer extends User{
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Address> customerAddress;
-
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<Order> orders;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<Rating> userRatings;

@@ -21,10 +21,16 @@ public class Response { //DONE
     private String content;
     @CreationTimestamp
     private LocalDateTime createdAt;
-    @JsonManagedReference
+    @JsonManagedReference(value="response-rating")
     @OneToOne(mappedBy = "response")
     private Rating rating;
     @ManyToOne
     private Restaurant restaurant;
 
+    public Response(String responseContent,Rating rating, Restaurant restaurant) {
+        this.content=responseContent;
+        this.createdAt = LocalDateTime.now();
+        this.rating = rating;
+        this.restaurant=restaurant;
+    }
 }

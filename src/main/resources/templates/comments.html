@@ -11,11 +11,25 @@
   <meta sec:authorize='isAuthenticated()' name="_csrf_header" th:content="${_csrf.headerName}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../static/css/popup.css" th:href="@{/css/popup.css}" rel="stylesheet" />
 
   <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet">
-
+  <style>
+    .overlay1{
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      opacity: 1;
+      z-index: 2;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
@@ -37,7 +51,7 @@
                     <th>Ime</th>
                     <th>Datum</th>
                     <th>Ocjena</th>
-                    <th>Detalji</th>
+                    <th>Komentar</th>
 
                   </tr>
                   </thead>
@@ -51,8 +65,8 @@
                       <td>[[${rating.getRating()}]]</td>
 
                       <td>
-                          <input th:rating-id="${rating.getId()}" onclick="showRatingDetails(this.getAttribute('rating-id'))"
-                                 class="button-3" type="submit" value="details" />
+
+                        [[${rating.getContent()}]]
                       </td>
                     </tr>
                   </th:block>
@@ -80,11 +94,9 @@
                     </h4>
                     <div class="" style="margin-bottom: 10px;"> [[${rating.getContent()}]]</div>
                     <div class="response" id="ratingId">
-                      <textarea style="width: 100%"></textarea>
+                      <textarea class="response-text" th:id="${rating.getId()}" id="${rating.getId()}" style="width: 100%"></textarea>
                     </div>
-                    <button class="accept-btn" th:id="rating"th:rating-id="${rating.getId()}">
-                      Odgovori
-                    </button>
+                    <button class="accept-btn" th:ratingId="${rating.getId()}" onclick="respond(this.getAttribute('ratingId'))">Odgovori</button>
 
 
                   </td>
@@ -96,22 +108,26 @@
         </div>
       </div>
 </section>
+<section>
+  <div id="popup1" class="overlay1 pop">
+    <div class="popup" style="height: 85%; overflow-y: auto;">
+      <h2 class="popup-header">Detalji komentara</h2>
+      <a class="close">&times;</a>
+      <h3 class="content-header">Korisnik je napisao:</h3>
+      <div class="content-wrapper">
+
+      </div>
+      <div class="response">
+        Odgovor
+      </div>
+    </div>
+  </div>
+</section>
 
 <footer th:replace="fragments/general :: footer">
 </footer>
 <script src="/webjars/jquery/jquery.min.js"></script>
 
-<script th:inline="javascript">
-
-  $(function (ratingId){
-    $('#rating').on('click',function (){
-        $('#ratingId').toggle()
-      }
-    )
-  });
-
-
-</script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
@@ -122,13 +138,58 @@
 </script>
 
 <script th:inline="javascript">
-
+  $(".close").on("click",function (e){
+    $(".pop").css("display","none");
+  })
   function showRatingDetails(ratingId){
     let ratingsList = [[${ratings}]].filter(o=>  o.id == ratingId);
-    console.log(ratingsList);
+    console.log(ratingsList[0]);
 
-    let contentHtml = ``;
+
+    let contentHtml = ratingsList[0].content;
+
+    if(!$(".bill-table .order-"+ratingsList[0].id).hasClass("NotAcceptedOrder")){
+      $(".accept").css("display","none");
+      $(".deliver").css("display","block");
+    }else{
+      $(".deliver").css("display","none");
+      $(".accept").css("display","block");
+    }
+    $("#popup1 "+ ".content-wrapper").html(contentHtml);
+    $("#popup1").css("display","block");
+    ratingsList = []
   }
+
+
+  function respond(ratingId) {
+    let content = document.getElementById(ratingId).value;
+    console.log(content);
+
+    let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+    let csrf = document.querySelector('meta[name="_csrf"]').content;
+
+    $(function () {
+      $.ajax({
+        url: `respond`,
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          [csrf_header]: csrf
+        },
+        data: ratingId,
+        data: (ratingId + "=" + content),
+        success: function (data) {
+          console.log("AJAX EXERCISE: " + data.toString());
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/komentari";
+        },
+        error: function (data){
+          console.log("AJAX EXERCISE ERROR: " + data);
+        }
+      });
+    });
+  }
+
 </script>
 
 <script th:inline="javascript">

@@ -11,12 +11,14 @@ import com.example.fooddelivery2_0.services.OrderRequestService;
 import com.example.fooddelivery2_0.services.OrderService;
 import com.example.fooddelivery2_0.services.UserService;
 import lombok.AllArgsConstructor;
+import org.hibernate.query.criteria.internal.expression.SizeOfPluralAttributeExpression;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +76,7 @@ public class OrderController {
     //THIS HERE
     @GetMapping(path = "/progress")
     public String orderStatus(@RequestParam("refid") String refId, Model model) {
-        System.out.println("I HAVE ENTERED REFID");
+        System.out.println("I HAVE ENTERED REFID: " + refId);
         //DO WHAT EVER YOU WANT WITH THE ORDER ID TO DISPLAY STEPS TO THE CLIENT
         Customer customer = (Customer)userService.getCurrentUser().get();
         Order order = orderRequestService.getOrderByRefId(refId, customer);
@@ -110,12 +112,19 @@ public class OrderController {
     @GetMapping(path = "/orders/decline")
     @ResponseBody
     public Map<String, String> declineOrder(@RequestParam("refid") String refId) {
+        System.out.println("OVO JE REZULTAT: " + refId);
+        Map<String, String> response = new HashMap<>();
+        String message = "Nažalost nismo u mogućnosti trenutno dostaviti vašu narudžbu";
+        try{
+            message = refId.split("message=")[1];
+        }catch (Exception e){
 
-        Map<String, String> response = new HashMap<>();//why hashmap
+        }
+
         RestaurantOwner owner = (RestaurantOwner)userService.getCurrentUser().get();
-        Order order = orderRequestService.declineOrder(refId, owner);
+        Order order = orderRequestService.declineOrder(refId.split("message=")[0], owner);
         if (order != null){
-            notificationService.notifyCustomerOnOrderProgress(order);
+            notificationService.notifyCustomerOnOrderDecline(order,message);
             response.put("status","success");
         }else{
             response.put("status","error");

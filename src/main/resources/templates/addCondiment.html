@@ -17,13 +17,20 @@
             <form class="form-horizontal" method="POST" th:action="@{/menu}">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Dodaj novo jelo</h1>
+                        <h1 class="panel-title">Dodaj novo prilog</h1>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Ime priloga</label>
                             <div class="col-sm-10">
-                                <input placeholder="Ime jela" type="text" style="width: 20rem" name="name" class="form-control" required>
+                                <input placeholder="Unesite ime jela" type="text" style="width: 20rem" name="name" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Cijena priloga</label>
+                            <div class="col-sm-10">
+                                <input placeholder="Unesite cijenu" type="text" style="width: 20rem" name="price" class="form-control" required>
                             </div>
                         </div>
 
@@ -42,12 +49,6 @@
 </div>
 <footer th:replace="fragments/general :: footer">
 </footer>
-<script type="text/javascript">
-    // run pre selected options
-    $('#pre-selected-options').multiSelect();
-    $('#my-select').multiSelect();
-
-</script>
 </body>
 
 <br><br><br>

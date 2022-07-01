@@ -21,13 +21,13 @@ public class FoodItem { //DONE
     private String info;
     private Boolean isHidden = false;
 
-    @JsonBackReference
+    @JsonBackReference(value = "category-foodItems")
     @ManyToOne
     private Category category;
-    @JsonManagedReference
+    @JsonManagedReference(value="foodItem-portion")
     @OneToMany(mappedBy = "foodItem")
     private List<Portion> portions;
-    @JsonManagedReference
+    @JsonManagedReference(value = "foodItem-condiments")
     @OneToMany(mappedBy = "foodItem")
     private List<Condiment> condiments;
     @ManyToOne

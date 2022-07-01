@@ -43,23 +43,53 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Order> findOrdersCountBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query(nativeQuery = true,
-            value = "select sum(CAST(price AS FLOAT)) from orders")
-    Double findAllIncome();
+            value = "select sum(CAST(price AS FLOAT)) from orders where restaurant_id = ?1")
+    Double findAllIncome(Long restaurant_id);
 
     @Query(nativeQuery = true,
-            value = "select sum(CAST(price AS FLOAT)) from orders where extract(day from created_at) = ?1 and extract(month from created_at) = ?2 and extract(year from created_at) = ?3")
-    Double findIncomeByDate(Integer day, Integer month, Integer year);
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(day from created_at) = ?1 and extract(month from created_at) = ?2 and extract(year from created_at) = ?3 and restaurant_id = ?4")
+    Double findIncomeByDate(Integer day, Integer month, Integer year, Long restaurant_id);
 
     @Query(nativeQuery = true,
-            value = "select sum(CAST(price AS FLOAT)) from orders where extract(month from created_at) = ?1 and extract(year from created_at) = ?2")
-    Double findIncomeByMonthAndYear(Integer month, Integer year);
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(month from created_at) = ?1 and extract(year from created_at) = ?2 and restaurant_id = ?3")
+    Double findIncomeByMonthAndYear(Integer month, Integer year, Long restaurant_id);
 
     @Query(nativeQuery = true,
-            value = "select sum(CAST(price AS FLOAT)) from orders where extract(year from created_at) = ?1")
-    Double findIncomeByYear(Integer lastYear);
+            value = "select sum(CAST(price AS FLOAT)) from orders where extract(year from created_at) = ?1 and restaurant_id = ?2")
+    Double findIncomeByYear(Integer lastYear, Long restaurant_id);
 
     @Query(nativeQuery = true,
             value = "SELECT customer_id FROM orders GROUP BY customer_id;")
     List<Integer> findCustomersCountList();
+
+
+
+    @Query(nativeQuery = true,
+            value = "select * from orders where created_at between ?1 and ?2")
+    List<Order> findOrdersBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query(nativeQuery = true,
+            value = "select  COUNT(*) from orders where extract(month from created_at) = ?1 and extract(year from created_at) = ?2 and restaurant_id = ?3")
+    Integer findOrdersCountByMonthAndYear(Integer month, Integer year, Long restaurant_id);
+
+    @Query(nativeQuery = true,
+            value = "select COUNT(*) from orders where extract(day from created_at) = ?1 and extract(month from created_at) = ?2 and extract(year from created_at) = ?3 and restaurant_id = ?4")
+    Integer findOrdersCountByDate(Integer day, Integer month, Integer year, Long restaurant_id);
+
+    @Query(nativeQuery = true,
+            value = "select COUNT(*) from orders where restaurant_id = ?1")
+    Integer findAllOrdersCount(Long restaurant_id);
+
+    @Query(nativeQuery = true,
+            value = "SELECT customer_id FROM orders where restaurant_id = ?1 GROUP BY customer_id ORDER BY COUNT(customer_id) DESC LIMIT 3")
+    List<Long> findTopThreeCustomersIds(Long restaurant_id);
+
+    @Query(nativeQuery = true,
+            value = "SELECT name FROM users where id in ?1")
+    List<String> findTopThreeCustomers(List<Long> customerIds);
+
+    @Query(nativeQuery = true,
+            value = "SELECT order_contents.name FROM orders JOIN order_contents ON orders.id = order_contents.order_id WHERE restaurant_id= ?1 GROUP BY order_contents.name ORDER BY COUNT(order_contents.name) DESC LIMIT 3;")
+    List<String> findTopThreeMeals(Long restaurant_id);
 }
 

@@ -132,9 +132,10 @@ public class OrderRequestService {
 
         System.out.println(refid + " ******************");
         String[] refidSplit = refid.split("\\$");
+        String orderId = refidSplit[1];
         Arrays.stream(refidSplit).forEach(System.out::println);
         Optional<Order> orderOpt =
-                orderRepo.findByOrderReferenceAndIdAndRestaurantOwners(refidSplit[0]+"$",Long.parseLong(refidSplit[1]),owner);
+                orderRepo.findByOrderReferenceAndIdAndRestaurantOwners(refidSplit[0]+"$",Long.parseLong(orderId),owner);
 
         if(orderOpt.isPresent()){
             Order order = orderOpt.get();

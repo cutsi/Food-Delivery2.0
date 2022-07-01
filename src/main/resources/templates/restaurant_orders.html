@@ -112,7 +112,12 @@
                   <a>
                     <button class="deliver button-content-cell" style="background: #D9391C; background: #1e7e34;margin-top: 2rem;">Deliver</button>
                   </a>
+
                 </div>
+                <div>
+                  <textarea id="message" style="margin-top: 1rem" rows="4" cols="50" placeholder="Napišite poruku korisniku ukoliko odbijate njegovu narudžbu"></textarea>
+                </div>
+
               </div>
             </div>
           </section>
@@ -235,14 +240,16 @@
   });
 
   $("#popup1 .decline").on("click",function (){
-
+    let message = document.getElementById("message").value;
+    console.log(message);
     $.ajax({
-      url:`/narudzba/orders/decline?refid=${currentRefId}`,
+      url:`/narudzba/orders/decline?refid=${currentRefId}message=${message}`,
       method:'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
+      data:message,
       success: function(data) {
         if(data.status === "success"){
 

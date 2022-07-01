@@ -27,7 +27,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private Address address;
     @OneToMany(mappedBy = "restaurant")
     private List<RestaurantOwner> owners; //MAX 2 (1 owner and  1 employee created by the owner)
-    @JsonManagedReference
+    @JsonManagedReference(value = "restaurant-ratings")
     @OneToMany(mappedBy = "restaurant")
     private List<Rating> ratings;
     @OneToMany(mappedBy = "restaurant")

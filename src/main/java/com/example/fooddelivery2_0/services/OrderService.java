@@ -75,25 +75,45 @@ public class OrderService {
 
         LocalDateTime today = LocalDateTime.now();
 
-        ordersStats.put("allOrdersCount", orders.size());
+        ordersStats.put("allOrdersCount", orderRepo.findAllOrdersCount(restaurant.getId()));
         ordersStats.put("pendingOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.ORDERED, restaurant).size() + orderRepo.findAllByStatusAndRestaurant(Status.ACCEPTED, restaurant).size());
         ordersStats.put("declinedOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.DECLINED, restaurant).size());
         ordersStats.put("deliveredOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.DELIVERED, restaurant).size());
-        Double tempIncome = orderRepo.findAllIncome();
+
+
+        Integer tempOrderCount = orderRepo.findOrdersCountByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear(), restaurant.getId());
+        ordersStats.put("todayOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
+
+        tempOrderCount = orderRepo.findOrdersCountByDate(today.getDayOfMonth(), today.getMonthValue(), today.minusYears(1).getYear(), restaurant.getId());
+        ordersStats.put("todayLastYearOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
+
+        tempOrderCount = orderRepo.findOrdersCountByMonthAndYear(today.getMonthValue(),today.getYear(), restaurant.getId());
+        ordersStats.put("monthOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
+
+        tempOrderCount = orderRepo.findOrdersCountByMonthAndYear(today.getMonthValue(),today.minusYears(1).getYear(), restaurant.getId());
+        ordersStats.put("monthLastYearOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
+
+
+        Double tempIncome = orderRepo.findAllIncome(restaurant.getId());
         ordersStats.put("totalIncome", tempIncome == null ? 0 : tempIncome);
-        tempIncome = orderRepo.findIncomeByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
+
+        tempIncome = orderRepo.findIncomeByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear(), restaurant.getId());
         ordersStats.put("todayIncome", tempIncome == null ? 0 : tempIncome);
-        tempIncome = orderRepo.findIncomeByMonthAndYear(today.getMonthValue(),today.getYear());
+
+        tempIncome = orderRepo.findIncomeByMonthAndYear(today.getMonthValue(),today.getYear(), restaurant.getId());
         ordersStats.put("monthIncome", tempIncome == null ? 0 : tempIncome);
-        tempIncome = orderRepo.findIncomeByYear(today.minusYears(1).getYear());
+
+        tempIncome = orderRepo.findIncomeByYear(today.minusYears(1).getYear(), restaurant.getId());
         ordersStats.put("lastYearIncome", tempIncome == null ? 0 : tempIncome);
-        tempIncome = orderRepo.findIncomeByDate(today.getDayOfMonth(), today.getMonthValue(), today.minusYears(1).getYear());
+
+        tempIncome = orderRepo.findIncomeByDate(today.getDayOfMonth(), today.getMonthValue(), today.minusYears(1).getYear(), restaurant.getId());
         ordersStats.put("todayLastYearIncome", tempIncome == null ? 0 : tempIncome);
-        tempIncome = orderRepo.findIncomeByMonthAndYear(today.getMonthValue(), today.minusYears(1).getYear());
+
+        tempIncome = orderRepo.findIncomeByMonthAndYear(today.getMonthValue(), today.minusYears(1).getYear(), restaurant.getId());
         ordersStats.put("monthLastYearIncome", tempIncome == null ? 0 : tempIncome);
 
         LocalDateTime todayMinusSeven = today.minusDays(7);
-        List<Order> lastSevenDaysOrders = orderRepo.findOrdersCountBetweenTwoDates(todayMinusSeven, today);
+        List<Order> lastSevenDaysOrders = orderRepo.findOrdersBetweenTwoDates(todayMinusSeven, today);
 
         List<CharJsDataWrapper> lastSevenDaysOrdersWrapped = new ArrayList<>();
         List<CharJsDataWrapper> lastSevenDaysIncomeWrapped = new ArrayList<>();
@@ -120,6 +140,9 @@ public class OrderService {
 
         ordersStats.put("lastSevenDaysOrders", lastSevenDaysOrdersWrapped);
         ordersStats.put("lastSevenDaysIncome", lastSevenDaysIncomeWrapped);
+
+        ordersStats.put("topThreeCustomers", orderRepo.findTopThreeCustomers(orderRepo.findTopThreeCustomersIds(restaurant.getId())));
+        ordersStats.put("topThreeMeals",orderRepo.findTopThreeMeals(restaurant.getId()));
 
         return  ordersStats;
     }

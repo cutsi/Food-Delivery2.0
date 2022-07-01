@@ -26,15 +26,14 @@ public class Rating {
     private Boolean isApproved;
     private Integer rating;
 
-    @JsonBackReference
     @ManyToOne
     private Customer customer;
 
-    @JsonBackReference
+    @JsonBackReference(value="response-rating")
     @OneToOne
     private Response response;
 
-    @JsonBackReference
+    @JsonBackReference(value = "restaurant-ratings")
     @ManyToOne
     private Restaurant restaurant;
     public Rating(String content, Restaurant restaurant, Customer user, Integer rating) {

@@ -17,7 +17,7 @@ public class Category { //DONE
     private Long id;
     private String name;
     private String image;
-    @JsonManagedReference
+    @JsonManagedReference(value = "category-foodItems")
     @OneToMany(mappedBy = "category")
     private List<FoodItem> foodItems;
 

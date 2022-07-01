@@ -157,3 +157,24 @@
 .red-percentage{
     color: rgb(255,136,136);
 }
+
+.top-3-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 30px 0px 30px;
+}
+
+.top-3-customers, .top-3-meals{
+    width: 45%;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid;
+    padding: 15px;
+    background: #d0ebf7;
+}
+
+.fa-star{
+    color: #d7d704 !important;
+}

@@ -1,15 +1,19 @@
 package com.example.fooddelivery2_0.services;
 
 import com.example.fooddelivery2_0.entities.Rating;
+import com.example.fooddelivery2_0.entities.Response;
 import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.entities.User;
 import com.example.fooddelivery2_0.repos.RatingRepo;
+import javassist.expr.NewArray;
 import lombok.AllArgsConstructor;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -60,8 +64,8 @@ public class RatingService {
         //return avgRating/Double.valueOf(comments.size());
     }
 
-    public List<Rating> getRatingsWithNoResponse(){
-        return ratingRepo.findAllByResponseIsNull();
+    public List<Rating> getApprovedRatingsWithNoResponse(){
+        return ratingRepo.findAllByResponseIsNullAndIsApprovedTrue();
     }
 
 

@@ -33,6 +33,8 @@ public class FoodItemService {
     public List<FoodItem> getAllByName(String name){
         return foodItemRepo.findAllByName(name);
     }
-
+    public void save(FoodItem foodItem){
+        foodItemRepo.save(foodItem);
+    }
 }
 

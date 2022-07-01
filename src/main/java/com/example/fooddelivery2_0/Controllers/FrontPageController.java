@@ -1,13 +1,16 @@
 package com.example.fooddelivery2_0.Controllers;
+import com.example.fooddelivery2_0.Utils.ReferenceGenerator;
 import com.example.fooddelivery2_0.Utils.UserRole;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -31,22 +34,14 @@ import java.util.List;
 public class FrontPageController {
     private final RestaurantService restaurantService;
     private final UserService userService;
-    private final ImageService imageService;
     private final RatingService ratingService;
     private final WorkingHoursService workingHoursService;
     private final OrderService orderService;
     private final CityService cityService;
-    private final FoodItemService foodItemService;
     private final FilterService filterService;
     private final OrderRequestService orderRequestService;
-
-
-
     @GetMapping(path = {"/", "/home"})
-    public String home(Model model){
-        for (Order order:orderRequestService.getAllOrdersByCreatedAtTodayAndRestaurant(6L)) {
-            System.out.println("TODAYS ORDERS: " + order.getCreatedAt());
-        }
+    public String home(Model model) {
 
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
         String userRole = "";

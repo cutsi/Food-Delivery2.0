@@ -20,7 +20,7 @@ public class Portion implements Comparable<Portion>{
     private boolean isChecked;
     @ManyToOne
     private PortionName name;
-    @JsonBackReference
+    @JsonBackReference(value="foodItem-portion")
     @ManyToOne
     private FoodItem foodItem;
     public Portion(String price, boolean isChecked, PortionName portionName) {

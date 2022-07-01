@@ -25,11 +25,19 @@ public class NotificationService {
                     );
                 });
     }
-    public void notifyCustomerOnOrderProgress(Order order){
+    public void notifyCustomerOnOrderProgress(Order order){//FINISH
         simpMessagingTemplate.convertAndSendToUser(
                 order.getOrderReference()+order.getId(),
                 "order/progress",
                 order.getStatus().name()
+        );// user listens in the first two lines, third line is what we send
+    }
+
+    public void notifyCustomerOnOrderDecline(Order order, String message){//FINISH
+        simpMessagingTemplate.convertAndSendToUser(
+                order.getOrderReference()+order.getId(),
+                "order/progress",
+                (order.getStatus().name()+'='+message)
         );// user listens in the first two lines, third line is what we send
     }
 
