@@ -136,9 +136,90 @@
                     </tbody>
                   </table>
                 </div>
+
+
+
+                <div class="recentOrders">
+                  <div class="cardHeader">
+                    <h2>Top 100 korisnika po narudžbama</h2>
+                  </div>
+                  <a href="admin/korisnici" style="margin-left: 3rem">Pregledaj sve korisnike</a>
+                  <div class="container card-container">
+                    <div class="">
+                      <table id="users" class="display nowrap" style="width:100%">
+                        <thead>
+                        <tr>
+                          <th>Ime</th>
+                          <th>Broj narudžbi</th>
+                          <th>Grad</th>
+                          <th>Telefon</th>
+                          <th>Zaključan</th>
+                          <th>Uloga</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="customer: ${customers}">
+                          <tr>
+                            <td>[[${customer.key.getName()}]]</td>
+
+                            <td>[[${customer.value}]]</td>
+
+                            <td>Split</td>
+
+                            <td>[[${customer.key.getPhone()}]]</td>
+
+                            <td><span class="status delivered">OTVOREN</span></td>
+
+                            <td>
+                              <a th:href="@{admin/profil-korisnika/}+${customer.key.getId()}">
+                                Detalji
+                              </a>
+                            </td>
+                          </tr>
+                        </th:block>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="recentCustomers">
+                  <div class="cardHeader">
+                    <h2>Novi korisnici([[${newCustomers.size()}]])</h2>
+                  </div>
+                  <<div class="container card-container">
+                  <div class="">
+                    <table id="newUsers" class="display nowrap" style="width:100%">
+                      <thead>
+                      <tr>
+                        <th>Ime</th>
+                        <th>Detalji</th>
+
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <th:block th:each="customer: ${newCustomers}">
+                        <tr>
+                          <td>[[${customer.getName()}]]</td>
+
+                          <td>
+                            <a th:href="@{admin/profil-korisnika/}+${customer.getId()}">
+                              Detalji
+                            </a>
+                          </td>
+                        </tr>
+                      </th:block>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                </div>
+
+
               </div>
-
-
             </div>
           </div>
         </div>
@@ -198,6 +279,23 @@
 
         new $.fn.dataTable.FixedHeader( table );
       } );
+
+      $(document).ready(function() {
+        var table = $('#users').DataTable( {
+          responsive: true
+        } );
+
+        new $.fn.dataTable.FixedHeader( table );
+      } );
+
+      $(document).ready(function() {
+        var table = $('#newUsers').DataTable( {
+          responsive: true
+        } );
+
+        new $.fn.dataTable.FixedHeader( table );
+      } );
     </script>
+
   </body>
 </html>

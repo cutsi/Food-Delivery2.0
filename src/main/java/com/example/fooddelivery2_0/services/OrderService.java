@@ -147,4 +147,11 @@ public class OrderService {
         return  ordersStats;
     }
 
+    public List<Long> getTopHundredCustomers(){
+        return orderRepo.findTopHundredCustomersIds();
+    }
+    public Integer getNumberOfOrdersByCustomer(Long id){
+        return orderRepo.findNumberOfOrdersByCustomer(id);
+    }
+
 }

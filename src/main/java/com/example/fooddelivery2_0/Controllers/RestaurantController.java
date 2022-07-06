@@ -69,9 +69,40 @@ public class RestaurantController {
     }
     @GetMapping(path = "komentari")
     public String getComments(Model model){
-        model.addAttribute("ratings", ratingService.getApprovedRatingsWithNoResponse());
-        model.addAttribute("oldRatings", ratingService.getAllByIsApproved());
+        model.addAttribute("ratings", ratingService.getRatingsWithNoResponseInTheLastThreeDays());
+        model.addAttribute("oldRatings", ratingService.getAll());
         return "comments";
+    }
+
+    @PostMapping(path = "komentari/{id}")
+    public String getCommentsPost(Model model, @PathVariable("id") String id){
+
+        System.out.println("DATA POST: " + id);
+
+        model.addAttribute("editComment", ratingService.getById(Long.valueOf(id)).get());
+        model.addAttribute("ratings", ratingService.getRatingsWithNoResponseInTheLastThreeDays());
+        model.addAttribute("oldRatings", ratingService.getAllByIsApproved());
+        return getComments(model);
+    }
+
+    @PostMapping(path = "uredi-komentar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void editComment(@RequestBody String result){
+        Long ratingId = Long.valueOf(result.split("content")[0]);
+        String content = result.split("content")[1];
+        Rating rating = ratingService.getById(ratingId).get();
+        Response response = responseService.getById(rating.getResponse().getId()).get();
+        response.setContent(content);
+        responseService.save(response);
+    }
+
+    @PostMapping(path = "report", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void reportComment(@RequestBody String ratingId){
+        System.out.println("PRIJAVLJENI KOMENTAR: " + ratingId);
+        Rating rating = ratingService.getById(Long.valueOf(ratingId)).get();
+        rating.setIsReported(true);
+        ratingService.save(rating);
     }
 
     @PostMapping(path = "/respond",  consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,7 +116,7 @@ public class RestaurantController {
         Response response = new Response(responseContent, rating, restaurantService.getRestaurantByOwner(
                         (RestaurantOwner) userService.getCurrentUser().get()).get());
         responseService.save(response);
-        rating.setResponse(response);
+        //rating.setResponse(response);
         ratingService.save(rating);
     }
     @GetMapping(path = "edit")

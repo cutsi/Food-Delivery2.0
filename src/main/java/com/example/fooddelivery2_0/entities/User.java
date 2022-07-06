@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -25,6 +26,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private Boolean isEnabled;
 
+    private LocalDateTime createdAt;
 
     private String name;
     @JsonIgnore
@@ -47,6 +49,7 @@ public class User implements UserDetails {
         this.phone = phone;
         this.password = password;
         this.name = name;
+        createdAt = LocalDateTime.now();
     }
 
     @Override
@@ -93,6 +96,28 @@ public class User implements UserDetails {
 
     public boolean hasRole(UserRole userRole) {
         return this.userRole.equals(userRole);
+    }
+
+    public String getCreatedAtDMYHM(){
+        String dayOfMonth = String.valueOf(createdAt.getDayOfMonth());
+        String month = String.valueOf(createdAt.getMonthValue());
+        String hour = String.valueOf(createdAt.getHour());
+        String minute = String.valueOf(createdAt.getMinute());
+
+        if(createdAt.getDayOfMonth()<10){
+            dayOfMonth = '0' + String.valueOf(createdAt.getDayOfMonth());
+        }
+        if(createdAt.getMonthValue()<10){
+            month = '0' + String.valueOf(createdAt.getMonthValue());
+        }
+        if(createdAt.getHour()<10){
+            hour = '0' + String.valueOf(createdAt.getHour());
+        }
+        if(createdAt.getMinute()<10){
+            minute = '0'+ String.valueOf(createdAt.getMinute());
+        }
+
+        return  dayOfMonth + "." + month + "." + createdAt.getYear() + " " + hour + ":" + minute;
     }
 }
 

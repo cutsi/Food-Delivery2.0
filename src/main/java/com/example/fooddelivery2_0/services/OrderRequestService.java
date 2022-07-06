@@ -194,6 +194,7 @@ public class OrderRequestService {
          return orderRepo.findAllByCreatedAtAndRestaurant(getStartOfDay(), getEndOfDay(), restaurantId);
     }
 
+
     public Map<Restaurant, Integer> getRestaurantsAndOrdersByRestaurantToday(){
         Map<Restaurant,Integer> numberOfOrdersPerRestaurantToday = new HashMap<>();
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();

@@ -1,8 +1,11 @@
 package com.example.fooddelivery2_0.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,19 +26,20 @@ public class Rating {
     private String content;
     @CreationTimestamp
     private LocalDateTime createdAt;
-    private Boolean isApproved;
+    private Boolean isApproved = true;
     private Integer rating;
-
+    private Boolean isReported = false;
+    @JsonBackReference("customer-rating")
     @ManyToOne
     private Customer customer;
 
-    @JsonBackReference(value="response-rating")
     @OneToOne
     private Response response;
 
     @JsonBackReference(value = "restaurant-ratings")
     @ManyToOne
     private Restaurant restaurant;
+
     public Rating(String content, Restaurant restaurant, Customer user, Integer rating) {
         this.content = content;
         this.restaurant = restaurant;
@@ -43,6 +47,9 @@ public class Rating {
         this.rating = rating;
         this.createdAt = LocalDateTime.now(ZoneId.of("CET"));
         this.isApproved = false;
+    }
+    public Rating(String content) {
+        this.content = content;
     }
     public String getCreatedAtDMYHM(){
         String dayOfMonth = String.valueOf(createdAt.getDayOfMonth());

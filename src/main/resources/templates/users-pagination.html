@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Korisnici</title>
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+    <link href="../static/css/all-users-table.css" th:href="@{/css/all-users-table.css}" rel="stylesheet" />
+
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+    <header th:replace="fragments/general :: header"></header>
+</main>
+
+<h2 style="padding: 1rem;margin-top: -2rem;margin-bottom: -3rem;margin-left: 2rem;font-weight: 600;font-size: x-large;">
+    Svi korisnici
+</h2>
+
+
+<div class="container">
+    <div class="header_wrap">
+        <div class="num_rows">
+
+            <div class="form-group"> 	<!--		Show Numbers Of Rows 		-->
+                <select class  ="form-control" name="state" id="maxRows">
+
+
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+                    <option value="5000">Show ALL Rows</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="tb_search">
+            <input type="text" id="search_input_all" onkeyup="FilterkeyWord_all_table()" placeholder="Pretraži tablicu" class="form-control">
+        </div>
+        <div class="tb_search" style="margin-right: 11rem;display: inline-flex;">
+            <input style="width: 11rem;" type="text" id="search_input_database" placeholder="Pretraži bazu" class="form-control">
+            <button style="width: 3rem;" onclick="databaseLookUp()"
+                    class="button-3" type="submit" value="Pretraži"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+    <table class="table table-striped table-class" id= "table-id">
+
+
+        <thead>
+        <tr>
+            <th>Ime</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Račun kreiran</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="user: ${users}">
+            <tr>
+                <td>[[${user.getName()}]]</td>
+                <td>[[${user.getEmail()}]]</td>
+                <td>[[${user.getPhone()}]]</td>
+                <td>[[${user.getCreatedAtDMYHM()}]]</td>
+            </tr>
+        </th:block>
+        <tbody>
+    </table>
+
+    <!--		Start Pagination -->
+    <div class='pagination-container'>
+        <nav>
+            <ul class="pagination">
+                <!--	Here the JS Function Will Add the Rows -->
+            </ul>
+        </nav>
+    </div>
+    <div class="rows_count">Showing 11 to 20 of 91 entries</div>
+
+</div> <!-- 		End of Container -->
+
+<nav aria-label="Page navigation example">
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+
+    <ul class="pagination-list">
+        <li class="page-item">
+            <a  class="page-link" th:if="${currentPage > 1}" th:href="@{/admin/korisnici/stranica/1}">First</a>
+            <span class="page-link" style="color: black" th:unless="${currentPage > 1}">Prva</span>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage > 1}" th:href="@{'/admin/korisnici/stranica/' + ${currentPage - 1}}">Previous</a>
+            <span class="page-link" style="color: black" th:unless="${currentPage > 1}">Prethodna</span>
+        </li>
+
+
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/admin/korisnici/stranica/' + ${currentPage + 1}}">Next</a>
+            <span class="page-link" style="color: black" th:unless="${currentPage < totalPages}">Sljedeća</span>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{'/admin/korisnici/stranica/' + ${totalPages}}">Last</a>
+            <span class="page-link" style="color: black" th:unless="${currentPage < totalPages}">Zadnja</span>
+        </li>
+    </ul>
+</nav>
+
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+<script th:src="@{/js/pagination.js}"></script>
+<script th:inline="javascript">
+    function databaseLookUp(){
+        console.log("databaseLookUp");
+        let searchElement = document.getElementById("search_input_database").value;
+        console.log("searchElement: " + searchElement);
+
+        $(function () {
+            $.ajax({
+                url: `/admin/pretrazi-bazu?user=${searchElement}`,
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                success: function () {
+                    window.location.href = window.location.protocol + "//" + window.location.host + "/admin/";
+                },
+                error: function (data) {
+                    console.log("AJAX ERROR: " + data);
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

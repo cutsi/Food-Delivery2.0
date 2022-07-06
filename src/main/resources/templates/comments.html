@@ -17,6 +17,16 @@
   <link href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet">
   <style>
+
+    .response-wrapper-text {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      resize: both;
+      min-height: 40px;
+      line-height: 20px;
+    }
+
     .overlay1{
       position: fixed;
       top: 0;
@@ -51,7 +61,8 @@
                     <th>Ime</th>
                     <th>Datum</th>
                     <th>Ocjena</th>
-                    <th>Komentar</th>
+                    <th>Detalji</th>
+                    <th>Prijavi</th>
 
                   </tr>
                   </thead>
@@ -65,8 +76,15 @@
                       <td>[[${rating.getRating()}]]</td>
 
                       <td>
+                          <button th:rating-id="${rating.getId()}" onclick="showRatingDetails(this.getAttribute('rating-id'))">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                          </button>
+                      </td>
+                      <td>
+                        <button th:rating-id="${rating.getId()}" onclick="reportRating(this.getAttribute('rating-id'))">
+                          <i class="fa fa-flag" aria-hidden="true"></i>
 
-                        [[${rating.getContent()}]]
+                        </button>
                       </td>
                     </tr>
                   </th:block>
@@ -113,13 +131,25 @@
     <div class="popup" style="height: 85%; overflow-y: auto;">
       <h2 class="popup-header">Detalji komentara</h2>
       <a class="close">&times;</a>
-      <h3 class="content-header">Korisnik je napisao:</h3>
+      <h3 class="content-header" style="margin-bottom: 1.5rem;">Korisnik je napisao:</h3>
       <div class="content-wrapper">
 
       </div>
-      <div class="response">
-        Odgovor
+      <h3 class="content-header" style="margin-bottom: 1.5rem; margin-top: 2rem">Vaš odgovor:</h3>
+      <div class="response-wrapper">
+        <span class="response-wrapper-text" role="textbox" >
+
+        </span>
       </div>
+      <div class="rating-id-hidden" style="display: none">
+
+      </div>
+      <button style="background: #D9391C;color: white" id="uredi-odgovor" onclick=editRating()
+               class="uredi">Uredi</button>
+
+      <button id="odustani" style="background: gray; color: white"
+              class="odustani">Odustani</button>
+
     </div>
   </div>
 </section>
@@ -138,16 +168,36 @@
 </script>
 
 <script th:inline="javascript">
+
+  $(".uredi").on("click",function (e){
+    $('.response-wrapper-text').attr('contenteditable', true);
+    $('.uredi').html("Spremi");
+    $('.uredi').css("background", "green");
+    $('.uredi').css("color", "white");
+    $('.response-wrapper-text').focus();
+  })
+
+  $(".odustani").on("click",function (e){
+    $('.response-wrapper-text').attr('contenteditable', false);
+    $('.uredi').html("Uredi");
+    $('.uredi').css("background", "#D9391C");
+    $('.uredi').css("color", "white");
+  })
+
   $(".close").on("click",function (e){
     $(".pop").css("display","none");
+    $('.uredi').html("Uredi");
+    $('.uredi').css("background", "#D9391C");
+    $('.uredi').css("color", "white");
   })
   function showRatingDetails(ratingId){
-    let ratingsList = [[${ratings}]].filter(o=>  o.id == ratingId);
-    console.log(ratingsList[0]);
+    let ratingsList = [[${oldRatings}]].filter(o=>  o.id == ratingId);
+
+    console.log("showRatingDetails:" + ratingId);
 
 
     let contentHtml = ratingsList[0].content;
-
+    let response = ratingsList[0].response.content;
     if(!$(".bill-table .order-"+ratingsList[0].id).hasClass("NotAcceptedOrder")){
       $(".accept").css("display","none");
       $(".deliver").css("display","block");
@@ -156,10 +206,36 @@
       $(".accept").css("display","block");
     }
     $("#popup1 "+ ".content-wrapper").html(contentHtml);
+    $("#popup1 "+ ".response-wrapper-text").html(response);
     $("#popup1").css("display","block");
-    ratingsList = []
+    $("#popup1 "+ ".rating-id-hidden").html(ratingId);
   }
 
+  function reportRating(ratingId){
+
+    let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+    let csrf = document.querySelector('meta[name="_csrf"]').content;
+
+    $(function () {
+      $.ajax({
+        url: `report`,
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          [csrf_header]: csrf
+        },
+        data: ratingId,
+        success: function (data) {
+          console.log("AJAX EXERCISE: " + data.toString());
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/komentari";
+        },
+        error: function (data){
+          console.log("AJAX EXERCISE ERROR: " + data);
+        }
+      });
+    });
+  }
 
   function respond(ratingId) {
     let content = document.getElementById(ratingId).value;
@@ -190,9 +266,62 @@
     });
   }
 
-</script>
+  function editRating(){
+    let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+    let csrf = document.querySelector('meta[name="_csrf"]').content;
+    let naslov = document.getElementsByClassName("uredi");
+    console.log("naslov HTML :" + naslov[0].innerHTML);
 
-<script th:inline="javascript">
+    let spremiElement = document.getElementsByClassName("rating-id-hidden");
+    let komentar = document.getElementsByClassName("response-wrapper-text");
+    console.log("INNER HTML :" + spremiElement[0].innerHTML);
+    console.log("komentar :" + komentar[0].innerHTML);
+    if(naslov[0].innerHTML == "Spremi"){
+      $(function () {
+      $.ajax({
+        url: `uredi-komentar`,
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          [csrf_header]: csrf
+        },
+        data: spremiElement[0].innerHTML,
+        data: (spremiElement[0].innerHTML + "content" + komentar[0].innerHTML),
+        success: function (data) {
+          console.log("AJAX EXERCISE: " + data.toString());
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/komentari";
+        },
+        error: function (data){
+          console.log("AJAX EXERCISE ERROR: " + data);
+        }
+      });
+      });
+    }
+
+
+    /*$(function () {
+      $.ajax({
+        url: `uredi-komentar`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          [csrf_header]: csrf
+        },
+        data: ratingId,
+        data: (ratingId + "content" + )
+        success: function (data) {
+          console.log("AJAX EXERCISE: " + data.toString());
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/komentari";
+        },
+        error: function (data){
+          console.log("AJAX EXERCISE ERROR: " + data);
+        }
+      });
+    });*/
+  }
+
   $(document).ready(function() {
     var table = $('#example').DataTable( {
       responsive: true

@@ -2,14 +2,13 @@ package com.example.fooddelivery2_0.Controllers;
 
 import com.example.fooddelivery2_0.Utils.FileUploadUtil;
 import com.example.fooddelivery2_0.Utils.Requests.CreateRestaurantRequest;
-import com.example.fooddelivery2_0.Utils.Requests.OrderRequest;
 import com.example.fooddelivery2_0.Utils.UserRole;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.repos.EmployeeFunctionRepo;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/admin")
@@ -35,11 +33,22 @@ public class AdminController {
     private final RatingService ratingService;
     private final OrderRequestService orderRequestService;
     private final OrderService orderService;
+    private final CustomerService customerService;
     @GetMapping
     public String getAdmin(Model model){
-        model.addAttribute("ratings", ratingService.getAllByIsApprovedFalse());
+        model.addAttribute("ratings", ratingService.getAllReportedComments());
         model.addAttribute("restaurants",orderRequestService.getRestaurantsAndOrdersByRestaurantToday());
+        model.addAttribute("customers", customerService.getTopOneHundredCustomersWithNumberOfOrders());
+        model.addAttribute("newCustomers", userService.getNewCustomers());
         return "admin";
+    }
+
+    @GetMapping(path = "profil-korisnika/{id}")
+    public String getCustomerProfile(Model model, @PathVariable("id") Long id){
+        User user = userService.getUserById(id).get();
+        model.addAttribute("user", user);
+        model.addAttribute("orders", orderService.getAllOrdersByCustomerOrderByCreatedAtDesc((Customer) user));
+        return "myProfile";
     }
 
     @GetMapping("/restaurant/stats/{restId}")
@@ -49,7 +58,6 @@ public class AdminController {
         Restaurant restaurant = restaurantService.getRestaurantById(restId).get();
         model.addAttribute("ordersStats",orderService.getOrdersStats(restaurant));
         model.addAttribute("customersCountList",orderService.getCustomersCountList());
-
         return "restaurant-stats";
     }
 
@@ -59,6 +67,7 @@ public class AdminController {
         model.addAttribute("restaurant", new Restaurant());
         return "dodaj-restoran";
     }
+
     @PostMapping(path = "save/restaurant")
     public String saveRestaurant(@ModelAttribute CreateRestaurantRequest rq,
                                  @RequestParam("image") MultipartFile multipartFile,
@@ -113,14 +122,45 @@ public class AdminController {
     public void approve(@RequestBody String result){
         String approveId = result.split("=")[0];
         String decision = result.split("=")[1];
-        if(decision.equals("accept")){
-            Rating rating = ratingService.getById(Long.valueOf(approveId)).get();
-            rating.setIsApproved(true);
+        Rating rating = ratingService.getById(Long.valueOf(approveId)).get();
+        if(decision.equals("decline")){
+            rating.setIsApproved(false);
+            rating.setIsReported(false);
             ratingService.save(rating);
             return;
         }
-        ratingService.delete(ratingService.getById(Long.valueOf(approveId)).get());
+        rating.setIsReported(false);
+        ratingService.save(rating);
+    }
+    @GetMapping(path = "svi-korisnici")
+    public String getAll(){
+        List<User> users;
+        users = userService.getAllUsers();
+        return "users-pagination";
 
+    }
+    @GetMapping("/korisnici/stranica/{pageNumber}")
+    public String getOnePage(Model model, @PathVariable("pageNumber") int currentPage){
+        Page<User> page = userService.findPage(currentPage);
+        int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        List<User> users = page.getContent();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("users", users);
 
+        return "users-pagination";
+    }
+
+    @GetMapping("/korisnici")
+    public String getAllPages(Model model){
+        return getOnePage(model, 1);
+    }
+
+    @GetMapping("pretrazi-bazu")
+    @ResponseBody
+    public void searchDataBase(Model model, @RequestParam("user") String keyword){
+        System.out.println("KEYWORD: " + keyword);
     }
 }

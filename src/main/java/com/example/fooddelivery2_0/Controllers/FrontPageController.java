@@ -40,9 +40,9 @@ public class FrontPageController {
     private final CityService cityService;
     private final FilterService filterService;
     private final OrderRequestService orderRequestService;
+
     @GetMapping(path = {"/", "/home"})
     public String home(Model model) {
-
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
         String userRole = "";
         model.addAttribute("restaurants",restaurants);
@@ -123,7 +123,7 @@ public class FrontPageController {
         model.addAttribute("restaurant", restaurant);
         //System.out.println(workingHoursService.isRestaurantClosed(workingHoursService.getRestaurantWorkingHoursToday(restaurant)));
         //System.out.println(workingHoursService.restaurantClosed(workingHoursService.getRestaurantWorkingHoursToday(restaurant), restaurant));
-        model.addAttribute("comments", ratingService.getAllByRestaurant(restaurant));
+        model.addAttribute("comments", ratingService.getAllApprovedRatingsByRestaurant(restaurant));
         //model.addAttribute("isClosed", workingHoursService.restaurantClosed(workingHoursService.getRestaurantWorkingHoursToday(restaurant), restaurant));
         model.addAttribute("isClosed", true);
         model.addAttribute("workingHours", workingHoursService.getByRestaurant(restaurant));

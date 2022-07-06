@@ -1,9 +1,13 @@
 package com.example.fooddelivery2_0.services;
 
+import com.example.fooddelivery2_0.entities.Customer;
 import com.example.fooddelivery2_0.entities.Token;
 import com.example.fooddelivery2_0.entities.User;
 import com.example.fooddelivery2_0.repos.UserRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,5 +87,16 @@ public class UserService implements UserDetailsService {
     }
     public void saveUser(User user){
         userRepo.save(user);
+    }
+
+    public Page<User> findPage(int pageNumber){
+        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        return userRepo.findAll(pageable);
+    }
+
+    public List<Customer> getNewCustomers() {
+        LocalTime startDay = LocalTime.of(00, 00, 00, 000000 );
+        return userRepo.findUsersBetweenTwoDates(LocalDateTime.of(LocalDate.now(), startDay),
+                LocalDateTime.now());
     }
 }

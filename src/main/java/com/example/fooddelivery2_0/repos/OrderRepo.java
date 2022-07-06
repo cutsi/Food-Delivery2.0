@@ -85,6 +85,14 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Long> findTopThreeCustomersIds(Long restaurant_id);
 
     @Query(nativeQuery = true,
+            value = "SELECT customer_id FROM orders GROUP BY customer_id ORDER BY COUNT(customer_id) DESC LIMIT 100")
+    List<Long> findTopHundredCustomersIds();
+
+    @Query(nativeQuery = true,
+            value = "SELECT COUNT(customer_id) FROM orders WHERE customer_id = ?1")
+    Integer findNumberOfOrdersByCustomer(Long id);
+
+    @Query(nativeQuery = true,
             value = "SELECT name FROM users where id in ?1")
     List<String> findTopThreeCustomers(List<Long> customerIds);
 

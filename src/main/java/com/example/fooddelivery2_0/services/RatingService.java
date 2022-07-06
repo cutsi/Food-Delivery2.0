@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +42,17 @@ public class RatingService {
     public List<Rating> getAllByIsApproved(){
         return ratingRepo.findAllByIsApprovedTrue();
     }
+    public List<Rating> getAll(){
+        return ratingRepo.findAll();
+    }
     public List<Rating> getAllByResponseId(Long id){
         return ratingRepo.findAllByResponseId(id);
     }
     public List<Rating> getAllByRestaurant(Restaurant restaurant){
         return ratingRepo.findAllByRestaurant(restaurant);
+    }
+    public List<Rating> getAllApprovedRatingsByRestaurant(Restaurant restaurant){
+        return ratingRepo.findAllByRestaurantAndIsApprovedTrue(restaurant);
     }
     public List<Rating> getAllByIsApprovedFalse(){
         return ratingRepo.findAllByIsApprovedFalse();
@@ -71,5 +79,23 @@ public class RatingService {
 
     public void save(Rating rating){
         ratingRepo.save(rating);
+    }
+
+    public List<Rating> getRatingsInTheLastThreeDays(){
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return ratingRepo.findRatingsBetweenTwoDates(
+                LocalDateTime.of(LocalDate.now().minusDays(3), midnight),
+                LocalDateTime.now());
+    }
+
+    public List<Rating> getRatingsWithNoResponseInTheLastThreeDays(){
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return ratingRepo.findRatingsBetweenTwoDatesWithNoResponse(
+                LocalDateTime.of(LocalDate.now().minusDays(3), midnight),
+                LocalDateTime.now());
+    }
+
+    public List<Rating> getAllReportedComments(){
+        return ratingRepo.findAllByIsReportedTrue();
     }
 }
