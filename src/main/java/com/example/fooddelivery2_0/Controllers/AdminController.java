@@ -36,6 +36,16 @@ public class AdminController {
     private final CustomerService customerService;
     @GetMapping
     public String getAdmin(Model model){
+
+        model.addAttribute("totalProfit", orderService.getAdminTotalProfits());
+        model.addAttribute("numberOfAllOrders", orderService.getNumberOfAllOrders());
+        model.addAttribute("numberOfAllUsers", userService.getNumberOfAllCustomers());
+        model.addAttribute("numberOfUsersToday", userService.getNumberOfCustomersToday());
+        model.addAttribute("numberOfUsersThisMonth", userService.getNumberOfCustomersThisMonth());
+        model.addAttribute("numberOfOrdersToday", orderService.getNumberOfOrdersToday());
+        model.addAttribute("numberOfOrdersThisMonth", orderService.getNumberOfOrdersThisMonth());
+        model.addAttribute("monthlyEarnings", orderService.getAdminProfitsThisMonth());
+        model.addAttribute("dailyEarnings", orderService.getAdminProfitsToday());
         model.addAttribute("ratings", ratingService.getAllReportedComments());
         model.addAttribute("restaurants",orderRequestService.getRestaurantsAndOrdersByRestaurantToday());
         model.addAttribute("customers", customerService.getTopOneHundredCustomersWithNumberOfOrders());
@@ -132,13 +142,15 @@ public class AdminController {
         rating.setIsReported(false);
         ratingService.save(rating);
     }
-    @GetMapping(path = "svi-korisnici")
+    /*@GetMapping(path = "svi-korisnici")
     public String getAll(){
         List<User> users;
         users = userService.getAllUsers();
         return "users-pagination";
+    }*/
 
-    }
+
+
     @GetMapping("/korisnici/stranica/{pageNumber}")
     public String getOnePage(Model model, @PathVariable("pageNumber") int currentPage){
         Page<User> page = userService.findPage(currentPage);
@@ -149,18 +161,36 @@ public class AdminController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("users", users);
-
+        model.addAttribute("buttonType", 1);
         return "users-pagination";
     }
-
     @GetMapping("/korisnici")
     public String getAllPages(Model model){
         return getOnePage(model, 1);
     }
 
-    @GetMapping("pretrazi-bazu")
-    @ResponseBody
-    public void searchDataBase(Model model, @RequestParam("user") String keyword){
-        System.out.println("KEYWORD: " + keyword);
+
+
+
+    @GetMapping("pretrazi-bazu/{keyword}")
+    public String searchDataBase(Model model, @PathVariable("keyword") String keyword){
+        return getOnePageOfSearchedUsers(model, 1, keyword);
+    }
+
+    @GetMapping("/pretrazi-korisnike/stranica/{pageNumber}")
+    public String getOnePageOfSearchedUsers(Model model, @PathVariable("pageNumber") int currentPage, String keyword){
+        Page<Customer> page = userService.getCustomersByIdNameEmail(currentPage, keyword);
+
+        List<Customer> users = page.getContent();
+        for (Customer customer: page.getContent()) {
+            System.out.println("PAGE CUSTOMERS: " + customer.getName());
+        }
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("users", users);
+        model.addAttribute("buttonType", 2);
+
+        return "users-pagination";
     }
 }

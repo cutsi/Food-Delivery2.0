@@ -5,8 +5,11 @@ import com.example.fooddelivery2_0.entities.Customer;
 import com.example.fooddelivery2_0.entities.Order;
 import com.example.fooddelivery2_0.entities.Restaurant;
 import com.example.fooddelivery2_0.entities.RestaurantOwner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +38,9 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true,
     value = "select * from orders where created_at>?1 and created_at<?2 and restaurant_id=?3")
     List<Order> findAllByCreatedAtAndRestaurant(LocalDateTime dayStart, LocalDateTime dayFinish, Long restaurant);
-
+    @Query(nativeQuery = true,
+            value = "select * from orders where created_at>?1 and created_at<?2 and restaurant_id=?3")
+    List<Order> findAllByCreatedAtToday(LocalDateTime dayStart, LocalDateTime dayFinish, Long restaurant);
 
 
     @Query(nativeQuery = true,
@@ -99,5 +104,43 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true,
             value = "SELECT order_contents.name FROM orders JOIN order_contents ON orders.id = order_contents.order_id WHERE restaurant_id= ?1 GROUP BY order_contents.name ORDER BY COUNT(order_contents.name) DESC LIMIT 3;")
     List<String> findTopThreeMeals(Long restaurant_id);
+
+    @Query(nativeQuery = true,
+            value = "select sum(cast(price as float)) from orders")
+    Float findTotalProfit();
+
+    @Query(nativeQuery = true,
+            value = "select sum(cast(price as float)) from orders where created_at between ?1 and ?2")
+    Float findProfitBetweenDates(LocalDateTime startDay, LocalDateTime endDay);
+
+    @Query(nativeQuery = true,
+            value = "select count(orders) from orders where created_at between ?1 and ?2")
+    Integer findNumberOfOrdersBetweenDates(LocalDateTime startDay, LocalDateTime endDay);
+
+    @Query(nativeQuery = true,
+            value = "select count(orders) from orders;")
+    Integer findNumberOfAllOrders();
+
+    @Query(nativeQuery = true,
+            value = "select (sum(cast(o.price as float))/100.00)*(cast(r.service_cost_percentage as float))" +
+                    " as suma from restaurants as r, orders as o where o.restaurant_id=r.id " +
+                    "group by r.service_cost_percentage")
+    float[] findSumOfAllRestaurantOrdersWithAdminsPercentage();
+
+    @Query(nativeQuery = true,
+            value = "select (sum(cast(o.price as float))/100.00)*(cast(r.service_cost_percentage as float))" +
+                    " as suma from restaurants as r, orders as o where o.restaurant_id=r.id and o.created_at between " +
+                    " ?1 and ?2" +
+                    " group by r.service_cost_percentage")
+    float[] findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates(LocalDateTime startDay, LocalDateTime endDay);
+
+    @Query(value = "SELECT * FROM orders where customer_id=?1 order by created_at desc"
+            , nativeQuery = true)
+    Page<Order> findOrdersByCustomer(Pageable pageable, Long id);
+
+
+
+//select ((sum(cast(o.price as float))/100)*r.service_cost_percentage) from orders as o where created_at between ?1 and ?2 JOIN restaurants as r where o.restaurant_id=r.id
+
 }
 

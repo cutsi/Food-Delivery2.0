@@ -1,6 +1,5 @@
 package com.example.fooddelivery2_0.services;
 
-import com.example.fooddelivery2_0.entities.Category;
 import com.example.fooddelivery2_0.entities.FoodItem;
 import com.example.fooddelivery2_0.entities.Restaurant;
 import lombok.AllArgsConstructor;
@@ -17,52 +16,21 @@ public class FilterService {
     private final RestaurantService restaurantService;
     private final CategoryService categoryService;
     private final FoodItemService foodItemService;
-
-
-    public List<Restaurant> filter(String filter){
-        filter = filter.substring(0, 1).toUpperCase() + filter.substring(1).toLowerCase(Locale.ROOT);
-
-        List<Restaurant> restaurantsByCategory = filterCategories(filter);
-        List<Restaurant> restaurantsByFoodItem = filterFoodItems(filter);
-
-
-        if(!restaurantsByFoodItem.isEmpty() && restaurantsByCategory.isEmpty()){
-            return restaurantsByFoodItem;
-        }
-        if(restaurantsByFoodItem.isEmpty() && !restaurantsByCategory.isEmpty()){
-            return restaurantsByCategory;
-        }
-        if(!restaurantsByFoodItem.isEmpty() && !restaurantsByCategory.isEmpty()){
-            return getUniqueRestaurants(restaurantsByFoodItem,restaurantsByCategory);
-        }
-        return restaurantsByCategory;
+    private final CityService cityService;
+    private String capitalizeFirstLetter(String word){
+        return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase(Locale.ROOT);
     }
-    private List<Restaurant> filterCategories(String category){
-        List<Restaurant> restaurants = new ArrayList<>();
-        if(!categoryService.getCategoryByName(category).isPresent()){
-            return restaurants;
+
+    public List<FoodItem> filter(String word, String city){
+        List<FoodItem> foodItems = new ArrayList<>();
+        for (Long foodItemId:foodItemService.getFoodItemsByCity(word, city)) {
+            foodItems.add(foodItemService.getById(foodItemId).get());
         }
-        Category category1 = categoryService.getCategoryByName(category).get();
-        List<FoodItem> allFoodItems = foodItemService.getAllByCategory(category1);
-        for (FoodItem foodItem:allFoodItems) {
-            if(!restaurants.contains(foodItem.getRestaurant())){
-                restaurants.add(foodItem.getRestaurant());
-            }
-        }
-        return restaurants;
+        return foodItems;
     }
-    private List<Restaurant> filterFoodItems(String foodItem){
-        List<Restaurant> restaurants = new ArrayList<>();
-        if(!foodItemService.getByName(foodItem).isPresent()){
-            return restaurants;
-        }
-        List<FoodItem> foodItems = foodItemService.getAllByName(foodItem);
-        for (FoodItem foodItem1: foodItems) {
-            if(!restaurants.contains(foodItem1.getRestaurant())){
-                restaurants.add(foodItem1.getRestaurant());
-            }
-        }
-        return restaurants;
+    private List<FoodItem> filterFoodItems(String foodItem){
+        return foodItemService.getFoodItemsByName(foodItem);
+
     }
     private List<Restaurant> getUniqueRestaurants(List<Restaurant> restaurants1, List<Restaurant> restaurants2){
         for (Restaurant restaurant: restaurants2) {

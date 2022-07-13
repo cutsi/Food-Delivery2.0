@@ -11,41 +11,43 @@ import java.util.*;
 public class RestaurantService {
     private final RestaurantRepo restaurantRepo;
 
-    public List<Restaurant> getAllRestaurants(){
+    public List<Restaurant> getAllRestaurants() {
         return restaurantRepo.findAllByOrderByIdAsc();
     }
 
-    public List<FoodItem> getFoodItemsFromRestaurantById(Long id){
+    public List<FoodItem> getFoodItemsFromRestaurantById(Long id) {
         return restaurantRepo.findFoodItemsById(id);
         //return new ArrayList<>();
     }
 
-    public Optional<Restaurant> getRestaurantByName(String name){
+    public Optional<Restaurant> getRestaurantByName(String name) {
         return restaurantRepo.findByName(name);
     }
 
-    public Optional<Restaurant> getRestaurantById(Long id){
+    public Optional<Restaurant> getRestaurantById(Long id) {
         return restaurantRepo.findById(id);
     }
 
-    public List<Category> getCategoriesFromRestaurant(List<FoodItem> menu){
+    public List<Category> getCategoriesFromRestaurant(List<FoodItem> menu) {
         List<Category> categories = new ArrayList<>();
-        for (FoodItem foodItem: menu) {
-            if(!categories.contains(foodItem.getCategory())){
+        for (FoodItem foodItem : menu) {
+            if (!categories.contains(foodItem.getCategory())) {
                 categories.add(foodItem.getCategory());
             }
         }
         return categories;
     }
-    public Optional<Restaurant> getRestaurantByOwner(RestaurantOwner owner){
+
+    public Optional<Restaurant> getRestaurantByOwner(RestaurantOwner owner) {
         return restaurantRepo.findByOwners(owner);
         //return Optional.empty();
     }
-    public void save(Restaurant restaurant){
+
+    public void save(Restaurant restaurant) {
         restaurantRepo.save(restaurant);
     }
 
-    public List<Restaurant> getAllRestaurantsByCity(City city){
+    public List<Restaurant> getAllRestaurantsByCity(City city) {
         return restaurantRepo.findAllByAddress_City(city);
     }
 

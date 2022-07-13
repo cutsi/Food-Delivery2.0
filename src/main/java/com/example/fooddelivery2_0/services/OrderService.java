@@ -2,16 +2,17 @@ package com.example.fooddelivery2_0.services;
 
 import com.example.fooddelivery2_0.Utils.CharJsDataWrapper;
 import com.example.fooddelivery2_0.Utils.Status;
-import com.example.fooddelivery2_0.entities.Customer;
-import com.example.fooddelivery2_0.entities.Order;
-import com.example.fooddelivery2_0.entities.OrderContent;
-import com.example.fooddelivery2_0.entities.Restaurant;
+import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.repos.OrderRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,4 +155,73 @@ public class OrderService {
         return orderRepo.findNumberOfOrdersByCustomer(id);
     }
 
+    private LocalDate getFirstDayOfTheMonth(){
+        return LocalDate.now().withDayOfMonth(1);
+
+    }
+    private LocalTime getMidnight(){
+        return LocalTime.of(00, 00, 00, 000000 );
+    }
+    public Float getProfitThisMonth(){
+        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return orderRepo.findProfitBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
+    }
+    public Float getProfitToday(){
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return orderRepo.findProfitBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
+    }
+
+    public Integer getNumberOfOrdersToday(){
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return orderRepo.findNumberOfOrdersBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
+    }
+
+    public Integer getNumberOfOrdersThisMonth(){
+        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return orderRepo.findNumberOfOrdersBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
+    }
+    public Integer getNumberOfAllOrders(){
+        return orderRepo.findNumberOfAllOrders();
+    }
+
+    public float getAdminTotalProfits(){
+        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentage();
+        float total = 0;
+        for(int i = 0; i < profitList.length; i++){
+            total += profitList[i];
+        }
+        return total;
+    }
+    public float getAdminProfitsThisMonth(){
+        LocalDate startMonth = getFirstDayOfTheMonth();
+        LocalTime midnight = getMidnight();
+
+        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
+        float total = 0;
+        for(int i = 0; i < profitList.length; i++){
+            total += profitList[i];
+        }
+        return total;
+    }
+
+    public float getAdminProfitsToday(){
+        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates
+                (LocalDateTime.of(LocalDate.now(), getMidnight()), LocalDateTime.now());
+        float total = 0;
+        for(int i = 0; i < profitList.length; i++){
+            total += profitList[i];
+        }
+        return total;
+    }
+
+    public Page<Order> findPage(int pageNumber, Long id){
+        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+
+        for (Order order:orderRepo.findOrdersByCustomer(pageable, id)) {
+            System.out.println("PAGED ORDER: " + order.getRestaurant().getName());
+        }
+        return orderRepo.findOrdersByCustomer(pageable, id);
+    }
 }

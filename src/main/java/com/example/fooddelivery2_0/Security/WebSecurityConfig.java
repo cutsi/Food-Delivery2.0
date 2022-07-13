@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //THIS HERE
                 .csrf().ignoringAntMatchers("/home/filter", "/home", "/admin/**").and() //only for development
                 .authorizeRequests()
-                .antMatchers("/restaurant","/css/**", "/js/**", "/css/**", "/audio/**", "/","/style.css","/index")
+                .antMatchers("/restaurant","/css/**", "/js/**", "/css/**", "/audio/**", "/","/style.css","/index","/kod/**", "/grad")
                 .permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/secured/notification-websocket/**").hasAnyAuthority("RESTAURANT","SUPER_RESTAURANT")
@@ -67,4 +67,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userService);
         return provider;
     }
+
 }

@@ -94,9 +94,29 @@ public class UserService implements UserDetailsService {
         return userRepo.findAll(pageable);
     }
 
+    public Page<Customer> getCustomersByIdNameEmail(int pageNumber, String keyword){
+        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        return userRepo.findUsersByIdNameEmail(pageable, keyword);
+    }
+
     public List<Customer> getNewCustomers() {
         LocalTime startDay = LocalTime.of(00, 00, 00, 000000 );
         return userRepo.findUsersBetweenTwoDates(LocalDateTime.of(LocalDate.now(), startDay),
                 LocalDateTime.now());
     }
+    public Integer getNumberOfCustomersThisMonth(){
+        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return userRepo.findNumberOfUsersBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
+    }
+    public Integer getNumberOfCustomersToday(){
+        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        return userRepo.findNumberOfUsersBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
+    }
+    public Integer getNumberOfAllCustomers(){
+        return userRepo.findNumberOfAllUsers();
+    }
+    /*public List<Customer> getCustomersByIdNameEmail(String keyword){
+        return userRepo.findUsersByIdNameEmail(keyword);
+    }*/
 }

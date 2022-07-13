@@ -65,7 +65,6 @@ public class RatingService {
         double avgRating = 0.00;
         for (Rating rating:ratings) {
             avgRating = avgRating + Double.valueOf(rating.getRating());
-            System.out.println("RATING: " + rating.getRating());
         }
         System.out.println(avgRating + "/" + (double) ratings.size());
         return df.format(avgRating/ (double) ratings.size());

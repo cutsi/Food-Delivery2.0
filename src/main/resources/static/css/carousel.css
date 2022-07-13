@@ -1,57 +1,34 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+.carousel-wrap {
+    margin: 10px auto;
+    padding: 0 5%;
+    width: 100%;
+    position: relative;
+}
 
-.slider{
-    margin-top: 3%;
-    display: flex;
+/* fix blank or flashing items on carousel */
+.owl-carousel .item {
+    position: relative;
+    z-index: 100;
+    -webkit-backface-visibility: hidden;
 }
-.slider .card1{
-    flex: 1;
-    margin: 2px 2px;
-    background: #fff;
+
+/* end fix */
+.owl-nav > div {
+    margin-top: -26px;
+    position: absolute;
+    top: 50%;
+    color: #cdcbcd;
 }
-.slider .card1 .img1{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-    height: 100%;
-    width: 100%;
+
+.owl-nav i {
+    font-size: 52px;
 }
-.slider .card1 .img1 img1{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+
+.owl-nav .owl-prev {
+    left: -30px;
 }
-.slider .card1 .content1{
-    padding: 10px 20px;
+
+.owl-nav .owl-next {
+    right: -30px;
 }
-.card1 .content1 .title1{
-    font-size: 25px;
-    font-weight: 600;
-}
-.card1 .content1 .sub-title{
-    font-size: 20px;
-    font-weight: 600;
-    color: #e74c3c;
-    line-height: 20px;
-}
-.card1 .content1 p1{
-    text-align: justify;
-    margin: 10px 0;
-}
-.card1 .content1 .btn1{
-    display: block;
-    text-align: left;
-    margin: 10px 0;
-}
-.card1 .content1 .btn button1{
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    outline: none;
-    font-size: 17px;
-    padding: 5px 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.card1 .content1 .btn1 button1:hover{
-    transform: scale(0.9);
-}
+

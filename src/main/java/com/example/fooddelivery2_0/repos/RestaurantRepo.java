@@ -18,4 +18,5 @@ public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findAllByOrderByIdAsc();
     Optional<Restaurant> findByOwners(RestaurantOwner owner);
     List<Restaurant> findAllByAddress_City(City city);
+    //List<Long> findAllByAddress_City(City city);
 }

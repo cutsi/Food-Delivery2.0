@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/general :: head"></head>
 <head>
@@ -30,7 +30,7 @@
 
                 <div class="infoCard">
                   <div>
-                    <div class="numbers">1942</div>
+                    <div class="numbers">[[${numberOfUsersToday}]]</div>
                     <div class="cardName">Novih korisnika danas</div>
                   </div>
                   <div class="iconBox">
@@ -40,8 +40,8 @@
 
                 <div class="infoCard">
                   <div>
-                    <div class="numbers">234</div>
-                    <div class="cardName">Prodaja</div>
+                    <div class="numbers">[[${numberOfOrdersToday}]]</div>
+                    <div class="cardName">Narudžbi danas</div>
                   </div>
                   <div class="iconBox">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -50,14 +50,82 @@
 
                 <div class="infoCard">
                   <div>
-                    <div class="numbers">122KM</div>
-                    <div class="cardName">Zarada</div>
+                    <div class="numbers">[[${dailyEarnings}]]</div>
+                    <div class="cardName">Zarada danas</div>
                   </div>
                   <div class="iconBox">
                     <i class="fa fa-usd" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
+
+
+
+            <div class="cardBox">
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${numberOfUsersThisMonth}]]</div>
+                  <div class="cardName">Korisnika ovaj mjesec </div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${numberOfOrdersThisMonth}]]</div>
+                  <div class="cardName">Narudžbi ovaj mjesec</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${monthlyEarnings}]]</div>
+                  <div class="cardName">Zarada ovaj mjesec</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-usd" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="cardBox">
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${numberOfAllUsers}]]</div>
+                  <div class="cardName">Ukupno korisnika</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${numberOfAllOrders}]]</div>
+                  <div class="cardName">Ukupno narudžbi</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="infoCard">
+                <div>
+                  <div class="numbers">[[${totalProfit}]]</div>
+                  <div class="cardName">Ukupna zarada</div>
+                </div>
+                <div class="iconBox">
+                  <i class="fa fa-usd" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
 
 
             <div class="main">
@@ -143,7 +211,7 @@
                   <div class="cardHeader">
                     <h2>Top 100 korisnika po narudžbama</h2>
                   </div>
-                  <a href="admin/korisnici" style="margin-left: 3rem">Pregledaj sve korisnike</a>
+                  <a href="/admin/korisnici" style="margin-left: 3rem">Pregledaj sve korisnike</a>
                   <div class="container card-container">
                     <div class="">
                       <table id="users" class="display nowrap" style="width:100%">

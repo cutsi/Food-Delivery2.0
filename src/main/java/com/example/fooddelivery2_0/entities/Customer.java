@@ -25,8 +25,9 @@ public class Customer extends User{
     @JsonIgnore
     private List<Order> orders;
 
-    @JsonManagedReference("customer-rating")
+    //@JsonManagedReference("customer-rating")
     @OneToMany(mappedBy = "customer")
+    @JsonIgnore
     private List<Rating> userRatings;
 
     public Customer(String name, String email, String phone, String password) {

@@ -23,6 +23,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private Double rating;
     private String banner;
     private String deliveryCost;
+    private String serviceCostPercentage;
     @OneToOne
     private Address address;
     @OneToMany(mappedBy = "restaurant")

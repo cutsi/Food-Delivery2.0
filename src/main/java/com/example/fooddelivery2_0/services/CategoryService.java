@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +27,13 @@ public class CategoryService {
 
     public List<Category> getAll() {
         return categoryRepo.findAll();
+    }
+
+    public List<Category> getAllOrderByName(String name){
+        for (Category category:categoryRepo.findCategoriesByNameOrderByNameDesc(name)) {
+            System.out.println(category.getName());
+        }
+        return categoryRepo.findCategoriesByNameOrderByNameDesc(name);
     }
 
 }

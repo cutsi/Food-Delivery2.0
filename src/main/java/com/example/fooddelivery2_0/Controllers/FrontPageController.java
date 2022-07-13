@@ -1,21 +1,16 @@
 package com.example.fooddelivery2_0.Controllers;
-import com.example.fooddelivery2_0.Utils.ReferenceGenerator;
 import com.example.fooddelivery2_0.Utils.UserRole;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAmount;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 // restoran food item 1 n
 //restoran id vuce se kroy sve tablice
 //portions food item 1 -> n
@@ -40,6 +35,7 @@ public class FrontPageController {
     private final CityService cityService;
     private final FilterService filterService;
     private final OrderRequestService orderRequestService;
+    private final FoodItemService foodItemService;
 
     @GetMapping(path = {"/", "/home"})
     public String home(Model model) {
@@ -53,16 +49,15 @@ public class FrontPageController {
         model.addAttribute("userRole", userRole);
         return "home";
     }
-    @GetMapping(path = "filter")
-    public String homeFilter(Model model,@RequestParam("kod") String codeWord){
-        //List<Restaurant> restaurants =  List.of(restaurantService.getRestaurantById(foodItemService.getByName(codeWord).get().getRestaurant().getId()).get());
-        List<Restaurant> filteredRestaurants = filterService.filter(codeWord);
-        if(filteredRestaurants.isEmpty()){
+    @GetMapping(path = "filter/{kod}/{grad}")
+    public String homeFilter(Model model,@PathVariable("kod") String codeWord, @PathVariable("grad") String city){
+        List<FoodItem> filteredFoodItems = filterService.filter(codeWord, city);
+        if(filteredFoodItems.isEmpty()){
             model.addAttribute("message", "Nažalost, vaše pretraživanje nema rezultata.");
             return "filter-fail";
         }
-        model.addAttribute("restaurants", filterService.filter(codeWord));
-        return "home";
+        model.addAttribute("menu",filteredFoodItems);
+        return "filter-meals";
     }
 
     @GetMapping(path = "grad")
@@ -99,12 +94,52 @@ public class FrontPageController {
     @GetMapping(path = "my-profile")
     public String myProfile(Model model){
         model.addAttribute("user", userService.getCurrentUser().get());
-        if(userService.getCurrentUser().get().getUserRole().equals(UserRole.CUSTOMER))
+        System.out.println("userService.getCurrentUser().get(): = " + userService.getCurrentUser().get().getId());
+        /*if(userService.getCurrentUser().get().getUserRole().equals(UserRole.CUSTOMER))
             model.addAttribute("orders", orderService.getAllOrdersByCustomerOrderByCreatedAtDesc((Customer) userService.getCurrentUser().get()));
         else if (userService.getCurrentUser().get().getUserRole().equals(UserRole.SUPER_RESTAURANT))
             model.addAttribute("orders", orderService.getAllByRestaurantOrderByCreatedAtDesc(restaurantService.getRestaurantByOwner((RestaurantOwner) userService.getCurrentUser().get()).get()));
+        */
+        Page<Order> orders = orderService.findPage(1, userService.getCurrentUser().get().getId());
+        model.addAttribute("currentPage", 1);
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("totalItems", orders.getTotalElements());
+        model.addAttribute("orders",orders);
         return "myProfile";
     }
+
+    @GetMapping(path = "my-profile/{pageNumber}")
+    public String myProfile(Model model, @PathVariable("pageNumber") int currentPage){
+        Page<Order> orders = orderService.findPage(currentPage, userService.getCurrentUser().get().getId());
+        model.addAttribute("user", userService.getCurrentUser().get());
+        model.addAttribute("orders", orders);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("totalItems", orders.getTotalElements());
+        model.addAttribute("ordersActive", 1);
+        return "myProfile";
+    }
+
+    /*@GetMapping("/my-profile/{pageNumber}")
+    public String getOnePage(Model model, @PathVariable("pageNumber") int currentPage){
+        Page<Order> page = orderService.findPage(currentPage, userService.getCurrentUser().get().getId());
+        int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        List<Order> orders = page.getContent();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("users", orders);
+        model.addAttribute("buttonType", 1);
+        return "users-pagination";
+    }*/
+
+
+    /*@GetMapping("/korisnici")
+    public String getAllPages(Model model){
+        return getOnePage(model, 1);
+    }*/
+
     @GetMapping(path = "Trenutne-narudzbe")
     public String ongoing_orders(Model model){
         model.addAttribute("orders",orderRequestService.getActiveOrdersByCustomer((Customer)userService.getCurrentUser().get()));
@@ -116,8 +151,19 @@ public class FrontPageController {
 
     //TODO onemogucit narucivanje kad je restoran zatvoren
     @GetMapping(path="/restaurant")
-    public String restaurant(Model model, @RequestParam("ime") String restaurantId) throws Exception {
+    public String restaurant(Model model, @RequestParam("ime") String restaurantId,
+                             @RequestParam(required = false, name = "jelo") String clickedMeal) throws Exception {
+        model.addAttribute("selectedFoodItemId", "none");
+
+        if(restaurantId.contains("?jelo=")){
+            String foodItemId = restaurantId.split(".?jelo=")[1];
+            restaurantId = restaurantId.split(".?jelo=")[0];
+            model.addAttribute("selectedFoodItemId", foodItemId);
+
+        }
         Restaurant restaurant = restaurantService.getRestaurantByName(restaurantId).get();
+
+        model.addAttribute("isFoodItemSelected", 1);
         model.addAttribute("categories", restaurantService.getCategoriesFromRestaurant(restaurant.getFoodItems()));
         model.addAttribute("menu",restaurant.getFoodItems());
         model.addAttribute("restaurant", restaurant);
@@ -132,6 +178,18 @@ public class FrontPageController {
         model.addAttribute("averageRating", ratingService.getAverageRating(restaurant));
         return "restaurant";
     }//TODO popravit poziciju zvjezdica, omogucit komentiranje ulogiranim korisnicima, stavit zvjezdicu nad komentar
+
+    @GetMapping("izaberi")
+    @ResponseBody
+    public Map<String, String> searchDataBase(Model model, @RequestParam("jelo") Long foodItemId){
+        System.out.println("MEAL: " + foodItemId);
+        Map<String, String> response = new HashMap<>();
+        FoodItem foodItem = foodItemService.getById(foodItemId).get();
+        Restaurant restaurant = restaurantService.getRestaurantById(foodItem.getRestaurant().getId()).get();
+
+        response.put("path", "restaurant?ime=" + restaurant.getName() + "?jelo=" + foodItemId);
+        return response;
+    }
 }
 
 
