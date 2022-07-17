@@ -20,7 +20,7 @@ public class CityService {
     public List<City> getAllCities(){
         return cityRepo.findAll();
     }
-    public List<String> getAllCityNames(){
+    public List<String> getAllCityNames(){//FIX
         List<String> cityNames = new ArrayList<>();
         for (City city:cityRepo.findAll()) {
             cityNames.add(city.getName());

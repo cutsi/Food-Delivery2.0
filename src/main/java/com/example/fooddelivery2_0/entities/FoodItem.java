@@ -11,7 +11,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "food_items")
-public class FoodItem { //DONE
+public class FoodItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,6 +40,13 @@ public class FoodItem { //DONE
         this.category = category;
         this.portions = portions;
         this.condiments = condiments;
+    }
+
+    public FoodItem(String image, String name, String info, Category category) {
+        this.image = image;
+        this.name = name;
+        this.info = info;
+        this.category = category;
     }
 
     public List<Portion> getPortionsOrderById(){

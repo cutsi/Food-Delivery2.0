@@ -23,7 +23,7 @@ public class RatingController {
 
     @PostMapping(path = "komentiraj")
     public String comment(Model model, @RequestParam("restaurantName") String restaurant, @RequestParam("content") String content, @RequestParam("star") String star){
-        Rating rating = new Rating(content,restaurantService.getRestaurantByName(restaurant).get(), (Customer) userService.getCurrentUser().get(),Integer.valueOf(star));
+        var rating = new Rating(content,restaurantService.getRestaurantByName(restaurant).get(), (Customer) userService.getCurrentUser().get(),Integer.valueOf(star));
         ratingService.save(rating);
         model.addAttribute("Uspješno ste ostavili komentar");
         return "success";

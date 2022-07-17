@@ -60,10 +60,18 @@
               </form>
             </td>
             <td>
-              <button style="border: none" th:item-id="${item.getId()}" class="accept-btn" onclick="ban(this.getAttribute('item-id'))">
-                <i class="fa fa-ban" aria-hidden="true"></i>
-              </button>
 
+              <div th:if="${item.getIsHidden == false}">
+                <button style="border: none" name="hide" th:item-id="${item.getId()}" class="accept-btn" onclick="hideItem(this.getAttribute('item-id'), 'hide')">
+                  <i class="fa fa-ban" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div th:if="${item.getIsHidden == true}">
+                <button style="border: none" name="show" th:item-id="${item.getId()}" class="accept-btn" onclick="hideItem(this.getAttribute('item-id'), 'show')">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+              </div>
             </td>
             <td>
               <th:block th:each="condiment: ${item.getCondiments()}">
@@ -125,9 +133,46 @@
 
 
   }
-  function ban(itemId) {
+  function hideItem(itemId, action) {
+    console.log("ITEM_ID: " + itemId);
+
+    let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+    let csrf = document.querySelector('meta[name="_csrf"]').content;
+
+    $.ajax({
+      url:`/sakrij-jelo`,
+      method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        [csrf_header] : csrf
+      },
+      data: itemId + "action=" + action,
+      success: function(data) {
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/menu";// redirects user to the progress page tied to his order
+      },
+      error: function() {
+        alert("The request failed");
+      }
+    });
 
   }
+
+  function changeHideBtnColor() {
+
+    /*let element = document.getElementsByName("hide");
+    for(let i = 0; i<element.length; i++){
+      if(element[i].isHidden === 'false'){
+        element[i].style.backgroundColor = '#27ae60';
+      }
+      if(element[i].isHidden === 'true'){
+        element[i].style.backgroundColor = '#fd094e';
+        element[i].getElementsByTagName()
+      }
+    }*/
+
+  }
+  window.onload=changeHideBtnColor;
 </script>
 </body>
 </html>

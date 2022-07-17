@@ -38,7 +38,7 @@ public class RegistrationController {
             model.addAttribute("message", REGISTRATION_FAIL_MESSAGE);
             return "fail";
         }
-        Customer customer = new Customer
+        var customer = new Customer
                 (request.getName(), request.getEmail(), request.getPhone(),
                         request.getPassword());
         customer.setUserRole(UserRole.CUSTOMER);

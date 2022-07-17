@@ -1,12 +1,18 @@
 package com.example.fooddelivery2_0.Controllers;
+import com.example.fooddelivery2_0.Utils.FileUploadUtil;
+import com.example.fooddelivery2_0.Utils.Requests.CondimentAddMealRequest;
+import com.example.fooddelivery2_0.Utils.Requests.PortionAddMealRequest;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -32,36 +38,26 @@ public class RestaurantController {
 
     @GetMapping(path = "narudzbe")
     public String getRestaurant(Model model){
-        RestaurantOwner owner = (RestaurantOwner)userService.getCurrentUser().get();
-
-        Restaurant restaurant = restaurantService.getRestaurantByOwner(owner).get();
+        var owner = (RestaurantOwner)userService.getCurrentUser().get();
+        var restaurant = restaurantService.getRestaurantByOwner(owner).get();
         model.addAttribute("item", restaurant);
         model.addAttribute("notif_ref", restaurant.getNotificationReference());
-
-        List<Order> orders = orderRequestService.getNotDeliveredOrder(restaurant.getId());
+        var orders = orderRequestService.getNotDeliveredOrder(restaurant.getId());
         Collections.sort(orders);
-
-        orders.stream()
-                .forEach(o-> {
-                    System.out.printf("Rest id : "+o.getRestaurant().getId());
-                });
-
         model.addAttribute("orders", orders);
-        //model.addAttribute("total", orderRequestService.getTotal(orders));
         return "restaurant_orders";
     }
     @GetMapping(path = "menu")
     public String getMenu(Model model){
-        //System.out.println(restaurantService.getRestaurantByOwner((RestaurantOwner) userService.getCurrentUser().get()).get());
-        Restaurant restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
+        var restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
         model.addAttribute("menu",restaurant.getFoodItems());
         model.addAttribute("categories", restaurantService.getCategoriesFromRestaurant(restaurant.getFoodItems()));
         return "menu";
     }
     @GetMapping(path = "statistika")
     public String getStats(Model model){
-        RestaurantOwner restaurantOwner = (RestaurantOwner)userService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getRestaurantById(restaurantOwner.getRestaurant().getId()).get();
+        var restaurantOwner = (RestaurantOwner)userService.getCurrentUser().get();
+        var restaurant = restaurantService.getRestaurantById(restaurantOwner.getRestaurant().getId()).get();
         model.addAttribute("ordersStats",orderService.getOrdersStats(restaurant));
         model.addAttribute("customersCountList",orderService.getCustomersCountList());
 
@@ -76,9 +72,6 @@ public class RestaurantController {
 
     @PostMapping(path = "komentari/{id}")
     public String getCommentsPost(Model model, @PathVariable("id") String id){
-
-        System.out.println("DATA POST: " + id);
-
         model.addAttribute("editComment", ratingService.getById(Long.valueOf(id)).get());
         model.addAttribute("ratings", ratingService.getRatingsWithNoResponseInTheLastThreeDays());
         model.addAttribute("oldRatings", ratingService.getAllByIsApproved());
@@ -88,10 +81,10 @@ public class RestaurantController {
     @PostMapping(path = "uredi-komentar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void editComment(@RequestBody String result){
-        Long ratingId = Long.valueOf(result.split("content")[0]);
-        String content = result.split("content")[1];
-        Rating rating = ratingService.getById(ratingId).get();
-        Response response = responseService.getById(rating.getResponse().getId()).get();
+        var ratingId = Long.valueOf(result.split("content")[0]);
+        var content = result.split("content")[1];
+        var rating = ratingService.getById(ratingId).get();
+        var response = responseService.getById(rating.getResponse().getId()).get();
         response.setContent(content);
         responseService.save(response);
     }
@@ -99,8 +92,7 @@ public class RestaurantController {
     @PostMapping(path = "report", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void reportComment(@RequestBody String ratingId){
-        System.out.println("PRIJAVLJENI KOMENTAR: " + ratingId);
-        Rating rating = ratingService.getById(Long.valueOf(ratingId)).get();
+        var rating = ratingService.getById(Long.valueOf(ratingId)).get();
         rating.setIsReported(true);
         ratingService.save(rating);
     }
@@ -108,23 +100,16 @@ public class RestaurantController {
     @PostMapping(path = "/respond",  consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void respond(@RequestBody String result){
-        System.out.println("RESULT: " + result);
-        String ratingId = result.split("=")[0];
-        String responseContent = result.split("=")[1];
-
-        Rating rating = ratingService.getById(Long.valueOf(ratingId)).get();
-        Response response = new Response(responseContent, rating, restaurantService.getRestaurantByOwner(
+        var ratingId = result.split("=")[0];
+        var responseContent = result.split("=")[1];
+        var rating = ratingService.getById(Long.valueOf(ratingId)).get();
+        var response = new Response(responseContent, rating, restaurantService.getRestaurantByOwner(
                         (RestaurantOwner) userService.getCurrentUser().get()).get());
         responseService.save(response);
-        //rating.setResponse(response);
         ratingService.save(rating);
     }
     @GetMapping(path = "edit")
     public String editMeal(Model model,@RequestParam("itemId") String itemId){
-        for (Condiment condiment: condimentService.getAllCondimentsByRestaurant(foodItemService.getById(Long.valueOf(itemId)).get().getRestaurant())) {
-            System.out.println("condiment: " + condiment.getName().getName());
-
-        }
         model.addAttribute("foodItem", foodItemService.getById(Long.valueOf(itemId)).get());
         model.addAttribute("condiments", condimentService.getAllCondimentsByRestaurant(foodItemService.getById(Long.valueOf(itemId)).get().getRestaurant()));
         return "editMeal";
@@ -132,22 +117,59 @@ public class RestaurantController {
 
     @PostMapping(path = "edit")
     public String editMealPost(Model model,@RequestParam("portion") String portion){
-        System.out.println("ITEMID: " + portion);
-
-        Restaurant restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
+        var restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
         model.addAttribute("menu",restaurant.getFoodItems());
         model.addAttribute("categories", restaurantService.getCategoriesFromRestaurant(restaurant.getFoodItems()));
         return "menu";
     }
 
+    @PostMapping(path = "dodaj-jelo")
+    public String addNewMealPost(Model model, @RequestParam("info") String info,
+                                 @RequestParam("name") String name, @RequestParam("category") String category,
+                                 @ModelAttribute PortionAddMealRequest portions,
+                                 @RequestParam("image") MultipartFile multipartFile,
+                                 @ModelAttribute CondimentAddMealRequest condiments) throws IOException {
+        var restaurant = restaurantService.getRestaurantByOwner((RestaurantOwner)userService.getCurrentUser().get()).get();
+        var uploadDir = "C:\\Users\\josip\\Documents\\workspace-spring-tool-suite-4-4.10.0.RELEASE\\FoodDelivery2.0\\src\\main\\resources\\static\\images";
+        var fileNameImage = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        FileUploadUtil.saveFile(uploadDir, fileNameImage, multipartFile);
+        var foodItem = new FoodItem("images/"+fileNameImage, name, info, categoryService.getCategoryByName(category).get());
+        foodItem.setRestaurant(restaurant);
+        foodItemService.save(foodItem);
+        foodItem.setPortions(portionService.savePortions(portions.getPortionName(),portions.getPrice(), foodItem));
+        condimentService.saveCondiments(condiments.getCondimentName(),condiments.getCondimentPrice(), foodItem);
+        foodItemService.save(foodItem);
+        model.addAttribute("foodItem",foodItemService.getById(foodItem.getId()).get());
+        return "setDefaultPrice";
+    }
+
     @GetMapping(path = "dodaj-jelo")
     public String addNewMeal(Model model){
-        RestaurantOwner restaurantOwner = (RestaurantOwner) userService.getCurrentUser().get();
+        var restaurantOwner = (RestaurantOwner) userService.getCurrentUser().get();
+        model.addAttribute("portion", new Portion());
+        model.addAttribute("condiment", new Condiment());
         model.addAttribute("condiments", condimentService.getAllCondimentsByRestaurant(restaurantOwner.getRestaurant()));
         model.addAttribute("portions", portionService.getAllPortionNames());
         model.addAttribute("categories", categoryService.getAll());
 
         return "addMeal";
+    }
+
+    @GetMapping(path = "izaberi-cijenu/{foodItemId}")
+    public String selectDefaultPrice(Model model, @PathVariable("foodItemId") Long foodItemId){
+        model.addAttribute("foodItem", foodItemService.getById(foodItemId).get());
+        return "setDefaultPrice";
+    }
+
+    @PostMapping(path = "spremi-porciju", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void saveDefaultPrice(@RequestBody String data){
+        var foodItemId = data.split("=")[0];
+        var portionNameId = data.split("=")[1];
+        var portion = portionService.getByNameIdAndFoodItem(Long.valueOf(portionNameId), foodItemService.getById(Long.valueOf(foodItemId)).get().getId());
+        portion.setChecked(true);
+        portionService.save(portion);
+
     }
 
     @GetMapping(path = "dodaj-dodatak")
@@ -159,6 +181,18 @@ public class RestaurantController {
     public String getOrderProgress(){
         return "order_progress";
     }
-    //TODO napravit service i repo za working hours, u kontroleru dobit od restorana sate, poslat ih na frontend
-    //TODO i foreachat ih
+
+    @PostMapping(path = "sakrij-jelo", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void hideMeal(@RequestBody String result){
+        var foodItem = foodItemService.getById(Long.valueOf(result.split("action=")[0])).get();
+        if(result.split("action=")[1].equals("hide")){
+            foodItem.setIsHidden(true);
+            foodItemService.save(foodItem);
+        }
+        if(result.split("action=")[1].equals("show")){
+            foodItem.setIsHidden(false);
+            foodItemService.save(foodItem);
+        }
+    }
 }

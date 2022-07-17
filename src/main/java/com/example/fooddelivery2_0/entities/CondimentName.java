@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "condiment_names")
-public class CondimentName { //DONE
+public class CondimentName {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,15 +1,11 @@
 package com.example.fooddelivery2_0.Controllers;
-import com.example.fooddelivery2_0.Utils.UserRole;
 import com.example.fooddelivery2_0.entities.*;
 import com.example.fooddelivery2_0.services.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 // restoran food item 1 n
 //restoran id vuce se kroy sve tablice
@@ -27,6 +23,7 @@ import java.util.Map;
 @RequestMapping(path = "/")
 @AllArgsConstructor
 public class FrontPageController {
+
     private final RestaurantService restaurantService;
     private final UserService userService;
     private final RatingService ratingService;
@@ -39,8 +36,9 @@ public class FrontPageController {
 
     @GetMapping(path = {"/", "/home"})
     public String home(Model model) {
-        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
-        String userRole = "";
+
+        var restaurants = restaurantService.getAllRestaurants();
+        var userRole = "";//removed
         model.addAttribute("restaurants",restaurants);
         if(userService.getCurrentUser().isPresent()){
             userRole = userService.getCurrentUser().get().getUserRole().toString();
@@ -49,9 +47,10 @@ public class FrontPageController {
         model.addAttribute("userRole", userRole);
         return "home";
     }
+
     @GetMapping(path = "filter/{kod}/{grad}")
     public String homeFilter(Model model,@PathVariable("kod") String codeWord, @PathVariable("grad") String city){
-        List<FoodItem> filteredFoodItems = filterService.filter(codeWord, city);
+        var filteredFoodItems = filterService.filter(codeWord, city);
         if(filteredFoodItems.isEmpty()){
             model.addAttribute("message", "Nažalost, vaše pretraživanje nema rezultata.");
             return "filter-fail";
@@ -94,13 +93,12 @@ public class FrontPageController {
     @GetMapping(path = "my-profile")
     public String myProfile(Model model){
         model.addAttribute("user", userService.getCurrentUser().get());
-        System.out.println("userService.getCurrentUser().get(): = " + userService.getCurrentUser().get().getId());
         /*if(userService.getCurrentUser().get().getUserRole().equals(UserRole.CUSTOMER))
             model.addAttribute("orders", orderService.getAllOrdersByCustomerOrderByCreatedAtDesc((Customer) userService.getCurrentUser().get()));
         else if (userService.getCurrentUser().get().getUserRole().equals(UserRole.SUPER_RESTAURANT))
             model.addAttribute("orders", orderService.getAllByRestaurantOrderByCreatedAtDesc(restaurantService.getRestaurantByOwner((RestaurantOwner) userService.getCurrentUser().get()).get()));
         */
-        Page<Order> orders = orderService.findPage(1, userService.getCurrentUser().get().getId());
+        var orders = orderService.findPage(1, userService.getCurrentUser().get().getId());
         model.addAttribute("currentPage", 1);
         model.addAttribute("totalPages", orders.getTotalPages());
         model.addAttribute("totalItems", orders.getTotalElements());
@@ -110,7 +108,7 @@ public class FrontPageController {
 
     @GetMapping(path = "my-profile/{pageNumber}")
     public String myProfile(Model model, @PathVariable("pageNumber") int currentPage){
-        Page<Order> orders = orderService.findPage(currentPage, userService.getCurrentUser().get().getId());
+        var orders = orderService.findPage(currentPage, userService.getCurrentUser().get().getId());
         model.addAttribute("user", userService.getCurrentUser().get());
         model.addAttribute("orders", orders);
         model.addAttribute("currentPage", currentPage);
@@ -154,15 +152,15 @@ public class FrontPageController {
     public String restaurant(Model model, @RequestParam("ime") String restaurantId,
                              @RequestParam(required = false, name = "jelo") String clickedMeal) throws Exception {
         model.addAttribute("selectedFoodItemId", "none");
-
-        if(restaurantId.contains("?jelo=")){
-            String foodItemId = restaurantId.split(".?jelo=")[1];
-            restaurantId = restaurantId.split(".?jelo=")[0];
-            model.addAttribute("selectedFoodItemId", foodItemId);
-
+        model.addAttribute("ableToComment", 1);
+        if(clickedMeal!=null){
+            System.out.println("ASDSADSADSAWEQQQQQQQQQQQQQQQQQQQQQQQ: " + restaurantId);
+            model.addAttribute("selectedFoodItemId", clickedMeal);
         }
-        Restaurant restaurant = restaurantService.getRestaurantByName(restaurantId).get();
-
+        if(userService.getCurrentUser().isPresent()){
+            model.addAttribute("ableToComment", orderService.isUserIsViableToComment(userService.getCurrentUser().get().getId()));
+        }
+        var restaurant = restaurantService.getRestaurantByName(restaurantId).get();
         model.addAttribute("isFoodItemSelected", 1);
         model.addAttribute("categories", restaurantService.getCategoriesFromRestaurant(restaurant.getFoodItems()));
         model.addAttribute("menu",restaurant.getFoodItems());
@@ -181,13 +179,13 @@ public class FrontPageController {
 
     @GetMapping("izaberi")
     @ResponseBody
-    public Map<String, String> searchDataBase(Model model, @RequestParam("jelo") Long foodItemId){
+    public HashMap<Object, Object> searchDataBase(Model model, @RequestParam("jelo") Long foodItemId){
         System.out.println("MEAL: " + foodItemId);
-        Map<String, String> response = new HashMap<>();
-        FoodItem foodItem = foodItemService.getById(foodItemId).get();
-        Restaurant restaurant = restaurantService.getRestaurantById(foodItem.getRestaurant().getId()).get();
+        var response = new HashMap<>();
+        var foodItem = foodItemService.getById(foodItemId).get();
+        var restaurant = restaurantService.getRestaurantById(foodItem.getRestaurant().getId()).get();
 
-        response.put("path", "restaurant?ime=" + restaurant.getName() + "?jelo=" + foodItemId);
+        response.put("path", "restaurant?ime=" + restaurant.getName() + "&jelo=" + foodItemId);
         return response;
     }
 }

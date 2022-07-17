@@ -28,18 +28,18 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final TokenService tokenService;
-    EmailService emailService;
+    EmailService emailService;//FIX
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final String USER_NOT_FOUND = "Korisnik sa emailom: %s nije pronađen";
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepo.findByEmail(email);
+        var user = userRepo.findByEmail(email);
         if(!user.isPresent()) throw new UsernameNotFoundException(String.format(USER_NOT_FOUND, email));
         return user.get();
     }
     public void signUpUser(User user) throws UnsupportedEncodingException, MessagingException {
-        boolean userExists = userRepo.findByEmail(user.getEmail()).isPresent();
+        var userExists = userRepo.findByEmail(user.getEmail()).isPresent();
         //String verificationCode = RandomString.make(64);
 
         if (userExists) {
@@ -50,12 +50,12 @@ public class UserService implements UserDetailsService {
                 emailService.sendRegistrationConfirmEmail(user);
             throw new IllegalStateException("Email je zauzet");
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        var encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepo.save(user);
         //Token verificationCode = new Token(userService.getUserByEmail(email).get());
 
-        Token token = new Token(user);
+        var token = new Token(user);
         tokenService.saveToken(token);
         emailService.sendRegistrationConfirmEmail(user);
         // TODO: Send confirmation token later
@@ -76,13 +76,13 @@ public class UserService implements UserDetailsService {
         return userRepo.findByPhone(phone);
     }
     public Optional<User> getCurrentUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         String username;
         if(authentication.getPrincipal() instanceof UserDetails)
             username = ((UserDetails)authentication.getPrincipal()).getUsername();
         else
             username = authentication.getPrincipal().toString();
-        Optional<User> user = userRepo.findByEmail(username);
+        var user = userRepo.findByEmail(username);
         return user;
     }
     public void saveUser(User user){
@@ -90,33 +90,31 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<User> findPage(int pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        var pageable = PageRequest.of(pageNumber - 1,5);
         return userRepo.findAll(pageable);
     }
 
     public Page<Customer> getCustomersByIdNameEmail(int pageNumber, String keyword){
-        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        var pageable = PageRequest.of(pageNumber - 1,5);
         return userRepo.findUsersByIdNameEmail(pageable, keyword);
     }
 
     public List<Customer> getNewCustomers() {
-        LocalTime startDay = LocalTime.of(00, 00, 00, 000000 );
+        var startDay = LocalTime.of(00, 00, 00, 000000 );
         return userRepo.findUsersBetweenTwoDates(LocalDateTime.of(LocalDate.now(), startDay),
                 LocalDateTime.now());
     }
     public Integer getNumberOfCustomersThisMonth(){
-        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var startMonth = LocalDate.now().withDayOfMonth(1);
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return userRepo.findNumberOfUsersBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
     }
     public Integer getNumberOfCustomersToday(){
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return userRepo.findNumberOfUsersBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
     }
     public Integer getNumberOfAllCustomers(){
         return userRepo.findNumberOfAllUsers();
     }
-    /*public List<Customer> getCustomersByIdNameEmail(String keyword){
-        return userRepo.findUsersByIdNameEmail(keyword);
-    }*/
+
 }

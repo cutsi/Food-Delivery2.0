@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "responses")
-public class Response { //DONE
+public class Response {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

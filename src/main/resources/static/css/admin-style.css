@@ -176,6 +176,12 @@ admin-details .recentOrders table thead tr td:nth-child(3),
     background: #ff4949;;
     border: 1px solid;
 }
+
+.hide-btn{
+    border-radius: 15px;
+    background: #8de02e;
+    border: none;
+}
 .admin-details .recentCustomers table tr td h4{
     font-size: 16px;
     font-weight: 500;

@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "condiments")
-public class Condiment { //DONE
+public class Condiment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +26,6 @@ public class Condiment { //DONE
     @ManyToOne
     private FoodItem foodItem;
     //@ManyToMany(mappedBy = "condiments")
-    //private List<FOrderContentDetails> details;
     //@Transient
     //@JsonIgnore
     //private String displayName;

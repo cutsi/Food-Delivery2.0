@@ -55,7 +55,7 @@ public class AdminController {
 
     @GetMapping(path = "profil-korisnika/{id}")
     public String getCustomerProfile(Model model, @PathVariable("id") Long id){
-        User user = userService.getUserById(id).get();
+        var user = userService.getUserById(id).get();
         model.addAttribute("user", user);
         model.addAttribute("orders", orderService.getAllOrdersByCustomerOrderByCreatedAtDesc((Customer) user));
         return "myProfile";
@@ -65,7 +65,7 @@ public class AdminController {
     public String adminDemo(Model model, @PathVariable Long restId){
 
         //TODO check if restaurant exists
-        Restaurant restaurant = restaurantService.getRestaurantById(restId).get();
+        var restaurant = restaurantService.getRestaurantById(restId).get();
         model.addAttribute("ordersStats",orderService.getOrdersStats(restaurant));
         model.addAttribute("customersCountList",orderService.getCustomersCountList());
         return "restaurant-stats";
@@ -83,13 +83,13 @@ public class AdminController {
                                  @RequestParam("image") MultipartFile multipartFile,
                                  @RequestParam("banner") MultipartFile multipartFileBanner,
                                  @RequestParam(value = "ownerId", required = false, defaultValue = "") String ownerId) throws IOException {
-        String uploadDir = "C:\\Users\\josip\\Documents\\workspace-spring-tool-suite-4-4.10.0.RELEASE\\FoodDelivery2.0\\src\\main\\resources\\static\\images";
-        String fileNameImage = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        String fileNameBanner = StringUtils.cleanPath(multipartFileBanner.getOriginalFilename());
-        Address address = new Address(rq.getAddress(), cityService.getCityByName(rq.getCity()).get());
+        var uploadDir = "C:\\Users\\josip\\Documents\\workspace-spring-tool-suite-4-4.10.0.RELEASE\\FoodDelivery2.0\\src\\main\\resources\\static\\images";
+        var fileNameImage = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        var fileNameBanner = StringUtils.cleanPath(multipartFileBanner.getOriginalFilename());
+        var address = new Address(rq.getAddress(), cityService.getCityByName(rq.getCity()).get());
         addressService.save(address);
 
-        Restaurant restaurant = new Restaurant(rq.getPhone(),rq.getName(),
+        var restaurant = new Restaurant(rq.getPhone(),rq.getName(),
                 address,"images/"+fileNameImage, "images/"+fileNameBanner);
 
 
@@ -110,7 +110,7 @@ public class AdminController {
 
     @PostMapping(path = "odobri-komentar")
     public String approveRating(Model model,@RequestParam String approveId){
-        Rating rating = ratingService.getById(Long.valueOf(approveId)).get();
+        var rating = ratingService.getById(Long.valueOf(approveId)).get();
         rating.setIsApproved(true);
         ratingService.save(rating);
 
@@ -130,9 +130,9 @@ public class AdminController {
     @PostMapping(path = "/approve",  consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void approve(@RequestBody String result){
-        String approveId = result.split("=")[0];
-        String decision = result.split("=")[1];
-        Rating rating = ratingService.getById(Long.valueOf(approveId)).get();
+        var approveId = result.split("=")[0];
+        var decision = result.split("=")[1];
+        var rating = ratingService.getById(Long.valueOf(approveId)).get();
         if(decision.equals("decline")){
             rating.setIsApproved(false);
             rating.setIsReported(false);
@@ -153,10 +153,10 @@ public class AdminController {
 
     @GetMapping("/korisnici/stranica/{pageNumber}")
     public String getOnePage(Model model, @PathVariable("pageNumber") int currentPage){
-        Page<User> page = userService.findPage(currentPage);
+        var page = userService.findPage(currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
-        List<User> users = page.getContent();
+        var users = page.getContent();
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
@@ -179,9 +179,9 @@ public class AdminController {
 
     @GetMapping("/pretrazi-korisnike/stranica/{pageNumber}")
     public String getOnePageOfSearchedUsers(Model model, @PathVariable("pageNumber") int currentPage, String keyword){
-        Page<Customer> page = userService.getCustomersByIdNameEmail(currentPage, keyword);
+        var page = userService.getCustomersByIdNameEmail(currentPage, keyword);
 
-        List<Customer> users = page.getContent();
+        var users = page.getContent();
         for (Customer customer: page.getContent()) {
             System.out.println("PAGE CUSTOMERS: " + customer.getName());
         }

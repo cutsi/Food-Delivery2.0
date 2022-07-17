@@ -370,24 +370,32 @@
                 <form th:action="@{/komentiraj}" method="post">
                   <div sec:authorize='!isAuthenticated()'>
                     <div class="komentiraj">
-                      Morate se <a href="/login"> registrirati</a> prije nego što možete komentirati.
+                      Morate se <a href="/login"> registrirati</a>prije nego što možete komentirati
                     </div>
                   </div>
                   <div sec:authorize='isAuthenticated()'>
-                    <input type="hidden" name="restaurantName" th:value="${restaurant.getName()}">
-                    <textarea class="form-control" rows="2" name="content" placeholder="Napišite nam vašu recenziju"></textarea>
-                    <div class="mar-top clearfix">
-                      <div class="your-rating">
-                        Vaša ocjena:
-                        <div class="rating">
-                          <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
-                          <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
-                          <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
-                          <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
-                          <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+
+                    <div th:if="${ableToComment == true}">
+                      <input type="hidden" name="restaurantName" th:value="${restaurant.getName()}">
+                        <textarea class="form-control" rows="2" name="content" placeholder="Napišite nam vašu recenziju"></textarea>
+                        <div class="mar-top clearfix">
+                          <div class="your-rating">
+                            Vaša ocjena:
+                            <div class="rating">
+                              <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
+                              <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
+                              <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+                              <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
+                              <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+                            </div>
+                          </div>
+                          <button class="btn btn-sm btn-primary pull-right" type="submit">Objavi</button>
                         </div>
+                    </div>
+                    <div th:if="${ableToComment == false}">
+                      <div class="komentiraj">
+                        Morate imati narudžbu iz ovog restorana prije nego što možete komentirati
                       </div>
-                      <button class="btn btn-sm btn-primary pull-right" type="submit">Objavi</button>
                     </div>
                   </div>
 
@@ -451,7 +459,7 @@
           </div>
           <div class="menu-group">
             <th:block th:each="foodItem: ${menu}">
-              <div th:if="${foodItem.getCategory().getId() == category.getId()}">
+            <div th:if="${foodItem.getCategory().getId() == category.getId()} AND ${foodItem.getIsHidden == false}">
                 <button class="menu-item" th:id="'btnItem_'+${foodItem.getId()}" >
                   <img class="menu-item-image" th:src="${foodItem.getImage()}" src ="${foodItem.getImage()}">
                   <div class="menu-item-text">
@@ -589,7 +597,7 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
 </script>
 <script type="text/javascript">
-  window.addEventListener("load", function(){
+  /*window.addEventListener("load", function(){
     setTimeout(
             function open(event){
               document.querySelector(".overlay1").style.display = "block";
@@ -604,7 +612,7 @@
   });
   document.querySelector("#shop-closed-popup").addEventListener("click", function(){
     document.querySelector(".overlay1").style.display = "none";
-  });
+  });*/
 </script>
 <script>
   let btnItem = document.querySelector('.menu-item');
@@ -1008,7 +1016,7 @@
       $(document).ready(function () {
         // Handler for .ready() called.
         $('html, body').animate({
-          scrollTop: $('.blob').offset().top - 200
+          scrollTop: $('#btnItem_' + [[${selectedFoodItemId}]]).offset().top - 200
         }, 700);
       });
 
@@ -1249,8 +1257,11 @@
 </script>
 <script th:inline="javascript">
   async function pulsate(go) {
+    console.log("AAAAAAAAAAAAAAAAAAAAASDDDDDDDDDDDDDDDDDDDdddddddddddd");
+
     if (go != 1) {
-      if ([[${selectedFoodItemId}]].toString() != "none") {
+
+      if ([[${selectedFoodItemId}]] !== "none") {
         let element1 = document.getElementById("btnItem_" + [[${selectedFoodItemId}]]);
         element1.classList.add("blob");
         await new Promise(r => setTimeout(r, 2350));

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository //
+@Repository
 public interface ResponseRepo extends JpaRepository<Response, Long> {
 
     List<Response> findAllByRestaurant(Restaurant restaurant);

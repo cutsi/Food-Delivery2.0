@@ -1,10 +1,7 @@
 package com.example.fooddelivery2_0.repos;
 
 import com.example.fooddelivery2_0.Utils.Status;
-import com.example.fooddelivery2_0.entities.Customer;
-import com.example.fooddelivery2_0.entities.Order;
-import com.example.fooddelivery2_0.entities.Restaurant;
-import com.example.fooddelivery2_0.entities.RestaurantOwner;
+import com.example.fooddelivery2_0.entities.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,11 +18,11 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     Optional<Order> findByOrderReferenceAndIdAndCustomer(String ref, Long id, Customer customer);
 
     @Override
-    List<Order> findAll();
+    List<Order> findAll();//uklonit
     List<Order> findAllByRestaurant(Restaurant restaurant);
     List<Order> findAllByCustomer(Customer customer);
     List<Order> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
-    List<Order> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);
+    List<Order> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);//jpql
 
     @Query(nativeQuery = true, value = "select * from orders where (status = ?1 or status = ?2) and restaurant_id = ?3")
     List<Order> findByStatusOrStatusAndRestaurant(Status ordered, Status accepted, Long id);
@@ -116,6 +113,10 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true,
             value = "select count(orders) from orders where created_at between ?1 and ?2")
     Integer findNumberOfOrdersBetweenDates(LocalDateTime startDay, LocalDateTime endDay);
+
+    @Query(nativeQuery = true,
+            value = "select count(orders) from orders where (created_at between ?1 and ?2) and customer_id=?3")
+    Integer findNumberOfOrdersBetweenDatesByUser(LocalDateTime startDay, LocalDateTime endDay, Long id);
 
     @Query(nativeQuery = true,
             value = "select count(orders) from orders;")

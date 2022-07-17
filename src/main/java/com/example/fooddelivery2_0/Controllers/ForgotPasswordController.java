@@ -37,12 +37,14 @@ public class ForgotPasswordController {
 
     @GetMapping("")
     public String ChangePasswordGet(){
+
         return "change_password";
     }
 
     @PostMapping("")
     public String ChangePasswordPost(Model model, @RequestParam("email") String email)
             throws MessagingException, UnsupportedEncodingException {
+
         if(!userService.getUserByEmail(email).isPresent()){
             model.addAttribute("message", NO_USER_WITH_THIS_EMAIL);
             return "fail";
@@ -55,7 +57,7 @@ public class ForgotPasswordController {
             model.addAttribute("message", CHANGE_PASSWORD_EMAIL_ALREADY_SENT);
             return "fail";
         }
-        Token verificationCode = new Token(userService.getUserByEmail(email).get());
+        var verificationCode = new Token(userService.getUserByEmail(email).get());
         tokenService.saveToken(verificationCode);
         emailService.sendPasswordChangeEmail(userService.getUserByEmail(email).get());
 
@@ -65,13 +67,13 @@ public class ForgotPasswordController {
 
     @GetMapping("/promijeni-lozinku")
     public String changePassword(Model model, @Param("code") String code){
-        Optional<Token> tokenOptional = tokenService.getTokenByCode(code);
+        var tokenOptional = tokenService.getTokenByCode(code);
         if(tokenService.isTokenExpired(tokenOptional)){
             model.addAttribute("message", TOKEN_EXPIRED);
             return "fail";
         }
-        Token token = tokenOptional.get();
-        User user = userService.getUserById(token.getUser().getId()).get();
+        var token = tokenOptional.get();
+        var user = userService.getUserById(token.getUser().getId()).get();
         model.addAttribute("user", user);
         return "change_password_form";
     }
@@ -82,8 +84,8 @@ public class ForgotPasswordController {
             model.addAttribute("message", GENERIC_ERROR_MESSAGE);
             return "fail";
         }
-        User user = userService.getUserById(Long.valueOf(userId)).get();
-        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        var user = userService.getUserById(Long.valueOf(userId)).get();
+        var encodedPassword = bCryptPasswordEncoder.encode(password);
         user.setPassword(encodedPassword);
         tokenService.deleteToken(tokenService.getTokenByUser(user).get());
         userService.saveUser(user);

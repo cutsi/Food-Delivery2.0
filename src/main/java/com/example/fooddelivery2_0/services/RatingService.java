@@ -62,13 +62,11 @@ public class RatingService {
     }
     public String getAverageRating(Restaurant restaurant){
         List<Rating> ratings = ratingRepo.findAllByRestaurant(restaurant);
-        double avgRating = 0.00;
-        for (Rating rating:ratings) {
+        var avgRating = 0.00;
+        for (var rating:ratings) {
             avgRating = avgRating + Double.valueOf(rating.getRating());
         }
-        System.out.println(avgRating + "/" + (double) ratings.size());
         return df.format(avgRating/ (double) ratings.size());
-        //return avgRating/Double.valueOf(comments.size());
     }
 
     public List<Rating> getApprovedRatingsWithNoResponse(){
@@ -81,14 +79,14 @@ public class RatingService {
     }
 
     public List<Rating> getRatingsInTheLastThreeDays(){
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return ratingRepo.findRatingsBetweenTwoDates(
                 LocalDateTime.of(LocalDate.now().minusDays(3), midnight),
                 LocalDateTime.now());
     }
 
     public List<Rating> getRatingsWithNoResponseInTheLastThreeDays(){
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return ratingRepo.findRatingsBetweenTwoDatesWithNoResponse(
                 LocalDateTime.of(LocalDate.now().minusDays(3), midnight),
                 LocalDateTime.now());

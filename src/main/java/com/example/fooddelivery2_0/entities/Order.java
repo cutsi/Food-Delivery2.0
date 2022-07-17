@@ -15,7 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "orders")
-public class Order implements Comparable<Order>{ //DONE
+public class Order implements Comparable<Order>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

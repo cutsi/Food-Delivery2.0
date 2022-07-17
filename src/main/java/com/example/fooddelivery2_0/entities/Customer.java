@@ -19,7 +19,7 @@ import java.util.List;
 public class Customer extends User{
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Address> customerAddress;
+    private List<Address> address;
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore

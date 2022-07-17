@@ -30,7 +30,7 @@ public class RestaurantService {
 
     public List<Category> getCategoriesFromRestaurant(List<FoodItem> menu) {
         List<Category> categories = new ArrayList<>();
-        for (FoodItem foodItem : menu) {
+        for (var foodItem : menu) {
             if (!categories.contains(foodItem.getCategory())) {
                 categories.add(foodItem.getCategory());
             }

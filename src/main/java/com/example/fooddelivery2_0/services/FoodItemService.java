@@ -40,7 +40,6 @@ public class FoodItemService {
         return foodItemRepo.findFoodItemsByNameSubstring(codeWord);
     }
     public List<Long> getFoodItemsByCity(String codeWord, String city){
-        System.out.println("getFoodItemsByAndRestaurant");
         return foodItemRepo.findFoodItemsByCity(codeWord, city);
     }
     public List<FoodItem> getFoodItemsBySelectedItemFirst(Long restaurantId, Long foodItemId){

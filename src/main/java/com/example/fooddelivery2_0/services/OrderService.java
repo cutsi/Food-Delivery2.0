@@ -16,7 +16,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +25,9 @@ public class OrderService {
 
     public String[] serialize(String[] foodItems){
 
-        String orderStr = new String();
-        String fullOrderStr = new String();
-        String[] fullOrderArr = new String[foodItems.length];
+        var orderStr = new String();
+        var fullOrderStr = new String();
+        var fullOrderArr = new String[foodItems.length];
         for (int i = 0; i< foodItems.length-1;i++) {
             for(int j = foodItems[i].indexOf("orderDetail")+14; j<foodItems[i].length()-1;j++){
                 orderStr += foodItems[i].charAt(j);
@@ -36,8 +35,6 @@ public class OrderService {
             for(int k = 0;  k<foodItems[i].indexOf("orderDetail")-1;k++){
                 fullOrderStr += foodItems[i].charAt(k);
             }
-            System.out.println("FULLORDERSTR: " + fullOrderStr);
-            System.out.println("ORDERSTR: " + orderStr);
             fullOrderArr[i] = fullOrderStr + orderStr;
         }
         return fullOrderArr;
@@ -69,24 +66,21 @@ public class OrderService {
         return orderRepo.findCustomersCountList();
     }
 
-    public Map<String, Object> getOrdersStats(Restaurant restaurant){
+    public HashMap<Object, Object> getOrdersStats(Restaurant restaurant){
 
-        List<Order> orders = orderRepo.findAllByRestaurant(restaurant);
-        Map<String, Object> ordersStats = new HashMap<>();
-
-        LocalDateTime today = LocalDateTime.now();
-
+        var orders = orderRepo.findAllByRestaurant(restaurant);
+        var ordersStats = new HashMap<>();//mapa string, integer
+        var today = LocalDateTime.now();
         ordersStats.put("allOrdersCount", orderRepo.findAllOrdersCount(restaurant.getId()));
-        ordersStats.put("pendingOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.ORDERED, restaurant).size() + orderRepo.findAllByStatusAndRestaurant(Status.ACCEPTED, restaurant).size());
+        ordersStats.put("pendingOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.ORDERED, restaurant).size() + orderRepo.findAllByStatusAndRestaurant(Status.ACCEPTED, restaurant).size());//vratit count
         ordersStats.put("declinedOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.DECLINED, restaurant).size());
         ordersStats.put("deliveredOrdersCount", orderRepo.findAllByStatusAndRestaurant(Status.DELIVERED, restaurant).size());
 
-
-        Integer tempOrderCount = orderRepo.findOrdersCountByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear(), restaurant.getId());
+        var tempOrderCount = orderRepo.findOrdersCountByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear(), restaurant.getId());
         ordersStats.put("todayOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
 
         tempOrderCount = orderRepo.findOrdersCountByDate(today.getDayOfMonth(), today.getMonthValue(), today.minusYears(1).getYear(), restaurant.getId());
-        ordersStats.put("todayLastYearOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
+        ordersStats.put("todayLastYearOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);//izdvojit u metodu if uvjetm samo nek budu putovi
 
         tempOrderCount = orderRepo.findOrdersCountByMonthAndYear(today.getMonthValue(),today.getYear(), restaurant.getId());
         ordersStats.put("monthOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
@@ -95,7 +89,7 @@ public class OrderService {
         ordersStats.put("monthLastYearOrdersCount", tempOrderCount == null ? 0 : tempOrderCount);
 
 
-        Double tempIncome = orderRepo.findAllIncome(restaurant.getId());
+        var tempIncome = orderRepo.findAllIncome(restaurant.getId());
         ordersStats.put("totalIncome", tempIncome == null ? 0 : tempIncome);
 
         tempIncome = orderRepo.findIncomeByDate(today.getDayOfMonth(), today.getMonthValue(), today.getYear(), restaurant.getId());
@@ -116,20 +110,20 @@ public class OrderService {
         LocalDateTime todayMinusSeven = today.minusDays(7);
         List<Order> lastSevenDaysOrders = orderRepo.findOrdersBetweenTwoDates(todayMinusSeven, today);
 
-        List<CharJsDataWrapper> lastSevenDaysOrdersWrapped = new ArrayList<>();
-        List<CharJsDataWrapper> lastSevenDaysIncomeWrapped = new ArrayList<>();
+        var lastSevenDaysOrdersWrapped = new ArrayList<>();
+        var lastSevenDaysIncomeWrapped = new ArrayList<>();
 
         for(int i =0; i<7; i++){
 
-            LocalDate finalToday = today.toLocalDate();
+            var finalToday = today.toLocalDate();
 
-            List<Order> lastSevenDaysFilteredOrders = lastSevenDaysOrders.stream().filter(o->
+            var lastSevenDaysFilteredOrders = lastSevenDaysOrders.stream().filter(o->
                     o.getCreatedAt().toLocalDate().equals(finalToday)
             ).collect(Collectors.toList());
 
             lastSevenDaysOrdersWrapped.add(new CharJsDataWrapper<>(finalToday.toString(), lastSevenDaysFilteredOrders.size()));
 
-            Double total = lastSevenDaysFilteredOrders.stream()
+            var total = lastSevenDaysFilteredOrders.stream()
                     .mapToDouble(o->
                             Double.parseDouble(o.getPrice())
                     ).sum();
@@ -162,24 +156,25 @@ public class OrderService {
     private LocalTime getMidnight(){
         return LocalTime.of(00, 00, 00, 000000 );
     }
+
     public Float getProfitThisMonth(){
-        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var startMonth = LocalDate.now().withDayOfMonth(1);
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return orderRepo.findProfitBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
     }
     public Float getProfitToday(){
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return orderRepo.findProfitBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
     }
 
     public Integer getNumberOfOrdersToday(){
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return orderRepo.findNumberOfOrdersBetweenDates(LocalDateTime.of(LocalDate.now(), midnight), LocalDateTime.now());
     }
 
     public Integer getNumberOfOrdersThisMonth(){
-        LocalDate startMonth = LocalDate.now().withDayOfMonth(1);
-        LocalTime midnight = LocalTime.of(00, 00, 00, 000000 );
+        var startMonth = LocalDate.now().withDayOfMonth(1);
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
         return orderRepo.findNumberOfOrdersBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
     }
     public Integer getNumberOfAllOrders(){
@@ -187,19 +182,19 @@ public class OrderService {
     }
 
     public float getAdminTotalProfits(){
-        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentage();
-        float total = 0;
+        var profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentage();
+        var total = 0;
         for(int i = 0; i < profitList.length; i++){
             total += profitList[i];
         }
         return total;
     }
     public float getAdminProfitsThisMonth(){
-        LocalDate startMonth = getFirstDayOfTheMonth();
-        LocalTime midnight = getMidnight();
+        var startMonth = getFirstDayOfTheMonth();
+        var midnight = getMidnight();
 
-        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
-        float total = 0;
+        var profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates(LocalDateTime.of(startMonth, midnight), LocalDateTime.now());
+        var total = 0;
         for(int i = 0; i < profitList.length; i++){
             total += profitList[i];
         }
@@ -207,9 +202,9 @@ public class OrderService {
     }
 
     public float getAdminProfitsToday(){
-        float[] profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates
+        var profitList = orderRepo.findSumOfAllRestaurantOrdersWithAdminsPercentageBetweenDates
                 (LocalDateTime.of(LocalDate.now(), getMidnight()), LocalDateTime.now());
-        float total = 0;
+        var total = 0;
         for(int i = 0; i < profitList.length; i++){
             total += profitList[i];
         }
@@ -217,11 +212,15 @@ public class OrderService {
     }
 
     public Page<Order> findPage(int pageNumber, Long id){
-        Pageable pageable = PageRequest.of(pageNumber - 1,5);
-
-        for (Order order:orderRepo.findOrdersByCustomer(pageable, id)) {
-            System.out.println("PAGED ORDER: " + order.getRestaurant().getName());
-        }
+        var pageable = PageRequest.of(pageNumber - 1,5);
         return orderRepo.findOrdersByCustomer(pageable, id);
+    }
+
+    public Boolean isUserIsViableToComment(Long id){
+        var midnight = LocalTime.of(00, 00, 00, 000000 );
+        if(orderRepo.findNumberOfOrdersBetweenDatesByUser(LocalDateTime.of(LocalDate.now().minusDays(3), midnight), LocalDateTime.now(), id) > 0){
+            return true;
+        }
+        return false;
     }
 }

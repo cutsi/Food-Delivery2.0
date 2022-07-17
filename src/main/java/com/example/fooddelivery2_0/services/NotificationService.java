@@ -13,7 +13,7 @@ public class NotificationService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void notifyRestaurantOnNewOrder(Order order){
-        Restaurant restaurant = order.getRestaurant();
+        var restaurant = order.getRestaurant();
         restaurant.getOwners().stream()
                 .forEach(o-> {
                     System.out.println(o.getUsername());
@@ -30,7 +30,7 @@ public class NotificationService {
                 order.getOrderReference()+order.getId(),
                 "order/progress",
                 order.getStatus().name()
-        );// user listens in the first two lines, third line is what we send
+        );
     }
 
     public void notifyCustomerOnOrderDecline(Order order, String message){//FINISH
@@ -38,7 +38,7 @@ public class NotificationService {
                 order.getOrderReference()+order.getId(),
                 "order/progress",
                 (order.getStatus().name()+'='+message)
-        );// user listens in the first two lines, third line is what we send
+        );
     }
 
 }

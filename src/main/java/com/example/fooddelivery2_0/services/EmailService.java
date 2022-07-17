@@ -38,26 +38,26 @@ public class EmailService {
 
 
     public void sendPasswordChangeEmail(User user) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String email = buildEmail(getPasswordChangeCode
+        var toAddress = user.getEmail();
+        var email = buildEmail(getPasswordChangeCode
                         (tokenService.getTokenByUser(user).get().getToken()),user.getName(),
                 CHANGE_PASSWORD_HEADER, CHANGE_PASSWORD_BODY,BUTTON_PASSWORD_CHANGE_TEXT, PASSWORD_CHANGE_IMG);
         sendEmail(toAddress, CHANGE_PASSWORD_SUBJECT, email);
     }
     public void sendMessageToUs(ContactMessage contactMessage) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = FROM_ADDRESS;
+        var toAddress = FROM_ADDRESS;
         sendEmail(toAddress, contactMessage.getEmail(), CHANGE_MESSAGE_TO_US_SUBJECT, contactMessage.getMessage());
     }
     public void sendRegistrationConfirmEmail(User user) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String email = buildEmail(getRegistrationCode
+        var toAddress = user.getEmail();
+        var email = buildEmail(getRegistrationCode
                         (tokenService.getTokenByUser(user).get().getToken()),user.getName(),
                 CONFIRM_EMAIL_HEADER, CONFIRM_EMAIL_BODY,BUTTON_EMAIL_CONFIRMATION_TEXT, CONFIRM_EMAIL_IMG);
         sendEmail(toAddress, REGISTRATION_SUBJECT, email);
     }
     private void sendEmail(String toAddress, String fromAddress, String subject,String emailMessage) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        var message = mailSender.createMimeMessage();
+        var helper = new MimeMessageHelper(message);
         helper.setFrom(fromAddress, fromAddress);
         helper.setTo(toAddress);
         helper.setSubject(subject);
@@ -65,8 +65,8 @@ public class EmailService {
         mailSender.send(message);
     }
     private void sendEmail(String toAddress, String subject,String email) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        var message = mailSender.createMimeMessage();
+        var helper = new MimeMessageHelper(message);
         helper.setFrom(FROM_ADDRESS, SENDER_NAME);
         helper.setTo(toAddress);
         helper.setSubject(subject);
@@ -84,13 +84,13 @@ public class EmailService {
     public boolean verify(String verificationCode) {
         if(!tokenService.getTokenByCode(verificationCode).isPresent())
             return false;
-        Optional<User> userOptional = userRepo.findById(tokenService.getTokenByCode(verificationCode).get().getUser().getId());
+        var userOptional = userRepo.findById(tokenService.getTokenByCode(verificationCode).get().getUser().getId());
         if (!userOptional.isPresent())
             return false;
         if (userOptional.get().isEnabled())
             return false;
         else {
-            User user = userOptional.get();
+            var user = userOptional.get();
             tokenService.deleteToken(tokenService.getTokenByCode(verificationCode).get());
             user.setIsEnabled(true);
             userRepo.save(user);
@@ -98,7 +98,7 @@ public class EmailService {
         }
     }
     private String buildEmail(String verification_link, String user_name, String header, String body, String buttonText, String imgSrc){
-        String message = "<!doctype html>\n" +
+        var message = "<!doctype html>\n" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
                 "\n" +
                 "<head>\n" +

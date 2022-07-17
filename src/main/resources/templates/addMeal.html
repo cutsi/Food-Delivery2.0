@@ -16,13 +16,15 @@
 <div class="container bootstrap snippets bootdeys">
   <div class="row" style="justify-content: center; margin-bottom: 6rem;">
     <div class="col-xs-12 col-sm-9">
-      <form class="form-horizontal" method="POST" th:action="@{/menu}">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h1 class="panel-title">Dodaj novo jelo</h1>
           </div>
 
-          <form th:action="@{/dodaj-jelo}" method="post" enctype="multipart/form-data">
+          <form th:action="@{/dodaj-jelo}"
+                method="post" enctype="multipart/form-data"
+                th:object="${portion}">
+            <div th:object="${condiment}">
             <div class="panel-body">
               <div class="form-group">
                 <label class="col-sm-2 control-label">Ime jela</label>
@@ -48,7 +50,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Kategorija</label>
                 <div class="col-sm-10">
-                  <select class="form-select" aria-label="Default select example">
+                  <select name = "category" class="form-select" aria-label="Default select example">
                     <th:block th:each="category: ${categories}">
                       <option th:name="${category.getName()}" th:value="${category.getName()}">[[${category.getName()}]]</option>
                     </th:block>
@@ -57,55 +59,56 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Porcije</label>
-                <div class="col-sm-10">
-                  <select id='my-select' multiple='multiple'>
-                    <optgroup label='Sve porcije'>
+                <div class="form-group" id="portions">
+                  <label> Porcije </label> <button style="background: #5aec06;border: none;width: 2rem;
+                    border-radius: 23px;box-shadow: 3px 3px 4px grey;height: 2rem;margin-left: 1rem" id="add-btn" onclick="addPortionRow(event)">+</button><br>
+
+                  <div class="portions-row" id="portions-row-1" name="portion-object">
+                    <select th:id="portionName" th:name="portionName" style="min-width: 30%; max-width: 30% ">
                       <th:block th:each="portion: ${portions}">
-                          <option th:value="${portion.getId()}">[[${portion.getName()}]]
-                          </option>
+                        <option  th:value="${portion.getName()}" th:text="${portion.getName()}">[[${portion.getName()}]]</option>
                       </th:block>
-                    </optgroup>
+                    </select>
+                    <input type="text" th:field="*{price}" placeholder="Unesite cijenu" name="price">
 
-                    <optgroup label='Trenutni porcije'>
-                    </optgroup>
+                    <button style="display: none;background: #ea3212;border: none;width: 2rem;
+                    border-radius: 23px;box-shadow: 3px 3px 4px grey;height: 2rem;" id="remove-portion-1"
+                            onclick="removePortionRow(event)">-</button>
 
+                    <button style="background: #5aec06;border: none;width: 2rem;
+                    border-radius: 23px;box-shadow: 3px 3px 4px grey;height: 2rem;" id="add-portion-1"
+                            onclick="addPortionNew(event)">+</button>
+                  </div>
+                </div>
+
+              <div class="form-group" id="condiments">
+                <label> Dodaci </label> <button style="background: #5aec06;border: none;width: 2rem;
+                  border-radius: 23px;box-shadow: 3px 3px 4px grey;height: 2rem;margin-left: 1rem" onclick="addCondimentRow(event)" >+</button><br>
+
+                <div class="condiments-row" id="condiments-row-1">
+                  <select th:id="condimentName" th:name="condimentName">
+                    <th:block th:each="condiment: ${condiments}">
+                      <option th:value="${condiment.getName().getName()}">[[${condiment.getName().getName()}]]</option>
+                    </th:block>
                   </select>
+                  <input type="text" th:id="condimentPrice" th:name="condimentPrice" placeholder="Unesite cijenu" name="price">
+                  <button style="display: none;background: #ea3212;border: none;width: 2rem;
+                  border-radius: 23px;box-shadow: 3px 3px 4px grey;height: 2rem;margin-left: 5rem"
+                          id="remove-condiment-1" onclick="removeCondimentRow(event)">-</button>
                 </div>
               </div>
-
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Dodaci</label>
-                <div class="col-sm-10">
-                  <select id='pre-selected-options' multiple='multiple'>
-
-                    <optgroup label='Svi dodaci'>
-                      <th:block th:each="condiment: ${condiments}">
-                          <option th:value="${condiment.getId()}">[[${condiment.getName().getName()}]]
-                            <div class>([[${condiment.getPrice()}]]KM)</div>
-                          </option>
-                      </th:block>
-                    </optgroup>
-
-                    <optgroup label='Trenutni dodaci'>
-                    </optgroup>
-
-                  </select>
-                </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Spremi</button>
+                <button type="reset" class="btn btn-default">Odustani</button>
               </div>
+            </div>
             </div>
           </form>
         </div>
 
-        <div class="form-group">
-          <div class="col-sm-10 col-sm-offset-2">
-            <button type="submit" class="btn btn-primary">Spremi</button>
-            <button type="reset" class="btn btn-default">Odustani</button>
-          </div>
-        </div>
-      </form>
+
     </div>
   </div>
 </div>
@@ -122,6 +125,86 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+<script th:inline="javascript">
+
+  let portionRowsCount = 1;
+  let condimentRowsCount = 1;
+  let previouslySelectedOptionIndex = 0;
+  function addPortionNew(e){
+    e.preventDefault();
+
+  }
+  function addPortionRow(e){
+    e.preventDefault();
+    console.log("ENTERED");
+    let portionContainer = document.getElementById("portions");
+    let portionContainerFirstChild = document.getElementsByClassName("portions-row")[0];
+    let divHandler = document.createElement("div");
+    divHandler.classList.add("portions-row");
+    divHandler.setAttribute("id","portions-row-"+(++portionRowsCount));
+    divHandler.innerHTML = portionContainerFirstChild.innerHTML;
+    //divHandler.getElementsByTagName("select")[0].selectedIndex = 2;
+    console.log("SELECTED ELEMENT ID=" + portionContainerFirstChild.getElementsByTagName("select")[0].selectedIndex);
+    //divHandler.style.pointerEvents="none";
+    //divHandler.style.cursor="default";
+    divHandler.getElementsByTagName("select")[0].remove(document.getElementById("portionName")[0].selectedIndex);
+    var x = document.getElementById("portionName");
+    let btn = document.getElementById("add-btn");
+    if (x.options.length == 1) {
+      console.log("BBBBBBBBBBBBBBBBBBBBBBb:");
+      btn.style.display = "none";
+      return;
+    }
+    if (x.options.length > 1) {
+      console.log("CCCCCCCCCCCCCCCCCCCCC:");
+      btn.style.display = "inline";
+    }
+    var text= x.options[x.selectedIndex].text;
+    console.log("AAAAAAAAAAAAAAAAAAAAAA: " + text);
+    //x.remove(x.selectedIndex);
+    let removeButton = divHandler.getElementsByTagName("button")[0];
+    removeButton.setAttribute("id","remove-portion-"+portionRowsCount);
+    removeButton.style.display = "inline";
+    portionContainer.append(divHandler);
+    portionContainerFirstChild.getElementsByTagName("button")[0].style.display = 'inline';
+    portionContainerFirstChild.getElementsByTagName("button")[1].style.display = 'inline';
+
+  }
+
+  function addCondimentRow(e){
+    e.preventDefault();
+    let condimentContainer = document.getElementById("condiments");
+    let condimentContainerFirstChild = document.getElementsByClassName("condiments-row")[0];
+    let divHandler = document.createElement("div");
+    divHandler.classList.add("condiments-row");
+    divHandler.setAttribute("id","condiments-row-"+(++condimentRowsCount));
+    divHandler.innerHTML = condimentContainerFirstChild.innerHTML;
+    divHandler.getElementsByTagName("select")[0].selectedIndex = 0;
+    let removeButton = divHandler.getElementsByTagName("button")[0];
+    removeButton.setAttribute("id","remove-condiment-"+condimentRowsCount);
+    removeButton.style.display = "inline";
+    condimentContainer.append(divHandler);
+    condimentContainerFirstChild.getElementsByTagName("button")[0].style.display = 'inline';
+
+
+  }
+
+  function removePortionRow(e){
+    e.preventDefault();
+    document.getElementById('portions-row-'+e.target.getAttribute("id").split("-")[2]).remove();
+    if(document.getElementsByClassName('portions-row').length == 1)
+      document.getElementsByClassName('portions-row')[0].getElementsByTagName("button")[0].style.display = 'none';
+  }
+
+
+  function removeCondimentRow(e){
+    e.preventDefault();
+    document.getElementById('condiments-row-'+e.target.getAttribute("id").split("-")[2]).remove();
+    if(document.getElementsByClassName('condiments-row').length == 1)
+      document.getElementsByClassName('condiments-row')[0].getElementsByTagName("button")[0].style.display = 'none';
+
+  }
 </script>
 </body>
 </html>

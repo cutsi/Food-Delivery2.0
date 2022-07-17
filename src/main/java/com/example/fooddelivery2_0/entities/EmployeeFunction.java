@@ -15,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "employee_functions")
-public class EmployeeFunction { //DONE
+public class EmployeeFunction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

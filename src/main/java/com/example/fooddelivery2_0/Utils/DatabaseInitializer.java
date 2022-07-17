@@ -83,7 +83,7 @@ public class DatabaseInitializer {
                     "0923329275",
                     bCryptPasswordEncoder.encode("user")
             );
-            customer.setCustomerAddress(List.of(new Address("Address_1", new City("Imotski"), "Croatia")));
+            customer.setAddress(List.of(new Address("Address_1", new City("Imotski"), "Croatia")));
             customer.setUserRole(UserRole.CUSTOMER);
             customer.setIsEnabled(true);
             customerRepo.save(customer);

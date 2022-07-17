@@ -54,25 +54,25 @@ public class WorkingHoursService {//ulogirat se na super restoran
         return workingHoursRepo.findByDayOfWeekAndRestaurant(dayOfWeek, restaurant).orElseThrow(Exception::new);
     }
     private void injectSeparator(List <WorkingHours> workingHours){
-        for (WorkingHours wh: workingHours) {
+        for (var wh: workingHours) {
             if(!wh.getOpensAt().equals(ZATVORENO))
                 wh.setOpensAt(wh.getOpensAt() + " -");
         };
     }
     public WorkingHours getRestaurantWorkingHoursToday(Restaurant restaurant) throws Exception {
 
-        String today = translateDayOfWeek(new SimpleDateFormat("EEEE").format(new Date()));
+        var today = translateDayOfWeek(new SimpleDateFormat("EEEE").format(new Date()));
         if(workingHoursRepo.findByDayOfWeekAndRestaurant(today, restaurant).isPresent()){
             if(workingHoursRepo.findByDayOfWeekAndRestaurant(today, restaurant).get().getOpensAt().equals(ZATVORENO))
                 return workingHoursRepo.findByDayOfWeekAndRestaurant(today, restaurant).get();
         }
         //System.out.println(workingHoursRepo.findByDayOfWeekAndRestaurant(today, restaurant).get().getOpensAt());
-        String yesterday = getYesterday(today);
+        var yesterday = getYesterday(today);
         if(workingHoursRepo.findByDayOfWeekAndRestaurant(yesterday, restaurant).isPresent()){
             if(workingHoursRepo.findByDayOfWeekAndRestaurant(yesterday, restaurant).get().getOpensAt().equals(ZATVORENO))
                 return workingHoursRepo.findByDayOfWeekAndRestaurant(today, restaurant).get();
         }
-        WorkingHours yesterdayWorkingHours = workingHoursRepo.findByDayOfWeekAndRestaurant(yesterday,restaurant).get();
+        var yesterdayWorkingHours = workingHoursRepo.findByDayOfWeekAndRestaurant(yesterday,restaurant).get();
         if(LocalTime.parse(yesterdayWorkingHours.getClosesAt())
                 .isBefore(LocalTime.parse(yesterdayWorkingHours.getOpensAt())) &&
                 LocalTime.parse(yesterdayWorkingHours.getClosesAt())
@@ -98,30 +98,30 @@ public class WorkingHoursService {//ulogirat se na super restoran
 
     }
     private WorkingHours checkOverrideHours(Restaurant restaurant, WorkingHours workingHours) throws Exception {
-        String yesterday = getYesterday(workingHours.getDayOfWeek());
+        var yesterday = getYesterday(workingHours.getDayOfWeek());
         return workingHoursRepo.findByDayOfWeekAndRestaurant(yesterday, restaurant).orElseThrow(Exception::new);
     }
     private String[] getCurrentTime(){
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String now = LocalDateTime.now(ZoneId.of("CET")).format(df);
+        var df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        var now = LocalDateTime.now(ZoneId.of("CET")).format(df);
         return now.split(" ");
     }
     private LocalDateTime getCurrentDateTime(){
-        String[] arrString = getCurrentTime();
+        var arrString = getCurrentTime();
         return LocalDateTime.parse(arrString[0] + "T" + arrString[1]);
     }
     private LocalTime getCurrentHoursMinutes(){
-        String[] arrString = getCurrentTime();
+        var arrString = getCurrentTime();
         return LocalTime.parse(arrString[1]);
     }
     private String getCurrentYearMonthDay(){
-        String[] arrString = getCurrentTime();
+        var arrString = getCurrentTime();
         return arrString[0];
     }
     public Boolean restaurantClosed(WorkingHours workingHours, Restaurant restaurant) throws Exception {
         if(workingHours.getOpensAt().equals(ZATVORENO))
             return false;
-        WorkingHours yesterdayWorkingHours = checkOverrideHours(restaurant, workingHours);
+        var yesterdayWorkingHours = checkOverrideHours(restaurant, workingHours);
         if(!yesterdayWorkingHours.getOpensAt().equals(ZATVORENO)){
             if(LocalTime.parse(yesterdayWorkingHours.getClosesAt())
                     .isBefore(LocalTime.parse(yesterdayWorkingHours.getOpensAt())) &&
@@ -131,8 +131,8 @@ public class WorkingHoursService {//ulogirat se na super restoran
             }
         }
 
-        LocalDateTime newOpensAt = LocalDateTime.parse(getCurrentYearMonthDay() + "T" + workingHours.getOpensAt());
-        LocalDateTime newClosesAt = LocalDateTime.parse(getCurrentYearMonthDay() + "T" + workingHours.getClosesAt());
+        var newOpensAt = LocalDateTime.parse(getCurrentYearMonthDay() + "T" + workingHours.getOpensAt());
+        var newClosesAt = LocalDateTime.parse(getCurrentYearMonthDay() + "T" + workingHours.getClosesAt());
 
         if(LocalTime.parse(workingHours.getClosesAt()).isBefore(LocalTime.parse(workingHours.getOpensAt())))
             newClosesAt = LocalDateTime.parse(LocalDate.parse(getCurrentYearMonthDay())
@@ -146,14 +146,13 @@ public class WorkingHoursService {//ulogirat se na super restoran
     //. POPRAVIT PRIKAZIVANJE VRIMENA KAD PRODJE PONOC, NE UZIMAT SLJEDECI WORKING HOURS DOK NE PRODJE TRENUTNI BEZ OBZIRA AKO PRELAZI U DRUGI DAN
 
     public Boolean isRestaurantClosed(WorkingHours workingHoursToday){
-        LocalDateTime localTime = LocalDateTime.now(ZoneId.of("CET"));
-        String timeNow = localTime.format(DateTimeFormatter.ofPattern("MM:DD HH:mm"));
-        System.out.println("TRENUTNO VRIJEME: " + LocalDateTime.now(ZoneId.of("CET")));
-        LocalDateTime closingTime = LocalDateTime.parse(getCurrentMonthDay() + " " + workingHoursToday.getClosesAt());
-        LocalDateTime openingTime = LocalDateTime.parse(getCurrentMonthDay() + " " + workingHoursToday.getOpensAt());
+        var localTime = LocalDateTime.now(ZoneId.of("CET"));
+        var timeNow = localTime.format(DateTimeFormatter.ofPattern("MM:DD HH:mm"));
+        var closingTime = LocalDateTime.parse(getCurrentMonthDay() + " " + workingHoursToday.getClosesAt());
+        var openingTime = LocalDateTime.parse(getCurrentMonthDay() + " " + workingHoursToday.getOpensAt());
         if(closingTime.isBefore(openingTime))
         {
-            LocalDateTime newClosingTime = LocalDateTime.parse(closingTime.toString()).plusDays(1);
+            var newClosingTime = LocalDateTime.parse(closingTime.toString()).plusDays(1);
             if(LocalDateTime.parse(timeNow).isBefore(openingTime) ||
                     LocalDateTime.parse(timeNow).isAfter(newClosingTime)){
                 return false;

@@ -21,8 +21,8 @@ public class FilterService {
         return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase(Locale.ROOT);
     }
 
-    public List<FoodItem> filter(String word, String city){
-        List<FoodItem> foodItems = new ArrayList<>();
+    public ArrayList<Object> filter(String word, String city){
+        var foodItems = new ArrayList<>();
         for (Long foodItemId:foodItemService.getFoodItemsByCity(word, city)) {
             foodItems.add(foodItemService.getById(foodItemId).get());
         }
@@ -33,7 +33,7 @@ public class FilterService {
 
     }
     private List<Restaurant> getUniqueRestaurants(List<Restaurant> restaurants1, List<Restaurant> restaurants2){
-        for (Restaurant restaurant: restaurants2) {
+        for (var restaurant: restaurants2) {
             if(!restaurants1.contains(restaurant)){
                 restaurants1.add(restaurant);
             }

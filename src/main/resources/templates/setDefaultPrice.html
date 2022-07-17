@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="hr" class="h-100" xmlns:th="https://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/general :: head"></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Postavi zadanu cijenu</title>
+  <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="../static/css/experiment.css" th:href="@{/css/experiment.css}" rel="stylesheet" />
+  <link href="../static/css/test.css" th:href="@{/css/test.css}" rel="stylesheet" />
+  <style>
+    .save-btn{
+      width: 8rem;
+      height: 3rem;
+      border-radius: 1rem;
+      border: none;
+      background: #3be13b;
+    }
+  </style>
+</head>
+<body>
+<main role="main" class="flex-shrink-0" style="margin-bottom: 125px;">
+  <header th:replace="fragments/general :: header"></header>
+</main>
+
+  <div class="container card-container">
+    <div class="menu">
+      <div class="menu-group">
+          <div class="menu-item blob" th:id="'btnItem_'+${foodItem.getId()}">
+            <img id = "test" class="menu-item-image" th:src="@{'/'+${foodItem.getImage()}}">
+            <div class="menu-item-text">
+              <h3 class="menu-item-heading">
+                <span class="menu-item-name">[[${foodItem.getName()}]]</span>
+              </h3>
+                <div class="" style="float: right">
+                  <th:block th:each="portion: ${foodItem.getPortions()}">
+                      <div style="font-size: medium;margin-right: 5rem;">[[${portion.getName().getName()}]] ([[${portion.getPrice()}]])KN
+                      <input type="radio"  name="foodItem" id="foodItem" th:value="${portion.getName().getId()}"><br><br>
+                      </div>
+                  </th:block>
+                  <button class="save-btn" onclick="saveDefaultPortion()">Spremi</button>
+
+                </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<br><br><br>
+<footer th:replace="fragments/general :: footer">
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+</script>
+<script th:inline="javascript">
+  function saveDefaultPortion(){
+    let portionNameId = document.querySelector('input[name="foodItem"]:checked').value;
+    console.log(document.querySelector('input[name="foodItem"]:checked').value)
+
+    let csrf_header = document.querySelector('meta[name="_csrf_header"]').content;
+    let csrf = document.querySelector('meta[name="_csrf"]').content;
+
+    $(function () {
+      $.ajax({
+        url: `/spremi-porciju`,
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          [csrf_header]: csrf
+        },
+        data: ([[${foodItem.getId()}]] + "=" + portionNameId),
+        success: function (data) {
+          console.log("AJAX EXERCISE: " + data.toString());
+          window.location.href =  window.location.protocol + "//" + window.location.host + "/home";
+        },
+        error: function (data){
+          console.log("AJAX EXERCISE ERROR: " + data);
+        }
+      });
+    });
+  }
+
+</script>
+</body>
+</html>

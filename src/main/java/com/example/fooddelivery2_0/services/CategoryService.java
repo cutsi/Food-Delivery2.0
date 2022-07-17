@@ -24,15 +24,10 @@ public class CategoryService {
     public void save(Category category){
         categoryRepo.save(category);
     }
-
     public List<Category> getAll() {
         return categoryRepo.findAll();
     }
-
     public List<Category> getAllOrderByName(String name){
-        for (Category category:categoryRepo.findCategoriesByNameOrderByNameDesc(name)) {
-            System.out.println(category.getName());
-        }
         return categoryRepo.findCategoriesByNameOrderByNameDesc(name);
     }
 
